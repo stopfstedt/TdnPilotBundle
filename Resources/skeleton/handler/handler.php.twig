@@ -1,0 +1,38 @@
+<?php
+
+namespace {{ namespace }}\Handler{{ entity_namespace ? '\\' ~ entity_namespace : '' }};
+
+{% block use_statements %}
+use Symfony\Component\Form\FormFactoryInterface;
+use Doctrine\ORM\EntityManager;
+
+use {{ namespace }}\Exception\InvalidFormException;
+use {{ namespace }}\Form\{{ entity }}Type;
+use {{ namespace }}\Entity\Manager\{{ entity }}Manager;
+use {{ namespace }}\Entity\{{ entity }}Interface;
+{% endblock use_statements %}
+
+{% block class_definition %}
+class {{ entity }}Handler extends {{ entity }}Manager
+{% endblock class_definition %}
+{
+{% block class_parameters %}
+    /**
+     * @var FormFactoryInterface
+     */
+    protected $formFactory;
+
+{% endblock %}
+{% block class_body %}
+    {%- include 'handler/construct.php.twig' %}
+
+    {%- include 'handler/post.php.twig' %}
+
+    {%- include 'handler/put.php.twig' %}
+
+    {%- include 'handler/patch.php.twig' %}
+
+    {%- include 'handler/extras.php.twig' %}
+
+{% endblock class_body %}
+}

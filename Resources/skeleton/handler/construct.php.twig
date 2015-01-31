@@ -1,0 +1,14 @@
+{% block method_definition %}
+    /**
+     * @param EntityManager $em
+     * @param string $class
+     * @param FormFactoryInterface $formFactory
+     */
+    public function __construct(EntityManager $em, $class, FormFactoryInterface $formFactory)
+{% endblock method_definition %}
+    {
+{% block method_body %}
+        $this->formFactory = $formFactory;
+        parent::__construct($em, $class);
+{% endblock method_body %}
+    }

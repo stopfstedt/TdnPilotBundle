@@ -1,0 +1,56 @@
+
+    /**
+{% block phpdoc_method_header %}
+     * Delete a {{ entity }}.
+     *
+{% block documentation %}
+{% if document %}
+     * @ApiDoc(
+     *   description = "Delete a {{ entity }} entity.",
+     *   resource = true,
+     *   requirements={
+     *     {
+     *         "name" = "{{ entity_identifier }}",
+     *         "dataType" = "{{ entity_identifier_type }}",
+     *         "requirement" = "{{ requirement_regex }}",
+     *         "description" = "{{ entity }} identifier"
+     *     }
+     *   },
+     *   statusCodes={
+     *     204 = "No content. Successfully deleted {{ entity }}.",
+     *     400 = "Bad Request.",
+     *     404 = "Not found."
+     *   }
+     * )
+     *
+{% endif %}
+{% endblock documentation %}
+     * @View(statusCode=204)
+     *
+     * @param Request $request
+     * @param $id
+     * @internal {{ entity }}Interface ${{ entity|lowerfirst }}
+     *
+     * @return Response
+{% endblock phpdoc_method_header %}
+{% block phpdoc_method_annotations %}
+{% if 'annotation' == format %}{% endif %}
+{% endblock phpdoc_method_annotations %}
+     */
+{% block method_definition %}
+    public function deleteAction(Request $request, $id)
+{% endblock method_definition %}
+    {
+{% block method_body %}
+        ${{ entity|lowerfirst }} = $this->getOr404($id);
+        try {
+            $this->get{{ entity }}Handler()->delete{{ entity }}(${{ entity|lowerfirst }});
+
+            return new Response('', Codes::HTTP_NO_CONTENT);
+        } catch (\Exception $exception) {
+            throw new \RuntimeException("Deletion not allowed");
+        }
+{% endblock method_body %}
+{% block method_return '' %}
+    }
+{% block form '' %}

@@ -1,0 +1,16 @@
+{% block method_definition %}
+    /**
+     * @param array $parameters
+     *
+     * @return {{ entity }}Interface
+     */
+    public function post(array $parameters)
+{% endblock method_definition %}
+    {
+{% block method_body %}{# todo create null variables meant to be passed into contructor with a todo tag. #}
+        ${{ entity|lowerfirst }} = $this->create{{ entity }}();
+
+        return $this->processForm(${{ entity|lowerfirst }}, $parameters, 'POST');
+{% endblock method_body %}
+    }
+

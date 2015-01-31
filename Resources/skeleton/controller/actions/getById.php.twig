@@ -1,0 +1,42 @@
+
+    /**
+{% block phpdoc_method_header %}
+     * Get a {{ entity }}
+     *
+{% block documentation %}
+{% if document %}
+     * @ApiDoc(
+     *   description = "Get a {{ entity }}.",
+     *   resource = true,
+     *   requirements={
+     *     {"name"="{{ entity_identifier }}", "dataType"="{{ entity_identifier_type }}", "requirement"="{{ requirement_regex }}", "description"="{{ entity }} identifier."}
+     *   },
+     *   output="{{ namespace }}\Entity\{{ entity_namespace }}{{ entity }}",
+     *   statusCodes={
+     *     200 = "{{ entity }}.",
+     *     404 = "Not Found."
+     *   }
+     * )
+     *
+{% endif %}
+{% endblock documentation %}
+     * @View(serializerEnableMaxDepthChecks=true)
+     *
+     * @param Request $request
+     * @param $id
+     *
+     * @return Response
+     */
+{% endblock phpdoc_method_header %}
+{% block method_definition %}
+    public function getAction(Request $request, $id)
+{% endblock method_definition %}
+    {
+{% block method_body %}
+        $answer{{ resource ? "['" ~ entity|lowerfirst ~  "']" }} = $this->getOr404($id);
+
+        return $answer;
+{% endblock method_body %}
+{% block method_return '' %}
+    }
+{% block form '' %}
