@@ -2,6 +2,7 @@
 
 namespace Tdn\SfProjectGeneratorBundle\Generator;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
@@ -16,9 +17,9 @@ interface GeneratorInterface
      * @param BundleInterface $bundle
      * @param string $entity
      * @param ClassMetadataInfo  $metadata
-     * @param array  $options
+     * @param ArrayCollection  $options
      */
-    public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata, array $options = null);
+    public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata, ArrayCollection $options = null);
 
     /**
      * @param Filesystem $filesystem

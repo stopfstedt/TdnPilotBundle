@@ -2,6 +2,7 @@
 
 namespace Tdn\SfProjectGeneratorBundle\Generator;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
@@ -54,7 +55,7 @@ class ControllerGenerator extends Generator
      * @param BundleInterface $bundle
      * @param string $entity
      * @param ClassMetadataInfo $metadata
-     * @param array $options
+     * @param ArrayCollection $options
      *
      * @throws \RuntimeException
      */
@@ -62,11 +63,11 @@ class ControllerGenerator extends Generator
         BundleInterface $bundle,
         $entity,
         ClassMetadataInfo $metadata,
-        array $options = null
+        ArrayCollection $options = null
     ) {
-        $this->routePrefix = $options['route-prefix'];
-        $this->routeNamePrefix = str_replace('/', '_', $options['route-prefix']);
-        $this->actions = array('getById', 'getAll', 'post', 'put', 'delete');
+        $this->routePrefix = $options->get('route-prefix');
+        $this->routeNamePrefix = str_replace('/', '_', $options->get('route-prefix'));
+        $this->actions = ['getById', 'getAll', 'post', 'put', 'delete'];
 
         if (count($metadata->identifier) > 1) {
             throw new \RuntimeException(
@@ -79,7 +80,7 @@ class ControllerGenerator extends Generator
         $this->metadata = $metadata;
         $this->setFormat('yml');
 
-        $this->generateControllerClass($options['overwrite'], $options['document'], $options['resource'], $metadata);
+        $this->generateControllerClass($options->get('overwrite'), $options->get('document'), $options->get('resource'), $metadata);
     }
 
     /**
@@ -133,7 +134,7 @@ class ControllerGenerator extends Generator
         $this->renderFile(
             'controller/controller.php.twig',
             $target,
-            array(
+            [
                 'entity_identifier_type' => $idType,
                 'entity_identifier'      => $this->getEntityIdentifier($metadata),
                 'requirement_regex'      => $this->getRequirementRegex($idType),
@@ -149,7 +150,8 @@ class ControllerGenerator extends Generator
                 'resource' => $resource,
                 'document' => $document,
                 'form_type' => $this->bundle->getNamespace() . "\\Form\\" . $this->entity . "Type.php"
-            )
+            ],
+            $forceOverwrite
         );
     }
 
@@ -222,7 +224,7 @@ class ControllerGenerator extends Generator
         $this->renderFile(
             'controller/controller-test.php.twig',
             $target,
-            array(
+            [
                 'route_prefix' => $this->routePrefix,
                 'route_name_prefix' => $this->routeNamePrefix,
                 'entity' => $this->entity,
@@ -237,23 +239,7 @@ class ControllerGenerator extends Generator
                         $parts
                     ) . '_' . $entityClass . 'Type'
                 ),
-            )
+            ]
         );
-    }
-
-    /**
-     * @param string $filePath
-     */
-    public function setFilePath($filePath)
-    {
-        $this->filePath = $filePath;
-    }
-
-    /**
-     * @param string $generatedName
-     */
-    public function setGeneratedName($generatedName)
-    {
-        $this->generatedName = $generatedName;
     }
 }

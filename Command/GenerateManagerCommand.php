@@ -2,6 +2,7 @@
 
 namespace Tdn\SfProjectGeneratorBundle\Command;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,8 +31,8 @@ class GenerateManagerCommand extends GeneratorCommand
                 new InputOption(
                     'overwrite',
                     'w',
-                    InputOption::VALUE_OPTIONAL,
-                    false
+                    InputOption::VALUE_NONE,
+                    'Overwrite existing manager'
                 )
             ))
             ->setDescription('Generates an manager from an entity file.')
@@ -53,7 +54,7 @@ EOT
     /**
      * @return ManagerGenerator
      */
-    public function createGenerator()
+    protected function createGenerator()
     {
         return new ManagerGenerator();
     }
@@ -69,11 +70,10 @@ EOT
     /**
      * @param InputInterface $input
      */
-    public function setOptions(InputInterface $input)
+    protected function setOptions(InputInterface $input)
     {
-        $this->options = [
-            'overwrite' => ($input->getOption('overwrite') !== false) ? true : false
-        ];
+        $this->options = new ArrayCollection([
+            'overwrite' => ($input->getOption('overwrite') ? true : false)
+        ]);
     }
-
 }

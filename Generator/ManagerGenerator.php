@@ -9,10 +9,7 @@ use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Tdn\PhpTypes\Type\String;
-use Tdn\SfProjectGeneratorBundle\Manipulator\ObjectManipulator;
-use Tdn\SfProjectGeneratorBundle\Model\Source;
-use Tdn\SfProjectGeneratorBundle\Model\Method;
-use Tdn\SfProjectGeneratorBundle\Model\Param;
+
 /**
  * Class ManagerGenerator
  * @package Tdn\SfProjectGeneratorBundle\Generator
@@ -23,7 +20,7 @@ class ManagerGenerator extends Generator
      * @param BundleInterface $bundle
      * @param string $entity
      * @param ClassMetadataInfo $metadata
-     * @param array $options
+     * @param ArrayCollection $options
      *
      * @throws \RuntimeException
      */
@@ -31,20 +28,13 @@ class ManagerGenerator extends Generator
         BundleInterface $bundle,
         $entity,
         ClassMetadataInfo $metadata,
-        array $options = null
+        ArrayCollection $options = null
     ) {
         $dir = $bundle->getPath();
 
         $parts = explode('\\', $entity);
         $entityClass = array_pop($parts);
         $entityNamespace = implode('\\', $parts);
-        $pathToEntity = $this->getEntityPath(
-            sprintf(
-                "%s/Entity/%s",
-                $dir,
-                $entityClass
-            )
-        );
 
         $this->setGeneratedName($entityClass . "Manager.php");
         $target = sprintf(
@@ -60,7 +50,7 @@ class ManagerGenerator extends Generator
             $entityClass
         );
 
-        if (!$options['overwrite'] && file_exists($target)) {
+        if (file_exists($target) && !$options->get('overwrite')) {
             throw new \RuntimeException(sprintf(
                 'Unable to generate the manager class %s as it already exists.',
                 $target
@@ -71,88 +61,92 @@ class ManagerGenerator extends Generator
             mkdir(dirname($target));
         }
 
-        /** @var Method $constructorMethod */
-        $constructorMethod = $this->getManipulator($pathToEntity)->findMethods(String::create('public'))->get('__construct');
-        $params = ($constructorMethod !== null) ? $constructorMethod->getParams() : new ArrayCollection();
-        $this->renderFile('manager/manager.php.twig', $target, array(
-            'entity'            => $entity,
-            'entity_class'      => $entityClass,
-            'namespace'         => $bundle->getNamespace(),
-            'entity_namespace'  => $entityNamespace,
-            'entity_construct_params' => $this->generateParams($params),
-            'contruct_params'   => $this->generateConstructParams($params)
-        ));
+        $entityReflection = new \ReflectionClass($bundle->getNameSpace() . '\\Entity\\' . $entity);
+        $constructorMethod = ($entityReflection->hasMethod('__construct')) ? $entityReflection->getMethod('__construct') : null;
 
-        $this->renderFile('manager/interface.php.twig', $interfaceTarget, array(
-            'entity'            => $entity,
-            'entity_class'      => $entityClass,
-            'namespace'         => $bundle->getNamespace(),
-            'entity_namespace'  => $entityNamespace,
-            'entity_construct_params' => $this->generateParams($params),
-            'contruct_params'   => $this->generateConstructParams($params)
-        ));
+        $this->renderFile(
+            'manager/manager.php.twig',
+            $target,
+            [
+                'entity'            => $entity,
+                'entity_class'      => $entityClass,
+                'namespace'         => $bundle->getNamespace(),
+                'entity_namespace'  => $entityNamespace,
+                'entity_construct_params' => $this->generateParams($constructorMethod),
+                'contruct_params'   => $this->generateConstructParams($constructorMethod)
+            ],
+            $options->get('overwrite')
+        );
+
+        $this->renderFile(
+            'manager/interface.php.twig',
+            $interfaceTarget,
+            [
+                'entity'            => $entity,
+                'entity_class'      => $entityClass,
+                'namespace'         => $bundle->getNamespace(),
+                'entity_namespace'  => $entityNamespace,
+                'entity_construct_params' => $this->generateParams($constructorMethod),
+                'contruct_params'   => $this->generateConstructParams($constructorMethod)
+            ],
+            $options->get('overwrite')
+        );
 
         $this->declareService($bundle, $entity);
-    }
-
-    /**
-     * @param string $path
-     *
-     * @return \Tdn\PhpTypes\Type\String
-     */
-    protected function getEntityPath($path)
-    {
-        return String::create($path)->ensureRight('.php');
     }
 
     /**
      * Generates string containing params in following format:
      * Interface $param, array $param = [], $param...etc
      *
-     * @param Collection $originalParams
+     * @param \ReflectionMethod $method
      * @return string
      */
-    protected function generateParams(Collection $originalParams)
+    protected function generateParams(\ReflectionMethod $method = null)
     {
-        $params = '';
+        $outParams = '';
+        if ($method) {
+            /** @var \ReflectionParameter $param */
+            foreach ($method->getParameters() as $param) {
+                $reference = ($param->isPassedByReference()) ? '&' : '';
+                $typeHint =
+                    ($param->getClass() !== null) ?
+                        $param->getClass()->getName() :
+                        ($param->isArray()) ? 'array' :
+                            ($param->isCallable()) ? 'Callable' : '';
 
-        /** @var Param $param */
-        foreach ($originalParams as $param) {
-            $typeHint = ($param->getTypeHint() !== null) ? ' ' . $param->getTypeHint() : '';
-            $default = ($param->getDefault() !== null) ? ' = ' . $param->getDefault() . ', ' : ', ';
-            $params .= sprintf("%s$%s%s", $typeHint, $param->getVarName(), $default);
+                try {
+                    $default = ' = ' . $param->getDefaultValue() . ', ';
+                } catch (\ReflectionException $e) {
+                    $default = ', ';
+                }
+
+                $outParams .= sprintf("%s$%s%s", $typeHint, $param->getName(), $default);
+            }
         }
 
-        return (string) String::create($params)->removeRight(', ');
+        return (string) String::create($outParams)->removeRight(', ');
     }
 
     /**
      * Generates string containing params in following format:
      * $param1, $param2, $param3...etc
      *
-     * @param Collection $originalParams
+     * @param \ReflectionMethod $method
      * @return string
      */
-    protected function generateConstructParams(Collection $originalParams)
+    protected function generateConstructParams(\ReflectionMethod $method = null)
     {
         $params = '';
 
-        /** @var Param $param */
-        foreach ($originalParams as $param) {
-            $params .= sprintf('$%s, ', $param->getVarName());
+        if ($method) {
+            /** @var \ReflectionParameter $param */
+            foreach ($method->getParameters() as $param) {
+                $params .= sprintf('$%s, ', $param->getVarName());
+            }
         }
 
         return (string) String::create($params)->removeRight(', ');
-    }
-
-    /**
-     * @param string $filePath
-     * @return ObjectManipulator
-     */
-    protected function getManipulator($filePath)
-    {
-        $source = new Source(new SplFileInfo($filePath, null, null), new TokenStream());
-        return new ObjectManipulator($source);
     }
 
     /**
@@ -202,7 +196,7 @@ class ManagerGenerator extends Generator
         );
 
         if (!is_file($managerFile)) {
-            $this->renderFile("config/services.xml.twig", $managerFile, array());
+            $this->renderFile("config/services.xml.twig", $managerFile, []);
         }
 
         $newXML = simplexml_load_file($managerFile);

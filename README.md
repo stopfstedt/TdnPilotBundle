@@ -1,36 +1,32 @@
-# SF Project Generator Bundle (Beta)
-Based on [voryx/RESTGeneratorBundle](https://github.com/voryx/restgeneratorbundle).
+# SF Project Generator Bundle (alpha)
+Inspired by [voryx/RESTGeneratorBundle](https://github.com/voryx/restgeneratorbundle).
 
 ## Description
+This bundle aims to provide developers a way to generate all "boilerplate" code required by projects (not only stubs but actual implementation).
 
-Unlike the original project, this bundle aims to allow you to generate not only controllers but almost anything in your project provided you have already created the entity files.
+##### Generated code features:
+* CRUD application that follows PSR-4
+* Generated code follows SF2 Best practices
+* 90% + code-coverage from the get-go. (Without you having to write a single line of test code)
 
-Fixed locally but not in upstream:
+##### Generators:
+- [x] Generate Controllers (with Api documentation from [nelmio/NelmioApiDocBundle](https://github.com/nelmio/NelmioApiDocBundle), using [FriendsOfSymfony/FOSRestBundle](https://github.com/FriendsOfSymfony/FOSRestBundle))
+  - [ ] Optional event driven architecture with "--create-events" option when genrating controller
+- [x] Form Types (with relationships)
+- [x]  Generate Entity Interfaces
+- [x]  Generate Entity Managers with interfaces
+- [x]  Generate Rest Handlers
+- [x]  Generate Routing files (credit to [testabit/restgeneratorbundle](https://github.com/testabit/restgeneratorbundle))
+- [ ] Generate Behat functional api tests
+- [ ] Generate PHPUnit tests for entities
+- [ ] Generate Sonata scaffolding (credit to [testabit/restgeneratorbundle](https://github.com/testabit/restgeneratorbundle))
+- [ ] Generate basic HTML (using bootstrap) templates for HTML in accept header
 
-* Dependency on ID property of entities.
+## Comparison to other generators:
+* No dependency on ID property of entities.
 * In track with latest symfony version (2.6 at the moment).
-* Fixed skeleton file spacing
-* Uses [JsonAPI](http://jsonapi.org/) compliant output (the rest is up to you in your entities!).
-
-Currently able to auto-generate (based on models):
-
-* Rest Controller (with Api documentation from [Nelmio/NelmioApiBundle]())
-* Form Types (with relationships)
-* Entity Interfaces
-* Entity Managers with interfaces
-* Rest Handlers
-* Routing files (credit to [testabit/restgeneratorbundle](https://github.com/testabit/restgeneratorbundle))
-* Sonata scaffolding files (credit to [testabit/restgeneratorbundle](https://github.com/testabit/restgeneratorbundle))
-
-Future plans:
-
-* Provide different project setups (event driven architecture, etc)
-* Auto-generate appropriate HTML for Requests accepting only that.
-* Integration with FOSUserBundle
-* Auto-generate entity unit tests (based on docblock)
-* Auto-generate controller functional tests (behat)
-
-Make feature requests or fork and create PRs!
+* Output is FULLY PSR compliant (up to PSR4)
+* Actively developed
 
 ## Installation
 
@@ -60,60 +56,24 @@ public function registerBundles()
 
 ## Configuration
 
-This bundle depends on a number of other symfony bundles, so they need to be configured in order for the generator to work properly
+This bundle depends on a number of other symfony bundles, so they need to be configured in order for the generator to work properly.
 
-```yaml
-framework:
-    csrf_protection: false #only use for public API
+<b>This bundle has (at the moment) no configuration of it's own.</b>
 
-fos_rest:
-    routing_loader:
-        default_format: json
-    param_fetcher_listener: true
-    body_listener: true
-    #disable_csrf_role: ROLE_USER
-    body_converter:
-        enabled: true
-    view:
-        view_response_listener: force
+See Nelmio/NelmioApiDocBundle and FriendsOfSymfony/FOSRestBundle documentation for configuration details.
 
-nelmio_cors:
-    defaults:
-        allow_credentials: false
-        allow_origin: []
-        allow_headers: []
-        allow_methods: []
-        expose_headers: []
-        max_age: 0
-    paths:
-        '^/api/':
-            allow_origin: ['*']
-            allow_headers: ['*']
-            allow_methods: ['POST', 'PUT', 'GET', 'DELETE']
-            max_age: 3600
+## Usage
+Please refer to the generator's documentation:
+[Project Generator.md (all generators in one)]()
 
-sensio_framework_extra:
-    request: { converters: true }
-    view:    { annotations: false }
-    router:  { annotations: true }
-    
-nelmio_api_doc: ~
-```
+[Controller Generator.md]()
 
-## Generators
+[Entity Generator.md]()
 
-### Project Generator
+[Form Generator.md]()
 
-#### Controller Generator
+[Manager Generator.md]()
 
-#### Entity Generator
+[Handler Generator.md]()
 
-#### Form Generator
-
-#### Handler Generator
-
-#### Manager Generator
-
-#### Routing Generator
-
-#### Sonata Generator
+[Routing Generator.md]()

@@ -14,10 +14,8 @@ use {{ useblock }}
  */
 interface {{ entity }}Interface {% block interface_extends %}{% endblock %}
 {
-{% block method_block %}
-{% for method in methods %}
+{% block method_block %}{% for method in methods %}
     {{ method.annotation }}
     {{ method.implementation }}
-{% endfor %}
-{% endblock %}
+{% endfor %}{% endblock %}
 }

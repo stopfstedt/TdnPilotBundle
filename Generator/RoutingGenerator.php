@@ -2,6 +2,7 @@
 
 namespace Tdn\SfProjectGeneratorBundle\Generator;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -36,35 +37,43 @@ class RoutingGenerator extends Generator
      * @param BundleInterface $bundle The bundle in which to create the class
      * @param string $entity The entity relative class name
      * @param ClassMetadataInfo $metadata The entity metadata class
-     * @param array $options [restSupport => (bool)]
+     * @param ArrayCollection $options [restSupport => (bool)]
      *
      * @return bool
      */
-    public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata, array $options = null)
+    public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata, ArrayCollection $options = null)
     {
-        $parts       = explode('\\', $this->routingFile);
-        $this->routingFile = $bundle->getPath() ."/" . $options['routing-file'];
+        $this->routingFile = $bundle->getPath() ."/" . $options->get('routing-file');
+        $parts = explode(DIRECTORY_SEPARATOR, $this->routingFile);
         $this->setGeneratedName(array_pop($parts));
         $this->setFilePath($this->routingFile);
 
         if (!file_exists($this->routingFile)) {
-            $this->createConfig($this->routingFile);
+            $this->createConfigFile($this->routingFile);
         }
 
-        $this->routingFileContents = file_get_contents($this->routingFile);
-        $this->route = $this->getRouteFromEntity($entity, $options['prefix']);
+        $this->route = $this->getRouteFromEntity($entity, $options->get('prefix'));
 
-        if (false === $options['remove']) {
-            return $this->addConfiguration($bundle, $entity, $options['prefix']);
+        $output = $this->getConfigurationText($bundle, $entity, $options->get('prefix'));
+
+        if (!$options->get('overwrite') && !$options->get('remove') && $this->inFile($output)) {
+            throw new \RuntimeException('Route is already in file.');
+        }
+
+        if (false === $options->get('remove')) {
+            if ($options->get('overwrite')) {
+                $this->removeConfiguration($output);
+            }
+            $this->addConfiguration($output);
         } else {
-            return $this->removeConfiguration($bundle, $entity);
+            $this->removeConfiguration($output);
         }
     }
 
     /**
      * @param $routingFile
      */
-    protected function createConfig($routingFile)
+    protected function createConfigFile($routingFile)
     {
         try {
             if (!is_dir(dirname($routingFile))) {
@@ -78,7 +87,6 @@ class RoutingGenerator extends Generator
     }
 
     /**
-     * @param BundleInterface $bundle
      * @param string $prefix
      * @return string
      */
@@ -92,12 +100,12 @@ class RoutingGenerator extends Generator
     /**
      * Generates the routing configuration.
      * @param BundleInterface $bundle
-     * @param $entity
-     * @param $prefix
+     * @param string $entity
+     * @param string $prefix
      *
-     * @return bool
+     * @return string
      */
-    protected function addConfiguration(BundleInterface $bundle, $entity, $prefix)
+    protected function getConfigurationText(BundleInterface $bundle, $entity, $prefix)
     {
         $output =
             sprintf("\n%s:\n", $this->getRouteFromEntity($entity, $prefix));
@@ -107,9 +115,38 @@ class RoutingGenerator extends Generator
             sprintf("    prefix:   /%s\n", $prefix);
         $output .=
             sprintf("    defaults: {_format:%s}\n", 'json');
-        $output .= "\n";
 
-        if (false === file_put_contents($this->routingFile, $output, FILE_APPEND)) {
+        return $output;
+    }
+
+    /**
+     * @param $toCheck
+     * @return bool
+     */
+    protected function inFile($toCheck)
+    {
+        $contents = null;
+        if (false == $contents = file_get_contents($this->routingFile)) {
+            throw new IOException('Error reading routing file.');
+        }
+
+        $contents = String::create($contents);
+        if ($contents->contains($toCheck)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $output
+     * @param bool   $overwrite
+     * @return bool
+     */
+    protected function addConfiguration($output, $overwrite = false)
+    {
+        $mode = ($overwrite) ? 0 : FILE_APPEND;
+        if (false === file_put_contents($this->routingFile, $output, $mode)) {
             return false;
         }
 
@@ -117,29 +154,22 @@ class RoutingGenerator extends Generator
     }
 
     /**
-     * @param BundleInterface $bundle
-     * @param $entity
+     * Probably a better way to do this but I have the flu and i'm tired :P
+     * @param $toRemove
      * @return bool
      */
-    protected function removeConfiguration(BundleInterface $bundle, $entity)
+    protected function removeConfiguration($toRemove)
     {
-        //@todo Implement removeConfiguration
-        return false;
-    }
+        $contents = null;
+        if (false == $contents = file_get_contents($this->routingFile)) {
+            throw new IOException('Error reading routing file.');
+        }
 
-    /**
-     * @param string $filePath
-     */
-    public function setFilePath($filePath)
-    {
-        $this->filePath = $filePath;
-    }
-
-    /**
-     * @param string $generatedName
-     */
-    public function setGeneratedName($generatedName)
-    {
-        $this->generatedName = $generatedName;
+        $contents = String::create($contents);
+        if ($contents->contains($toRemove)) {
+            $newContent = (string)$contents->subStrUntil($toRemove, true);
+            $newContent .= (string)$contents->subStrAfter($toRemove, true);
+            $this->addConfiguration($newContent, true);
+        }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Tdn\SfProjectGeneratorBundle\Generator;
 
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
@@ -69,11 +70,31 @@ abstract class Generator implements GeneratorInterface
     }
 
     /**
+     * @param string $generatedName
+     */
+    public function setGeneratedName($generatedName)
+    {
+        $this->generatedName = $generatedName;
+    }
+
+    /**
      * @return string
      */
     public function getGeneratedName()
     {
+        if (!$this->generatedName) {
+            throw new \RuntimeException('Invalid method call. generated name is null.');
+        }
+
         return $this->generatedName;
+    }
+
+    /**
+     * @param string $filePath
+     */
+    public function setFilePath($filePath)
+    {
+        $this->filePath = $filePath;
     }
 
     /**
@@ -81,6 +102,10 @@ abstract class Generator implements GeneratorInterface
      */
     public function getFilePath()
     {
+        if (!$this->filePath) {
+            throw new \RuntimeException('Invalid method call. file path is null');
+        }
+
         return $this->filePath;
     }
 
@@ -119,12 +144,12 @@ abstract class Generator implements GeneratorInterface
      */
     protected function render($template, $parameters)
     {
-        $twig = new \Twig_Environment(new \Twig_Loader_Filesystem($this->skeletonDirs), array(
+        $twig = new \Twig_Environment(new \Twig_Loader_Filesystem($this->skeletonDirs), [
             'debug'            => true,
             'cache'            => false,
             'strict_variables' => true,
             'autoescape'       => false,
-        ));
+        ]);
 
         $twig->addFilter(new \Twig_SimpleFilter('addslashes', 'addslashes'));
         $twig->addFilter(new \Twig_SimpleFilter('lowerfirst', function($input) {
@@ -138,18 +163,30 @@ abstract class Generator implements GeneratorInterface
     }
 
     /**
-     * @param $template
-     * @param $target
-     * @param $parameters
+     * @param string $template
+     * @param string $target
+     * @param array $parameters
+     * @param bool $overwrite
      *
-     * @return int
+     * @throws IOException
+     * @return bool
      */
-    protected function renderFile($template, $target, $parameters)
+    protected function renderFile($template, $target, array $parameters, $overwrite = false)
     {
+        $mode = ($overwrite) ? 0 : FILE_APPEND;
+
         if (!is_dir(dirname($target))) {
             mkdir(dirname($target), 0777, true);
         }
 
-        return file_put_contents($target, $this->render($template, $parameters), FILE_APPEND);
+        if (false === file_put_contents($target, $this->render($template, $parameters), $mode)) {
+            throw new IOException(srpintf(
+                'Could not write file %s based on template %s.',
+                $target,
+                $template
+            ));
+        }
+
+        return true;
     }
 }
