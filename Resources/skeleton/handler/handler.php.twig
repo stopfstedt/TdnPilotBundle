@@ -21,7 +21,6 @@ class {{ entity }}Handler extends {{ entity }}Manager
      * @var FormFactoryInterface
      */
     protected $formFactory;
-
 {% endblock %}
 {% block class_body %}
     {%- include 'handler/construct.php.twig' %}
@@ -33,6 +32,5 @@ class {{ entity }}Handler extends {{ entity }}Manager
     {%- include 'handler/patch.php.twig' %}
 
     {%- include 'handler/extras.php.twig' %}
-
 {% endblock class_body %}
 }
