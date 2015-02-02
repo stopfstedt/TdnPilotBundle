@@ -10,8 +10,13 @@
      */
     protected function processForm({{ entity }}Interface ${{ entity|lowerfirst }}, array $parameters, $method = "PUT")
     {
-        $form = $this->formFactory->create(new {{ entity }}Type(), ${{ entity|lowerfirst }}, array('method' => $method));
+        $form = $this->formFactory->create(
+            new {{ entity }}Type(),
+            ${{ entity|lowerfirst }},
+            array('method' => $method)
+        );
         $form->submit($parameters, 'PATCH' !== $method);
+
         if ($form->isValid()) {
             ${{ entity|lowerfirst }} = $form->getData();
             $this->update{{ entity }}(${{ entity|lowerfirst }}, true);
