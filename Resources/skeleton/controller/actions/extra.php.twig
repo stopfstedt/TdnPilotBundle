@@ -2,7 +2,7 @@
     /**
      * @return {{ entity }}Handler
      */
-    public function get{{ entity }}Handler()
+    protected function get{{ entity }}Handler()
     {
         return $this->container->get('{{ bundle|replace({'Bundle': ''})|lower}}.{{ entity|lower }}.handler');
     }
