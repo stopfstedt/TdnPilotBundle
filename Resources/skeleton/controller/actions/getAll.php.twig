@@ -61,7 +61,7 @@
         $orderBy = $paramFetcher->get('order_by');
         $criteria = !is_null($paramFetcher->get('filters')) ? $paramFetcher->get('filters') : array();
 
-        $answer{{ resource ? "['" ~ entity|lowerfirst ~  "']" }} =
+        $answer{{ resource ? "['" ~ entity|lowerfirst|pluralize ~  "']" }} =
             $this->get{{ entity }}Handler()->find{{ entity|pluralize }}By(
                 $criteria,
                 $orderBy,
@@ -69,7 +69,7 @@
                 $offset
             );
 
-        if ($answer{{ resource ? "['" ~ entity|lowerfirst ~  "']" }}) {
+        if ($answer{{ resource ? "['" ~ entity|lowerfirst|pluralize ~  "']" }}) {
             return $answer;
         }
 
