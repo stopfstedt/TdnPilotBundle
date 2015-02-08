@@ -1,0 +1,35 @@
+<?php
+
+namespace {{ namespace }}\Test\Controller;
+
+{% block use_statements %}
+{% endblock use_statements %}
+
+use Symfony\Framework\WebBundle\WebTestCase;
+
+/**
+{% block phpdoc_class_header %}
+ * {{ entity }} controller Test.
+ * @package {{ namespace }}\Test\Controller;
+{% endblock phpdoc_class_header %}
+ */
+{% block class_definition %}
+class {{ entity }}ControllerTest extends WebTestCase
+{% endblock class_definition %}
+{
+    {% block class_body %}{%- include 'controller/actions/getById.php.twig' %}
+
+    {%- include 'controller/test-actions/getAll.php.twig' %}
+
+    {%- include 'controller/test-actions/post.php.twig' %}
+
+    {%- include 'controller/test-actions/put.php.twig' %}
+
+    {%- include 'controller/test-actions/patch.php.twig' %}
+
+    {%- include 'controller/test-actions/delete.php.twig' %}
+
+    {%- include 'controller/test-actions/getOr404.php.twig' %}
+
+    {%- include 'controller/test-actions/extra.php.twig' %}{% endblock class_body %}
+}

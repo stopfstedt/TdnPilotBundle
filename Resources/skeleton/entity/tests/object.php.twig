@@ -1,0 +1,12 @@
+
+    public function test{{ property.getName() }}()
+    {
+        {%- if property.hasDefault() == true -%}
+        $this->assertNull($this->{{ entity|lowerfirst }}->get{{ property.getName() }});
+        {%- endif -%}
+        {# Mock Object setId #}
+        $mock = null;
+
+        $id = $this->generateValueForType({{ entityIdentifierType }})
+        $mock->set{{ entityIdentifier }}();
+    }

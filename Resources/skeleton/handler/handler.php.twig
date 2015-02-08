@@ -1,20 +1,23 @@
 <?php
 
-namespace {{ namespace }}\Handler{{ entity_namespace ? '\\' ~ entity_namespace : '' }};
+namespace {{ namespace }}\Handler;
 
 {% block use_statements %}
 use Symfony\Component\Form\FormFactoryInterface;
 use Doctrine\ORM\EntityManager;
-
 use {{ namespace }}\Exception\InvalidFormException;
-use {{ namespace }}\Form\{{ entity }}Type;
+use {{ namespace }}\Form\Type\{{ entity }}Type;
 use {{ namespace }}\Entity\Manager\{{ entity }}Manager;
 use {{ namespace }}\Entity\{{ entity }}Interface;
 {% endblock use_statements %}
 
-{% block class_definition %}
+{% block doc_block %}
+/**
+ * Class {{ entity }}Handler
+ * @package {{ namespace }}\Handler
+ */
+{% endblock doc_block %}
 class {{ entity }}Handler extends {{ entity }}Manager
-{% endblock class_definition %}
 {
 {% block class_parameters %}
     /**

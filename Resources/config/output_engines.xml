@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="tdn_pilot.output.engine.twig_output_engine_class">Tdn\PilotBundle\OutputEngine\TwigOutputEngine</parameter>
+    </parameters>
+
+    <services>
+        <service id="tdn_pilot.output.engine.twig_output_engine" class="%tdn_pilot.output.engine.twig_output_engine_class%" />
+    </services>
+
+</container>

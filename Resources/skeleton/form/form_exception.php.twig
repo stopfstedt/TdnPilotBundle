@@ -6,6 +6,10 @@ namespace {{ namespace }}\Exception;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 {% endblock use_statements %}
 
+/**
+ * Class InvalidFormException
+ * @package {{ namespace }}\Exception
+ */
 {% block class_definition %}
 class InvalidFormException extends BadRequestHttpException
 {% endblock class_definition %}

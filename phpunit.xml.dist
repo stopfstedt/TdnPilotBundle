@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit colors="true" bootstrap="./Tests/bootstrap.php">
+<phpunit
+    bootstrap="./vendor/autoload.php"
+    convertWarningsToExceptions="true"
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    colors="true">
+
     <php>
         <!-- Disable E_USER_DEPRECATED until reaching compatibility with Symfony 3.0 -->
         <!-- php -r 'echo -1 & ~E_USER_DEPRECATED;' -->
@@ -8,18 +14,28 @@
     </php>
 
     <testsuites>
-        <testsuite name="TdnSfProjectGeneratorBundle test suite">
-            <directory>./Tests</directory>
+        <testsuite name="TdnPilotBundle">
+            <directory suffix="Test.php">./Tests</directory>
         </testsuite>
     </testsuites>
-
+    <listeners>
+        <listener class="\Mockery\Adapter\Phpunit\TestListener"
+                  file="vendor/mockery/mockery/library/Mockery/Adapter/Phpunit/TestListener.php">
+        </listener>
+    </listeners>
     <filter>
         <whitelist>
             <directory>.</directory>
             <exclude>
                 <directory>./Resources</directory>
                 <directory>./Tests</directory>
+                <directory>./vendor</directory>
+                <directory>./bin</directory>
+                <directory>./build</directory>
             </exclude>
         </whitelist>
     </filter>
+    <logging>
+        <log type="coverage-clover" target="build/logs/clover.xml" />
+    </logging>
 </phpunit>

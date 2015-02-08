@@ -1,90 +1,71 @@
 <?php
 
-namespace Tdn\SfProjectGeneratorBundle\Command;
+namespace Tdn\PilotBundle\Command;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
-use Tdn\SfProjectGeneratorBundle\Generator\FormGenerator;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Tdn\PilotBundle\Manipulator\FormManipulator;
+use Tdn\PilotBundle\OutputEngine\OutputEngineInterface;
 
 /**
  * Generates a form type class for a given Doctrine entity, with optional REST generator support.
  *
  * @author Victor Passapera <vpassapera@gmail.com>
  */
-class GenerateFormCommand extends GeneratorCommand
+class GenerateFormCommand extends AbstractGeneratorCommand
 {
-    private $formGenerator;
+    /**
+     * @var string
+     */
+    const NAME = 'tdn:generate:form';
 
     /**
-     * @see Command
+     * @var string
      */
-    protected function configure()
+    const DESCRIPTION = 'Generates a form type class based on a doctrine entity.';
+
+    /**
+     * @return InputOption[]
+     */
+    protected function getInputArgs()
     {
-        $this
-            ->setDefinition(array(
-                new InputArgument(
-                    'entity',
-                    InputArgument::REQUIRED,
-                    'The entity class name to initialize (shortcut notation)'
-                ),
-                new InputOption(
-                    'overwrite',
-                    'w',
-                    InputOption::VALUE_NONE,
-                    'Overwrite existing form type.'
-                ),
-                new InputOption(
-                    'rest-support',
-                    '',
-                    InputOption::VALUE_NONE,
-                    'Generate an form type with tdn_entity support'
-                )
-            ))
-            ->setDescription('Generates a form type class based on a doctrine entity.')
-            ->setHelp(<<<EOT
-The <info>doctrine:generate:form</info> command generates a form class based on a Doctrine entity.
-
-<info>php app/console doctrine:generate:form AcmeBlogBundle:Post</info>
-
-Every generated file is based on a template. There are default templates but they can be overriden by placing custom templates in one of the following locations, by order of priority:
-
-<info>BUNDLE_PATH/Resources/SensioGeneratorBundle/skeleton/form
-APP_PATH/Resources/SensioGeneratorBundle/skeleton/form</info>
-
-You can check https://github.com/sensio/SensioGeneratorBundle/tree/master/Resources/skeleton
-in order to know the file structure of the skeleton
-EOT
+        return [
+            new InputOption(
+                'rest-support',
+                'r',
+                InputOption::VALUE_NONE,
+                'Generate an form type with tdn_entity support'
             )
-            ->setName('tdn:generate:form')
-        ;
+        ];
     }
 
     /**
-     * @return FormGenerator
+     * @param InputInterface          $input
+     * @param OutputEngineInterface   $outputEngine
+     * @param BundleInterface         $bundle
+     * @param ClassMetadataInfo       $metadata
+     *
+     * @return FormManipulator
      */
-    protected function createGenerator()
-    {
-        return new FormGenerator();
-    }
+    protected function createManipulator(
+        InputInterface $input,
+        OutputEngineInterface $outputEngine,
+        BundleInterface $bundle,
+        ClassMetadataInfo $metadata
+    ) {
+        $manipulator = new FormManipulator($outputEngine, $bundle, $metadata);
+        $manipulator->setRestSupport(($input->getOption('rest-support') ? true : false));
 
-    /**
-     * @param InputInterface $input
-     */
-    protected function setOptions(InputInterface $input)
-    {
-        $this->options = new ArrayCollection([
-            'rest-support' => ($input->getOption('rest-support') ? true : false),
-            'overwrite' => ($input->getOption('overwrite') ? true : false)
-        ]);
+        return $manipulator;
     }
 
     /**
      * @return string
      */
-    protected function getFileTypeCreated()
+    protected function getFileType()
     {
-        return 'Form Class';
+        return 'Form type';
     }
 }

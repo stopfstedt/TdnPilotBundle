@@ -8,18 +8,17 @@ namespace {{ namespace }}\Entity\Manager{{ entity_namespace ? '\\' ~ entity_name
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use {{ namespace }}\Entity\{{ entity }}Interface;
 {% endblock use_statements %}
 
 /**
 {% block phpdoc_class_header %}
- * Interface {{ entity_class }}ManagerInterface
- * @package {{ namespace }}\Manager{{ entity_namespace ? '\\' ~ entity_namespace : '' }}
+ * Interface {{ entity }}ManagerInterface
+ * @package {{ namespace }}\Entity\Manager{{ entity_namespace ? '\\' ~ entity_namespace : '' }}
 {% endblock phpdoc_class_header %}
  */
 {% block class_definition %}
-interface {{ entity_class }}ManagerInterface
+interface {{ entity }}ManagerInterface
 {% endblock class_definition %}
 {
 {% block class_body %}
@@ -29,7 +28,10 @@ interface {{ entity_class }}ManagerInterface
      *
      * @return {{ entity }}Interface
      */
-    public function find{{ entity }}By(array $criteria, array $orderBy = null);
+    public function find{{ entity }}By(
+        array $criteria,
+        array $orderBy = null
+    );
 
     /**
      * @param array $criteria
@@ -37,9 +39,14 @@ interface {{ entity_class }}ManagerInterface
      * @param integer $limit
      * @param integer $offset
      *
-     * @return {{ entity }}Interface[]|Collection
+     * @return ArrayCollection|{{ entity }}Interface[]
      */
-    public function find{{ entity|pluralize }}By(array $criteria, array $orderBy = null, $limit = null, $offset = null);
+    public function find{{ entity|pluralize }}By(
+        array $criteria,
+        array $orderBy = null,
+        $limit = null,
+        $offset = null
+    );
 
     /**
      * @param {{ entity }}Interface ${{ entity|lowerfirst }}
@@ -47,14 +54,19 @@ interface {{ entity_class }}ManagerInterface
      *
      * @return void
      */
-     public function update{{ entity }}({{ entity }}Interface ${{ entity|lowerfirst }}, $andFlush = true);
+    public function update{{ entity }}(
+        {{ entity }}Interface ${{ entity|lowerfirst }},
+        $andFlush = true
+    );
 
     /**
      * @param {{ entity }}Interface ${{ entity|lowerfirst }}
      *
      * @return void
      */
-    public function delete{{ entity }}({{ entity }}Interface ${{ entity|lowerfirst }});
+    public function delete{{ entity }}(
+        {{ entity }}Interface ${{ entity|lowerfirst }}
+    );
 
     /**
      * @return string

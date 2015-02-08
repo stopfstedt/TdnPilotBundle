@@ -1,0 +1,47 @@
+<?php
+
+namespace {{ namespace }}\Tests\Entity;
+
+{% block useblocks %}
+{%- for use_statement in useblock %}
+use {{ useblock }}
+{%- endfor %}
+{% endblock useblocks %}
+
+/**
+ * Class {{ entity }}Test
+ * @package {{ namespace }}\Tests\Entity
+ */
+{% block class_definition %}
+class {{ entity }}Test extends BaseEntity
+{
+{% block class_body %}
+    protected ${{ entity|lowerfirst }};
+
+    protected function setUp()
+    {
+        {{ entity_construct_setup }}
+        $this->{{ entity|lowerfirst }} = new {{ entity }}({{ entity_construct_params }});
+    }
+{% for property in public_properties %}
+    {% if property.type|lower == 'object' %}
+        {%- include 'entity/tests/object.php.twig' %}
+    {% elseif property.type|lower == 'collection' %}
+        {%- include 'entity/tests/collection.php.twig' %}
+    {% elseif property.type|lower == 'array' %}
+        {%- include 'entity/tests/array.php.twig' %}
+    {% elseif property.type|lower == 'string' %}
+        {%- include 'entity/tests/string.php.twig' %}
+    {% elseif property.type|lower == 'int' %}
+        {%- include 'entity/tests/int.php.twig' %}
+    {% elseif property.type|lower == 'double' %}
+        {%- include 'entity/tests/double.php.twig' %}
+    {% elseif property.type|lower == 'float' %}
+        {%- include 'entity/tests/float.php.twig' %}
+    {% elseif property.type|lower == 'bool' %}
+        {%- include 'entity/tests/bool.php.twig' %}
+    {% endif %}
+{% endfor %}
+{% enblock class_body %}
+}
+{% endblock class_definition %}

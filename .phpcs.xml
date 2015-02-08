@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<ruleset name="TdnPilotBundle Coding Standard">
+    <description>Coding standard for TdnPilotBundle</description>
+    <file>Command</file>
+    <file>DependencyInjection</file>
+    <file>Form</file>
+    <file>Manipulator</file>
+    <file>Model</file>
+    <file>OutputEngine</file>
+    <file>Tests</file>
+    <file>TdnPilotBundle.php</file>
+    <arg name="extensions" value="php" />
+    <arg value="sp" />
+    <rule ref="PSR2" />
+</ruleset>

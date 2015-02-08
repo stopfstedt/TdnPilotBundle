@@ -1,6 +1,6 @@
 <?php
 
-namespace {{ namespace }}\Form{{ entity_namespace ? '\\' ~ entity_namespace : '' }};
+namespace {{ namespace }}\Form\Type{{ entity_namespace ? '\\' ~ entity_namespace : '' }};
 
 {% block use_statements %}
 use Symfony\Component\Form\AbstractType;
@@ -9,6 +9,10 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 {% endblock use_statements %}
 
 {% block class_definition %}
+/**
+ * Class {{ entity_class }}Type
+ * @package {{ namespace }}\Form\Type
+ */
 class {{ entity_class }}Type extends AbstractType
 {% endblock class_definition %}
 {
@@ -31,7 +35,7 @@ class {{ entity_class }}Type extends AbstractType
                 'entityName' => "{{ field.relatedEntityShortcut }}"
             ])
 {% else %}
-{% if field.nullable or field.type == 'boolean' %}
+{% if field.nullable is defined and field.nullable == true or field.type == 'boolean' %}
             ->add('{{ field.fieldName }}', null, ['required' => false])
 {% else %}
             ->add('{{ field.fieldName }}')
@@ -47,9 +51,9 @@ class {{ entity_class }}Type extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => '{{ namespace }}\Entity{{ entity_namespace ? '\\' ~ entity_namespace : '' }}\{{ entity_class }}'
-        ));
+        ]);
     }
 
     /**

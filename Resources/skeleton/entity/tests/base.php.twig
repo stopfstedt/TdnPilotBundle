@@ -1,0 +1,108 @@
+<?php
+
+namespace {{ namespace }}\Tests\Entity;
+
+use Liip\FunctionalTestBundle\Test\WebTestCase;
+use Symfony\Component\Validator\ValidatorFactory;
+use Symfony\Component\Validator\ValidatorInterface;
+use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\ConstraintViolation;
+use Mockery as m;
+
+/**
+ * Class BaseEntityTest
+ * @package {{ namespace }}\Tests\Entity
+ */
+{% block class_definition %}
+abstract class BaseEntityTest extends WebTestCase
+{
+    private $validator;
+
+    /**
+     * Remove all mock objects
+     */
+    public function tearDown()
+    {
+        m::close();
+    }
+
+    /**
+     * @param string $type
+     * @throws \InvalidParameterException
+     *
+     * @return mixed
+     */
+    protected function generateValueForType($type)
+    {
+        $faker = \Faker\Factory::create();
+
+        switch ($type) {
+            case 'integer':
+                return $faker->randomNumber();
+            case 'double':
+            case 'float':
+                return $faker->randomFloat();
+            case 'string':
+                return $faker->text;
+            case 'email':
+                return $faker->email;
+            case 'phone':
+                return $faker->phoneNumber;
+            case 'datetime':
+                return $faker->dateTime();
+            case 'bool':
+            case 'boolean':
+              return $faker->boolean();
+            default:
+              throw new \InvalidParameterException("No values for type {$type}");
+        }
+    }
+
+    /**
+     * @return ValidatorInterface
+     */
+    protected function getValidator()
+    {
+        {# TODO: IMPLEMENT CREATION OF VALIDATOR. See WebTestCase for supporting functions. #}
+
+        return $this->validator;
+    }
+
+    /**
+     * @param mixed $entity The entity with constraints (annotation)
+     */
+    protected function assertNoValidatorErrors($entity)
+    {
+        return $this->assertValidationErrors($entity, 0);
+    }
+
+    /**
+     * @param mixed $entity The entity with constraints (annotations)
+     * @param int   $errorNo The number of errors validator should contain
+     * @param array $messages Optional. Contains expected messages keyed by property name. Number should equal errorNo.
+     */
+    protected function assertValidationErrors($entity, $errorNo, array $messages = [])
+    {
+        /** @var ConstraintViolationList $errors */
+        $errors = $this->getValidator()->validate($entity);
+
+        if (!$errorNo == count($messages)) {
+            throw new \RuntimeException('Error number should match number of messages.');
+        }
+
+        $this->assertEquals($errorNo, count($errors));
+
+        if (count($messages) > 0) {
+            /** @var ConstraintViolation $error */
+            foreach ($errors as $error) {
+                if (false !== $key = array_search($error->getMessage(), $messages)) {
+                    unset($messages[$key]);
+                }
+            }
+
+            $this->assertEquals(0, count($messages), 'Following error messages were not found: ' . print_r($messages, true));
+        }
+    }
+}
+
+{% endblock class_definition %}

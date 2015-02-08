@@ -8,15 +8,12 @@ use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\Util\Codes;
-use FOS\RestBundle\View\View as FOSView;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Doctrine\Common\Collections\ArrayCollection;
 {% if 'annotation' == format -%}
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 {%- endif %}
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -32,7 +29,7 @@ use {{ namespace }}\Entity\{{ entity }}Interface;
 /**
 {% block phpdoc_class_header %}
  * {{ entity }} controller.
- * @package {{ namespace }}\Controller\{{ entity_namespace ? '\\' ~ entity_namespace : '' }};
+ * @package {{ namespace }}\Controller;
 {% endblock phpdoc_class_header %}
  * @RouteResource("{{ entity }}")
 {% block phpdoc_class_annotations %}
@@ -45,21 +42,23 @@ use {{ namespace }}\Entity\{{ entity }}Interface;
 class {{ entity }}Controller extends FOSRestController
 {% endblock class_definition %}
 {
-    {% block class_body %}{%- include 'controller/actions/getById.php.twig' %}
+    {%- block class_body -%}
+    {%- include 'controller/actions/getById.php.twig' -%}
 
-    {%- include 'controller/actions/getAll.php.twig' %}
+    {%- include 'controller/actions/getAll.php.twig' -%}
 
-    {%- include 'controller/actions/post.php.twig' %}
+    {%- include 'controller/actions/post.php.twig' -%}
 
-    {%- include 'controller/actions/put.php.twig' %}
+    {%- include 'controller/actions/put.php.twig' -%}
 
-    {%- include 'controller/actions/patch.php.twig' %}
+    {%- include 'controller/actions/patch.php.twig' -%}
 
-    {%- include 'controller/actions/delete.php.twig' %}
+    {%- include 'controller/actions/delete.php.twig' -%}
 
-    {%- include 'controller/actions/getOr404.php.twig' %}
+    {%- include 'controller/actions/getOr404.php.twig' -%}
 
-    {%- include 'controller/actions/getPostData.php.twig' %}
+    {%- include 'controller/actions/getPostData.php.twig' -%}
 
-    {%- include 'controller/actions/extra.php.twig' %}{% endblock class_body %}
+    {%- include 'controller/actions/extra.php.twig' -%}
+    {% endblock class_body %}
 }

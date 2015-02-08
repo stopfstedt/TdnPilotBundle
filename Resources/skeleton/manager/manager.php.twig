@@ -8,19 +8,17 @@ namespace {{ namespace }}\Entity\Manager{{ entity_namespace ? '\\' ~ entity_name
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use {{ namespace }}\Entity\{{ entity }}Interface;
 {% endblock use_statements %}
 
 /**
 {% block phpdoc_class_header %}
- * {{ entity }} manager service.
- * Class {{ entity_class }}Manager
- * @package {{ namespace }}\Manager{{ entity_namespace ? '\\' ~ entity_namespace : '' }}
+ * Class {{ entity }}Manager
+ * @package {{ namespace }}\Entity\Manager{{ entity_namespace ? '\\' ~ entity_namespace : '' }}
 {% endblock phpdoc_class_header %}
  */
 {% block class_definition %}
-class {{ entity_class }}Manager implements {{ entity_class }}ManagerInterface
+class {{ entity }}Manager implements {{ entity }}ManagerInterface
 {% endblock class_definition %}
 {
 {% block class_body %}
@@ -56,8 +54,10 @@ class {{ entity_class }}Manager implements {{ entity_class }}ManagerInterface
      *
      * @return {{ entity }}Interface
      */
-    public function find{{ entity }}By(array $criteria, array $orderBy = null)
-    {
+    public function find{{ entity }}By(
+        array $criteria,
+        array $orderBy = null
+    ) {
         return $this->repository->findOneBy($criteria, $orderBy);
     }
 
@@ -67,10 +67,14 @@ class {{ entity_class }}Manager implements {{ entity_class }}ManagerInterface
      * @param integer $limit
      * @param integer $offset
      *
-     * @return {{ entity }}Interface[]|Collection
+     * @return ArrayCollection|{{ entity }}Interface[]
      */
-    public function find{{ entity|pluralize }}By(array $criteria, array $orderBy = null, $limit = null, $offset = null)
-    {
+    public function find{{ entity|pluralize }}By(
+        array $criteria,
+        array $orderBy = null,
+        $limit = null,
+        $offset = null
+    ) {
         return $this->repository->findBy($criteria, $orderBy, $limit, $offset);
     }
 
@@ -78,8 +82,10 @@ class {{ entity_class }}Manager implements {{ entity_class }}ManagerInterface
      * @param {{ entity }}Interface ${{ entity|lowerfirst }}
      * @param bool $andFlush
      */
-    public function update{{ entity }}({{ entity }}Interface ${{ entity|lowerfirst }}, $andFlush = true)
-    {
+    public function update{{ entity }}(
+        {{ entity }}Interface ${{ entity|lowerfirst }},
+        $andFlush = true
+    ) {
         $this->em->persist(${{ entity|lowerfirst }});
         if ($andFlush) {
             $this->em->flush();
@@ -89,8 +95,9 @@ class {{ entity_class }}Manager implements {{ entity_class }}ManagerInterface
     /**
      * @param {{ entity }}Interface ${{ entity|lowerfirst }}
      */
-    public function delete{{ entity }}({{ entity }}Interface ${{ entity|lowerfirst }})
-    {
+    public function delete{{ entity }}(
+        {{ entity }}Interface ${{ entity|lowerfirst }}
+    ) {
         $this->em->remove(${{ entity|lowerfirst }});
         $this->em->flush();
     }
@@ -109,7 +116,7 @@ class {{ entity_class }}Manager implements {{ entity_class }}ManagerInterface
     public function create{{ entity }}({{ entity_construct_params }})
     {
         $class = $this->getClass();
-        return new $class({{ contruct_params }});
+        return new $class({{ construct_params }});
     }
 {% endblock class_body %}
 }

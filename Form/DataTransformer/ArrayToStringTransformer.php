@@ -1,15 +1,15 @@
 <?php
 
-namespace Tdn\SfProjectGeneratorBundle\Form\DataTransformer;
+namespace Tdn\PilotBundle\Form\DataTransformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
 /**
+ * Class transforms norm data into view data.
+ *
  * Class ArrayToStringTransformer
- *
- * Transforms Arrays to CSV strings
- *
+ * @package Tdn\PilotBundle\Form\DataTransformer
  */
 class ArrayToStringTransformer implements DataTransformerInterface
 {
@@ -24,7 +24,7 @@ class ArrayToStringTransformer implements DataTransformerInterface
         if (!is_array($array)) {
             throw new TransformationFailedException(sprintf(
                 '%s is not an array',
-                get_type($array)
+                gettype($array)
             ));
         }
 

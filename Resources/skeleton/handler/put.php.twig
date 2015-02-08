@@ -1,4 +1,3 @@
-{% block method_definition %}
 
     /**
      * @param {{ entity }}Interface ${{ entity|lowerfirst }}
@@ -6,10 +5,15 @@
      *
      * @return {{ entity }}Interface
      */
-    public function put({{ entity }}Interface ${{ entity|lowerfirst }}, array $parameters)
-{% endblock method_definition %}
-    {
+    public function put(
+        {{ entity }}Interface ${{ entity|lowerfirst }},
+        array $parameters
+    ) {
 {% block method_body %}
-        return $this->processForm(${{ entity|lowerfirst }}, $parameters, 'PUT');
+        return $this->processForm(
+            ${{ entity|lowerfirst }},
+            $parameters,
+            'PUT'
+        );
 {% endblock method_body %}
     }

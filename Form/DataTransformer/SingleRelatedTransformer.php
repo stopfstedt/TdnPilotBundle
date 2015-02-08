@@ -1,23 +1,24 @@
 <?php
 
-namespace Tdn\SfProjectGeneratorBundle\Form\DataTransformer;
+namespace Tdn\PilotBundle\Form\DataTransformer;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
 /**
- * Class RelatedTransformer
- *
  * Transforms Relationship data for entity based forms
  *
+ * Class SingleRelatedTransformer
+ * @package Tdn\PilotBundle\Form\DataTransformer
  */
 class SingleRelatedTransformer implements DataTransformerInterface
 {
     /**
      * @var ObjectManager
      */
-    private $om;
+    private $entityManager;
 
     /**
      * The name of the entity we are working with
@@ -26,57 +27,79 @@ class SingleRelatedTransformer implements DataTransformerInterface
     private $entityName;
 
     /**
-     * @param ObjectManager $om
+     * @param ObjectManager $entityManager
      */
-    public function __construct(ObjectManager $om, $entityName)
+    public function __construct(ObjectManager $entityManager, $entityName)
     {
-        $this->om = $om;
+        $this->entityManager = $entityManager;
         $this->entityName = $entityName;
     }
 
     /**
-     * Transforms an entity to a string (id).
-     *
+     * Transforms an entity to a string: __toString or id, in that order.
      * @param  string|null $entity
-     * @return string
+     *
+     * @return string|null
      */
     public function transform($entity)
     {
-        if (empty($entity)) {
+        if (null === $entity) {
             return null;
         }
 
-        return (string) $entity;
+        try {
+            $entityString = (string) $entity;
+        } catch (\Exception $e) {
+            $metadata = $this->entityManager->getClassMetadata(get_class($entity));
+            $entityString = $this->getEntityIdentifier($metadata, $entity);
+        }
+
+        return $entityString;
     }
 
     /**
      * Transforms an id to an entity.
      *
-     * @param  string $id
+     * @param  string $identifier
+     * @throws TransformationFailedException if entity is not found.
      *
-     * @return mixed
-     *
-     * @throws TransformationFailedException if entiyt is not found.
+     * @return null|object
      */
-    public function reverseTransform($id)
+    public function reverseTransform($identifier)
     {
-        if (!$id) {
+        if (!$identifier) {
             return null;
         }
 
-        $entity = $this->om
+        $entity = $this->entityManager
             ->getRepository($this->entityName)
-            ->find($id)
+            ->find($identifier)
         ;
 
         if (null === $entity) {
             throw new TransformationFailedException(sprintf(
                 'A %s with id "%s" does not exist!',
                 $this->entityName,
-                $id
+                $identifier
             ));
         }
 
         return $entity;
+    }
+
+    /**
+     * @param ClassMetadata $metadata
+     * @param mixed         $entity The entity.
+     * @throws \RuntimeException if multiple ids.
+     *
+     * @return mixed
+     */
+    protected function getEntityIdentifier(ClassMetadata $metadata, $entity)
+    {
+        if (count($metadata->getIdentifierFieldNames()) !== 1) {
+            throw new \RuntimeException('Only one identifier allowed at this time.');
+        }
+
+        return $metadata->getIdentifierValues($entity)[$metadata->getIdentifierFieldNames()[0]];
     }
 }

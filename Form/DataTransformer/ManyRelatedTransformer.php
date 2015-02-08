@@ -1,25 +1,26 @@
 <?php
 
-namespace Tdn\SfProjectGeneratorBundle\Form\DataTransformer;
+namespace Tdn\PilotBundle\Form\DataTransformer;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
 /**
- * Class RelatedTransformer
- *
  * Transforms Relationship data for entity based forms
  *
+ * Class ManyRelatedTransformer
+ * @package Tdn\PilotBundle\Form\DataTransformer
  */
 class ManyRelatedTransformer implements DataTransformerInterface
 {
     /**
      * @var ObjectManager
      */
-    private $om;
+    private $entityManager;
 
     /**
      * The name of the entity we are working with
@@ -28,18 +29,18 @@ class ManyRelatedTransformer implements DataTransformerInterface
     private $entityName;
 
     /**
-     * @param ObjectManager $om
+     * @param ObjectManager $entityManager
      */
-    public function __construct(ObjectManager $om, $entityName)
+    public function __construct(ObjectManager $entityManager, $entityName)
     {
-        $this->om = $om;
+        $this->entityManager = $entityManager;
         $this->entityName = $entityName;
     }
 
     /**
-     * Transforms an entity collection to an array of strings.
+     * Transforms an entity collection to an array of identifiers.
      *
-     * @param  array|null $array
+     * @param  array|null $collection
      * @return string[]
      */
     public function transform($collection)
@@ -57,7 +58,14 @@ class ManyRelatedTransformer implements DataTransformerInterface
         }
 
         return $collection->map(function ($entity) {
-            return (string) $entity;
+            try {
+                $entityString = (string) $entity;
+            } catch (\Exception $e) {
+                $metadata = $this->entityManager->getClassMetadata(get_class($entity));
+                $entityString = $this->getEntityIdentifier($metadata, $entity);
+            }
+
+            return $entityString;
         })->toArray();
     }
 
@@ -66,7 +74,7 @@ class ManyRelatedTransformer implements DataTransformerInterface
      *
      * @param  Collection|array $collection
      *
-     * @return mixed
+     * @return Collection
      *
      * @throws TransformationFailedException if entity is not found.
      */
@@ -90,7 +98,7 @@ class ManyRelatedTransformer implements DataTransformerInterface
         }
 
         return $collection->map(function ($id) {
-            $entity = $this->om
+            $entity = $this->entityManager
                 ->getRepository($this->entityName)
                 ->find($id)
             ;
@@ -105,5 +113,21 @@ class ManyRelatedTransformer implements DataTransformerInterface
 
             return $entity;
         });
+    }
+
+    /**
+     * @param ClassMetadata $metadata
+     * @param mixed         $entity The entity.
+     * @throws \RuntimeException
+     *
+     * @return mixed
+     */
+    protected function getEntityIdentifier(ClassMetadata $metadata, $entity)
+    {
+        if (count($metadata->getIdentifierFieldNames()) !== 1) {
+            throw new \RuntimeException('Only one identifier allowed at this time.');
+        }
+
+        return $metadata->getIdentifierValues($entity)[$metadata->getIdentifierFieldNames()[0]];
     }
 }

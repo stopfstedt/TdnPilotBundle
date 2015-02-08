@@ -1,98 +1,91 @@
 <?php
 
-namespace Tdn\SfProjectGeneratorBundle\Command;
+namespace Tdn\PilotBundle\Command;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-
-use Tdn\SfProjectGeneratorBundle\Generator\RoutingGenerator;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Tdn\PilotBundle\Manipulator\RoutingManipulator;
+use Tdn\PilotBundle\OutputEngine\OutputEngineInterface;
 
 /**
  * Class GenerateRoutingCommand
  * @package Tdn\SfRoutingGeneratorBundle\Command
  */
-class GenerateRoutingCommand extends GeneratorCommand
+class GenerateRoutingCommand extends AbstractGeneratorCommand
 {
-    const DEFAULT_ROUTING = "Resources/config/routing.yml"; //@todo: Support multiple formats
+    /**
+     * @var string
+     */
+    const DEFAULT_ROUTING = 'routing.yml';
 
     /**
-     * @see Command
+     * @var string
      */
-    protected function configure()
+    const NAME = 'tdn:generate:routing';
+
+    /**
+     * @var string
+     */
+    const DESCRIPTION =
+        'Adds a routing entry for a rest controller based on an entity. Removes it with the --remove flag.';
+
+    /**
+     * @return array<InputArgument|InputOption>
+     */
+    protected function getInputArgs()
     {
-        $this
-            ->setDefinition(array(
-                new InputArgument(
-                    'entity',
-                    InputArgument::REQUIRED,
-                    'The entity class name to initialize (shortcut notation)'
-                ),
-                new InputArgument(
-                    'routing-file',
-                    InputArgument::OPTIONAL,
-                    'The routing file, defaults to: ' . self::DEFAULT_ROUTING,
-                    self::DEFAULT_ROUTING
-                ),
-                new InputOption(
-                    'route-prefix',
-                    '',
-                    InputOption::VALUE_REQUIRED,
-                    'The route prefix'
-                ),
-                new InputOption(
-                    'remove',
-                    null,
-                    InputOption::VALUE_NONE
-                ),
-                new InputOption(
-                    'overwrite',
-                    'w',
-                    InputOption::VALUE_NONE,
-                    'Overwrite existing form type.'
-                )
-            ))
-            ->setDescription('Generates the routing configuration for a RESTFul controller based on an entity. Removes it with the --remove flag.')
-            ->setHelp(<<<EOT
-The <info>tdn:generate:routing</info> command generates a routing file for a RESTFul controller based on a doctrine entity.
-
-<info>php app/console tdn:generate:routing AcmeBlogBundle:Post</info>
-<info>php app/console tdn:generate:routing AcmeBlogBundle:Post --remove</info>
-
-Every generated file is based on a template. There are default templates but they can be overriden by placing custom templates in one of the following locations, by order of priority:
-
-<info>BUNDLE_PATH/Resources/SensioGeneratorBundle/skeleton/entity
-APP_PATH/Resources/SensioGeneratorBundle/skeleton/entity</info>
-EOT
+        return [
+            new InputArgument(
+                'routing-file',
+                InputArgument::OPTIONAL,
+                'The routing file, defaults to: ' . self::DEFAULT_ROUTING,
+                self::DEFAULT_ROUTING
+            ),
+            new InputOption(
+                'route-prefix',
+                'p',
+                InputOption::VALUE_REQUIRED,
+                'The route prefix'
+            ),
+            new InputOption(
+                'remove',
+                'r',
+                InputOption::VALUE_NONE,
+                'Remove route instead of add.'
             )
-            ->setName('tdn:generate:routing')
-        ;
+        ];
     }
 
     /**
-     * @return RoutingGenerator
+     * @param InputInterface          $input
+     * @param OutputEngineInterface   $outputEngine
+     * @param BundleInterface         $bundle
+     * @param ClassMetadataInfo       $metadata
+     *
+     * @return RoutingManipulator
      */
-    protected function createGenerator()
-    {
-        return new RoutingGenerator();
+    protected function createManipulator(
+        InputInterface $input,
+        OutputEngineInterface $outputEngine,
+        BundleInterface $bundle,
+        ClassMetadataInfo $metadata
+    ) {
+        $manipulator = new RoutingManipulator($outputEngine, $bundle, $metadata);
+        $manipulator->setRoutingFile($input->getArgument('routing-file'));
+        $manipulator->setRoutePrefix($input->getOption('route-prefix'));
+        $manipulator->setRemove(($input->getOption('remove') ? true : false));
+
+        return $manipulator;
     }
 
     /**
      * @return string
      */
-    protected function getFileTypeCreated()
+    protected function getFileType()
     {
-        return 'Routing Configuration';
-    }
-
-    protected function setOptions(InputInterface $input)
-    {
-        $this->options = new ArrayCollection([
-            'routing-file' => $input->getArgument('routing-file'),
-            'remove' => ($input->getOption('remove') ? true : false),
-            'prefix' => $input->getOption('route-prefix'),
-            'overwrite' => ($input->getOption('overwrite') ? true : false)
-        ]);
+        return 'Routing';
     }
 }

@@ -1,80 +1,51 @@
 <?php
 
-namespace Tdn\SfProjectGeneratorBundle\Command;
+namespace Tdn\PilotBundle\Command;
 
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Doctrine\Common\Collections\ArrayCollection;
-use Tdn\SfProjectGeneratorBundle\Generator\HandlerGenerator;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Tdn\PilotBundle\Manipulator\HandlerManipulator;
+use Tdn\PilotBundle\OutputEngine\OutputEngineInterface;
 
 /**
  * Class GenerateHandlerCommand
- * @package Tdn\SfProjectGeneratorBundle\Command
+ * @package Tdn\PilotBundle\Command
  */
-class GenerateHandlerCommand extends GeneratorCommand
+class GenerateHandlerCommand extends AbstractGeneratorCommand
 {
     /**
-     * @see Command
+     * @var string
      */
-    protected function configure()
-    {
-        $this
-            ->setDefinition(array(
-                new InputArgument(
-                    'entity',
-                    InputArgument::REQUIRED,
-                    'The entity class name to initialize (shortcut notation)'
-                ),
-                new InputOption(
-                    'overwrite',
-                    'w',
-                    InputOption::VALUE_NONE,
-                    'Overwrite existing handler file.'
-                )
-            ))
-            ->setDescription(
-                'Generates an entity REST handler file for a controller. Depends on Entity Manager. Depended ON by controller.'
-            )
-            ->setHelp(
-<<<EOT
-The <info>tdn:generate:handler</info> command generates a REST handler based on a Doctrine entity. Requires manager to be present.
-
-<info>php app/console tdn:generate:handler AcmeBlogBundle:Post</info>
-
-Every generated file is based on a template. There are default templates but they can be overridden by placing custom templates in one of the following locations, by order of priority:
-
-<info>BUNDLE_PATH/Resources/SensioGeneratorBundle/skeleton/entity
-APP_PATH/Resources/SensioGeneratorBundle/skeleton/entity</info>
-EOT
-            )
-            ->setName('tdn:generate:handler')
-        ;
-    }
+    const NAME = 'tdn:generate:handler';
 
     /**
-     * @return EntityGenerator
+     * @var string
      */
-    protected function createGenerator()
-    {
-        return new HandlerGenerator();
+    const DESCRIPTION = 'Generates an entity REST handler file for a controller.';
+
+    /**
+     * @param InputInterface          $input
+     * @param OutputEngineInterface   $outputEngine
+     * @param BundleInterface         $bundle
+     * @param ClassMetadataInfo       $metadata
+     *
+     * @return HandlerManipulator
+     */
+    protected function createManipulator(
+        InputInterface $input,
+        OutputEngineInterface $outputEngine,
+        BundleInterface $bundle,
+        ClassMetadataInfo $metadata
+    ) {
+        return new HandlerManipulator($outputEngine, $bundle, $metadata);
     }
 
     /**
      * @return string
      */
-    protected function getFileTypeCreated()
+    protected function getFileType()
     {
-        return 'Handler Class';
-    }
-
-    /**
-     * @param InputInterface $input
-     */
-    protected function setOptions(InputInterface $input)
-    {
-        $this->options = new ArrayCollection([
-            'overwrite' => ($input->getOption('overwrite') ? true : false)
-        ]);
+        return 'Rest Handler';
     }
 }

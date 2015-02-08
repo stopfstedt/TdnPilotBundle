@@ -8,7 +8,7 @@
     public function post(array $parameters)
 {% endblock method_definition %}
     {
-{% block method_body %}{# todo create null variables meant to be passed into contructor with a todo tag. #}
+{% block method_body %}{# create null variables meant to be passed into contructor. #}
         ${{ entity|lowerfirst }} = $this->create{{ entity }}();
 
         return $this->processForm(${{ entity|lowerfirst }}, $parameters, 'POST');
