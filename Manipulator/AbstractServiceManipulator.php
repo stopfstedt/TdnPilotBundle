@@ -3,11 +3,10 @@
 namespace Tdn\PilotBundle\Manipulator;
 
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
-use Doctrine\Common\Collections\ArrayCollection;
-use Tdn\PilotBundle\OutputEngine\OutputEngineInterface;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 use Tdn\PilotBundle\Model\GeneratedFileInterface;
-use Tdn\PilotBundle\Services\Utils\DependencyInjection\DiXmlManipulator;
+use Tdn\PilotBundle\Services\Utils\DiXmlUtils;
 
 /**
  * Abstract Class AbstractServiceManipulator
@@ -16,19 +15,9 @@ use Tdn\PilotBundle\Services\Utils\DependencyInjection\DiXmlManipulator;
 abstract class AbstractServiceManipulator extends AbstractManipulator implements ServiceManipulatorInterface
 {
     /**
-     * @var string
+     * @var DiXmlUtils
      */
-    private $extensionFile;
-
-    /**
-     * @var bool
-     */
-    private $updatingDiFile;
-
-    /**
-     * @var DiXmlManipulator
-     */
-    private $diManipulator;
+    private $diUtils;
 
     /**
      * @var \SimpleXMLElement
@@ -36,18 +25,39 @@ abstract class AbstractServiceManipulator extends AbstractManipulator implements
     private $xmlServiceFile;
 
     /**
-     * @param OutputEngineInterface $outputEngine
-     * @param BundleInterface       $bundle
-     * @param ClassMetadataInfo     $metadata
+     * @var bool
+     */
+    private $updatingDiFile;
+
+    /**
+     * @param TemplateStrategyInterface $templateStrategy
+     * @param BundleInterface           $bundle
+     * @param ClassMetadata             $metadata
      */
     public function __construct(
-        OutputEngineInterface $outputEngine,
+        TemplateStrategyInterface $templateStrategy,
         BundleInterface $bundle,
-        ClassMetadataInfo $metadata
+        ClassMetadata $metadata
     ) {
-        $this->setDiManipulator(new DiXmlManipulator()); //Refactor later.
+        $this->setDiUtils(new DiXmlUtils()); //Refactor later.
 
-        parent::__construct($outputEngine, $bundle, $metadata);
+        parent::__construct($templateStrategy, $bundle, $metadata);
+    }
+
+    /**
+     * @param DiXmlUtils $diUtils
+     */
+    public function setDiUtils(DiXmlUtils $diUtils)
+    {
+        $this->diUtils = $diUtils;
+    }
+
+    /**
+     * @return DiXmlUtils
+     */
+    public function getDiUtils()
+    {
+        return $this->diUtils;
     }
 
     /**
@@ -56,7 +66,7 @@ abstract class AbstractServiceManipulator extends AbstractManipulator implements
     public function setXmlServiceFile(GeneratedFileInterface $file = null)
     {
         $loadContents = ($file && $file->getContents()) ?
-            $file->getContents() : $this->getOutputEngine()->render('config/services.xml.twig', []);
+            $file->getContents() : $this->getTemplateStrategy()->render('config/services.xml.twig', []);
 
         $this->xmlServiceFile = simplexml_load_string($loadContents);
     }
@@ -71,30 +81,6 @@ abstract class AbstractServiceManipulator extends AbstractManipulator implements
         }
 
         return $this->xmlServiceFile;
-    }
-
-    /**
-     * @param string|null $extensionFile
-     */
-    public function setExtensionFile($extensionFile = null)
-    {
-        $this->extensionFile = ($extensionFile) ?: sprintf(
-            '%s/DependencyInjection/%s.php',
-            $this->getBundle()->getPath(),
-            str_replace('Bundle', 'Extension', $this->getBundle()->getName())
-        );
-    }
-
-    /**
-     * @return string
-     */
-    public function getExtensionFile()
-    {
-        if (null === $this->extensionFile) {
-            $this->setExtensionFile();
-        }
-
-        return $this->extensionFile;
     }
 
     /**
@@ -114,46 +100,24 @@ abstract class AbstractServiceManipulator extends AbstractManipulator implements
     }
 
     /**
-     * @param DiXmlManipulator $diManipulator
-     */
-    public function setDiManipulator(DiXmlManipulator $diManipulator)
-    {
-        $this->diManipulator = $diManipulator;
-    }
-
-    /**
-     * @return DiXmlManipulator
-     */
-    public function getDiManipulator()
-    {
-        return $this->diManipulator;
-    }
-
-    /**
      * @param string $output
      *
      * @return string
      */
     public function formatOutput($output)
     {
-        return $this->getDiManipulator()->formatOutput($output);
+        return $this->getDiUtils()->formatOutput($output);
     }
 
     /**
-     * @return ArrayCollection|GeneratedFileInterface[]
+     * @return string
      */
-    public function generate()
+    protected function getDefaultExtensionFile()
     {
-        foreach ($this->getGeneratedFiles() as $generatedFile) {
-            $this->getOutputEngine()->renderFile($generatedFile);
-            if ($this->isUpdatingDiConfFile()) {
-                $this->getDiManipulator()->updateDiFile(
-                    $this->getExtensionFile(),
-                    $generatedFile->getFilename() . '.' . $generatedFile->getExtension()
-                );
-            }
-        }
-
-        return $this->getGeneratedFiles();
+        return sprintf(
+            '%s/DependencyInjection/%s.php',
+            $this->getBundle()->getPath(),
+            str_replace('Bundle', 'Extension', $this->getBundle()->getName())
+        );
     }
 }

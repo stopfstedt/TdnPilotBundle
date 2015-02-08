@@ -4,11 +4,12 @@
      * Partial Update to a {{ entity }}.
      *
 {% block documentation %}
-{% if document %}
+{% if swagger %}
      * @ApiDoc(
-     *   resource = true,
+     *   section = "{{ entity }}",
      *   description = "Partial Update to a {{ entity }}.",
-     *   input="{{ form_type|replace({'.php': ''}) }}",
+     *   resource = true,
+     *   input="{{ form_type }}",
      *   output="{{ namespace }}\Entity\{{ entity_namespace }}{{ entity }}",
      *   requirements={
      *     {
@@ -27,7 +28,6 @@
      *
 {% endif %}
 {% endblock documentation %}
-     *
      * @View(serializerEnableMaxDepthChecks=true)
      *
      * @param Request $request

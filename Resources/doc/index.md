@@ -1,136 +1,46 @@
 TdnPilotBundle
 ==============
-A pilot project generator for symfony2.
+A pilot project generator (scaffolding) for [Symfony 2][symfony 2].
 
-Assumptions
------------
-The documentation assumes the following locations:
+Overview
+--------
+TdnPilotBundle is a <b>very opinionated</b> bundle that provides commands
+that can help scaffold a restful application (or selected parts) based on your doctrine entities.
+These dependencies are listed on the [dependencies] page. Only entities are required as a base. 
+Due to the nature of the bundle it is very opinionated about directory structure and naming
+conventions all of which are in the [caveats] page (if followings PSR & best practices you should
+have no problems!).
 
-- `/bin` for binaries (e.g. `./bin/console`). standard location: `/app`. Only affects documentation.
-- Entities are in a loadable state and following the [entity guidelines][entity-guidelines]
-- `doctrine:schema:validate` passes.
+Documentation notes
+-------------------
+This documentation uses the symfony 3 directory structure. Specific cases are listed below.
 
-#### Dependencies:
-This bundle depends on a number of other symfony bundles, so they need to be configured
- in order for the generator to work properly.
+Please note this does not affect your project in any way, it is just how the documentation is written.
 
-See the following bundles to properly configure them to use in conjunction with this bundle:
-* [FriendsOfSymfony/FOSRestBundle](https://github.com/FriendsOfSymfony/FOSRestBundle)
-* [nelmio/NelmioApiDocBundle](https://github.com/nelmio/NelmioApiDocBundle)
-* [schmittjoh/JMSSerializerBundle](https://github.com/schmittjoh/JMSSerializerBundle)
-* [nelmio/NelmioCorsBundle](https://github.com/nelmio/NelmioCorsBundle)
+- Directory `/bin` for binaries (e.g. `./bin/console`). The current 2.x location is `/app/<console>`.
 
-A working example of the aforementioned bundles configured and working with this bundle can
- be found in this [config example].
+License
+-------
+This bundle is released under the MIT license. See the complete license in the
+[repository] under the following directory:
 
-Installation
+    Resources/meta/LICENSE
+
+Contributing
 ------------
-Require the "tdn/pilotbundle" package in composer.json
 
-```bash
-$ composer require tdn/pilotbundle dev-master
-```
+Please review the [contributing section].
 
-Add the bundle to your application kernel and configure.
 
-``` php
-public function registerBundles()
-{
-    $bundles = array(
-        //...
-          new FOS\RestBundle\FOSRestBundle(),
-          new JMS\SerializerBundle\JMSSerializerBundle($this),
-          new Nelmio\CorsBundle\NelmioCorsBundle(),
-          new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
-        //...
-    );
+Contents
+--------
+* [installation](installation/)
+* [usage](usage/)
+* [contributing](contributing/)
 
-    //...
-
-    if (in_array($this->getEnvironment(), array('dev', 'test'))) {
-        //...
-        $bundles[] = new Tdn\PilotBundle\TdnPilotBundle();
-        //...
-    }
-}
-```
-
-Enable the bundle's configuration in `app/config/config.yml`:
-``` yaml
-# app/config/config.yml
-tdn_pilot: ~
-```
-
-At this point, please do the following if you have not done so (only if applicable):
-- `bin/console doctrine:create:database`
-- `bin/console doctrine:migrations:migrate` *
-- `bin/console doctrine:fixtures:load` *
-
-<sub>* Optional commands provided by MigrationsBundle and FixturesBundle.</sub>
-
-Configuration
--------------
-#### Full configuration
-``` yaml
-tdn_pilot:
-    output:
-        engine: twig_output_engine # Or create your own service implementing OutputEngineInterface
-```
-
-Usage
------
-After the bundle is configured all commands will be availale through the console:
-
-```bash
-$ ./bin/console
-```
-
-### Pilot (all in one)
-
-#### [tdn:generate:project](generate-project.md)
-
-Pilots a project based on entities. [[documentation](generate-project.md)] [[command](../../Command/GenerateProjectCommand.php)]
-
-Please note that this is the **recommended** command to use when using this bundle.
-
-If you need more granular control, please continue reading.
-
-### Specific commands
-If executing single commands, please mind the order.
-
-The generated files rely on each other to some extent (E.g. Controllers rely on handlers which rely on forms which use the managers).
-
-The following list displays the commands in the order they should be executed.
-
-You may use the appropriate command to generate the required files, or you may create them manually. 
-However, if creating the files manually it is recommended that you **extend the generated code instead**, and use the DIC to handle dependencies and calls.
-
-Each command has validation to check for any files it expects.
-
-#### [tdn:generate:manager](generate-manager.md)
-
-Generates an entity manager (DAO) for a specified entity. [[documentation](generate-manager.md)] [[command](../../Command/GenerateManagerCommand.php)]
-
-#### [tdn:generate:form](generate-form.md)
-
-Generates a form type based on the specified entity. [[documentation](generate-form.md)] [[command](../../Command/GenerateFormCommand.php)]
-
-#### [tdn:generate:handler](generate-handler.md)
-
-Generates a rest handler used in controllers based on the specified entity. [[documentation](generate-handler.md)] [[command](../../Command/GenerateHandlerCommand.php)]
-
-#### [tdn:generate:controller](generate-controller.md)
-
-Generates a restful controller based on the specified entity. [[documentation](generate-controller.md)] [[command](../../Command/GenerateControllerCommand.php)]
-
-#### [tdn:generate:routing](generate-routing.md)
-
-Generates routes (or removes them) for controllers based on a the specified entity. [[documentation](generate-routing.md)] [[command](../../Command/GenerateRoutingCommand.php)]
-
-Development
------------
-
-If you are contributing or otherwise developing in this bundle, please read the [contributor guidelines](../../CONTRIBUTING.md).
-
-[config example]: https://github.com/ilios/ilios/blob/master/app/config/config.yml
-[entity-guidelines]: entity-rules.md
+[Dependencies]: installation/dependencies.md
+[caveats]: installation/caveats.md
+[contributing section]: contributing/index.md
+[symfony 2]: http://symfony.com
+[repository]: https://github.com/TheDevNetwork/TdnPilotBundle
+[the api docs]: https://github.com/TheDevNetwork/TdnPilotBundle/

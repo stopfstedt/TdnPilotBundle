@@ -1,0 +1,6 @@
+parameters:
+    tdn_pilot.template.strategy.twig_template_strategy.class: Tdn\PilotBundle\Template\Strategy\TwigStrategy
+
+services:
+    tdn_pilot.template.strategy.twig_template_strategy:
+        class: %tdn_pilot.template.strategy.twig_template_strategy.class%

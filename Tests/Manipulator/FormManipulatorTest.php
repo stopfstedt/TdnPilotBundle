@@ -14,26 +14,17 @@ use \Mockery;
  */
 class FormManipulatorTest extends AbstractManipulatorTest
 {
-    public function testRestSupport()
-    {
-        $manipulator = $this->getManipulator();
-        $this->assertEquals(true, $manipulator->hasRestSupport());
-        $manipulator->setRestSupport(false);
-        $this->assertEquals(false, $manipulator->hasRestSupport());
-    }
-
     /**
      * @return FormManipulator
      */
     protected function getManipulator()
     {
         $manipulator = new FormManipulator(
-            $this->getOutputEngine(),
+            $this->getTemplateStrategy(),
             $this->getBundle(),
             $this->getMetadata()
         );
 
-        $manipulator->setRestSupport(true);
         $manipulator->setOverwrite(false);
         $manipulator->setTargetDirectory($this->getOutDir());
 

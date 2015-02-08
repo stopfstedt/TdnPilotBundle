@@ -1,0 +1,11 @@
+source:
+    - .
+
+exclude:
+    - vendor/*
+    - bin/*
+    - build/*
+    - Resources/*
+    - Tests/*
+
+destination: build/api

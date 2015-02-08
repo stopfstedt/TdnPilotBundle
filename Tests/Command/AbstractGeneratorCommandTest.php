@@ -9,18 +9,17 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\FormatterHelper;
-use Symfony\Component\Console\Input\Input;
 use Sensio\Bundle\GeneratorBundle\Command\Helper\QuestionHelper;
 use Sensio\Bundle\GeneratorBundle\Tests\Command\GenerateCommandTest;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Tdn\PilotBundle\Command\AbstractGeneratorCommand;
-use Tdn\PilotBundle\OutputEngine\TwigOutputEngine;
-use Tdn\PilotBundle\OutputEngine\OutputEngineInterface;
+use Tdn\PilotBundle\Template\Strategy\TwigStrategy;
+use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 use Tdn\PilotBundle\Manipulator\ManipulatorInterface;
 use Tdn\PilotBundle\Model\GeneratedFile;
+use Tdn\PilotBundle\Services\Utils\EntityUtils;
 use Tdn\PilotBundle\TdnPilotBundle;
 use \Mockery as Mockery;
-use \InvalidArgumentException;
 
 /**
  * Class AbstractGeneratorCommandTest
@@ -34,12 +33,12 @@ abstract class AbstractGeneratorCommandTest extends GenerateCommandTest
     private $bundle;
 
     /**
-     * @var OutputEngineInterface
+     * @var TemplateStrategyInterface
      */
-    private $outputEngine;
+    private $templateStrategy;
 
     /**
-     * @var ClassMetadataInfo
+     * @var ClassMetadata
      */
     private $metadata;
 
@@ -107,8 +106,7 @@ abstract class AbstractGeneratorCommandTest extends GenerateCommandTest
         $this->assertEquals(
             $this->getManipulator(),
             $command->getManipulator(
-                $this->getInput(),
-                $this->getOutputEngine(),
+                $this->getTemplateStrategy(),
                 $this->getBundle(),
                 $this->getMetadata()
             )
@@ -123,27 +121,6 @@ abstract class AbstractGeneratorCommandTest extends GenerateCommandTest
         $command = $this->getFullCommand();
         $command->setEntity('Foo');
         $this->assertEquals('Foo', $command->getEntity());
-    }
-
-    /**
-     * @return void
-     */
-    public function testShortcutNotation()
-    {
-        $command = $this->getFullCommand();
-        $bundle  = 'BarBundle';
-        $entity  = 'Foo';
-        $this->assertEquals([$bundle, $entity], $command->parseShortcutNotation('BarBundle:Foo'));
-    }
-
-    /**
-     * @expectedException              InvalidArgumentException
-     * @expectedExceptionMessageRegExp #The entity name must contain a :#
-     */
-    public function testBadShortcutNotation()
-    {
-        $command = $this->getFullCommand();
-        $command->parseShortcutNotation('BarBundle');
     }
 
     /**
@@ -164,7 +141,7 @@ abstract class AbstractGeneratorCommandTest extends GenerateCommandTest
         ;
 
         $container->set('doctrine', $registry);
-        $container->set('tdn_pilot.output.engine.default', $this->getOutputEngine());
+        $container->set('tdn_pilot.template.strategy.default', $this->getTemplateStrategy());
 
         return $container;
     }
@@ -174,22 +151,22 @@ abstract class AbstractGeneratorCommandTest extends GenerateCommandTest
      */
     protected function setMetadata()
     {
-        $this->metadata = Mockery::mock('\Doctrine\ORM\Mapping\ClassMetadataInfo');
+        $this->metadata = Mockery::mock('\Doctrine\ORM\Mapping\ClassMetadata');
         $this->metadata
             ->shouldDeferMissing()
             ->shouldReceive(
                 [
-                    'getName' => 'Foo',
                     'isIdentifierNatural' => true,
                 ]
             )
             ->zeroOrMoreTimes()
         ;
 
-        if ($this->metadata instanceof ClassMetadataInfo) {
+        if ($this->metadata instanceof ClassMetadata) {
+            $this->metadata->name       = 'Foo\BarBundle\Entity\Foo';
             $this->metadata->identifier = ['id'];
             $this->metadata->associationMappings = [];
-            $this->metadata->namespace = '';
+            $this->metadata->namespace = 'Foo\BarBundle\Entity';
             $this->metadata->fieldMappings = [
                 'id' => [
                     'fieldName'  => 'id',
@@ -207,7 +184,7 @@ abstract class AbstractGeneratorCommandTest extends GenerateCommandTest
     }
 
     /**
-     * @return ClassMetadataInfo
+     * @return ClassMetadata
      */
     protected function getMetadata()
     {
@@ -221,30 +198,22 @@ abstract class AbstractGeneratorCommandTest extends GenerateCommandTest
     /**
      * @return void
      */
-    protected function setOutputEngine()
+    protected function setTemplateStrategy()
     {
-        $this->outputEngine = Mockery::mock(new TwigOutputEngine());
-        $this->outputEngine
-            ->shouldDeferMissing()
-            ->shouldReceive(
-                [
-                    'getSkeletonDirs' => $this->getSkeletonDirs()
-                ]
-            )
-            ->withAnyArgs()
-            ->zeroOrMoreTimes();
+        $this->templateStrategy = Mockery::mock(new TwigStrategy());
+        $this->templateStrategy->shouldDeferMissing();
     }
 
     /**
-     * @return OutputEngineInterface
+     * @return TemplateStrategyInterface
      */
-    protected function getOutputEngine()
+    protected function getTemplateStrategy()
     {
-        if (null === $this->outputEngine) {
-            $this->setOutputEngine();
+        if (null === $this->templateStrategy) {
+            $this->setTemplateStrategy();
         }
 
-        return $this->outputEngine;
+        return $this->templateStrategy;
     }
 
     /**
@@ -313,19 +282,6 @@ abstract class AbstractGeneratorCommandTest extends GenerateCommandTest
     }
 
     /**
-     * @return Mockery\MockInterface|Input
-     */
-    protected function getInput()
-    {
-        $input = Mockery::mock('\Symfony\Component\Console\Input\Input');
-        $input
-            ->shouldDeferMissing()
-        ;
-
-        return $input;
-    }
-
-    /**
      * @return Application
      */
     protected function getApplication()
@@ -343,12 +299,31 @@ abstract class AbstractGeneratorCommandTest extends GenerateCommandTest
     {
         /** @var AbstractGeneratorCommand $command */
         $command = $this->getApplication()->find($this->getCommand()->getName());
+        $command->setEntityUtils($this->getEntityUtils());
         $command->setManipulator($this->getManipulator());
         $command->setHelperSet($this->getHelperSet('y'));
         $command->setContainer($this->getContainer());
-        $command->setMetadata($this->getMetadata());
 
         return $command;
+    }
+
+    /**
+     * @return EntityUtils
+     */
+    protected function getEntityUtils()
+    {
+        $entityUtils = Mockery::mock('\Tdn\PilotBundle\Services\Utils\EntityUtils');
+        $entityUtils
+            ->shouldDeferMissing()
+            ->shouldReceive(
+                [
+                    'getMetadata' => $this->getMetadata()
+                ]
+            )
+            ->zeroOrMoreTimes()
+        ;
+
+        return $entityUtils;
     }
 
     /**

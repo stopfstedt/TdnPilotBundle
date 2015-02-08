@@ -2,8 +2,6 @@
 
 namespace Foo\BarBundle\Entity\Manager;
 
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Foo\BarBundle\Entity\FooInterface;
 

@@ -3,10 +3,10 @@
     <description>Coding standard for TdnPilotBundle</description>
     <file>Command</file>
     <file>DependencyInjection</file>
-    <file>Form</file>
     <file>Manipulator</file>
     <file>Model</file>
-    <file>OutputEngine</file>
+    <file>Template</file>
+    <file>Services</file>
     <file>Tests</file>
     <file>TdnPilotBundle.php</file>
     <arg name="extensions" value="php" />

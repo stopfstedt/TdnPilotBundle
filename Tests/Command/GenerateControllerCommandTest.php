@@ -43,8 +43,8 @@ class GenerateControllerCommandTest extends AbstractGeneratorCommandTest
             '--overwrite'        => false,
             '--target-directory' => $this->getOutDir(),
             '--resource'         => true,
-            '--document-api'     => true,
-            'entity'             => 'FooBarBundle:Foo'
+            '--with-swagger'     => true,
+            '--entity'           => 'FooBarBundle:Foo'
         ];
     }
 
@@ -54,7 +54,7 @@ class GenerateControllerCommandTest extends AbstractGeneratorCommandTest
     protected function getManipulator()
     {
         $manipulator = Mockery::mock(
-            new ControllerManipulator($this->getOutputEngine(), $this->getBundle(), $this->getMetadata())
+            new ControllerManipulator($this->getTemplateStrategy(), $this->getBundle(), $this->getMetadata())
         );
 
         $manipulator
@@ -93,7 +93,7 @@ class GenerateControllerCommandTest extends AbstractGeneratorCommandTest
         $content = @file_get_contents(
             dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
             'data' . DIRECTORY_SEPARATOR .
-            'controller.out'
+            'basic.controller.out'
         );
 
         $controllerFileMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');

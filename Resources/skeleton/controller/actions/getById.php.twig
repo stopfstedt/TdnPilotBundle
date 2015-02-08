@@ -4,8 +4,9 @@
      * Get a {{ entity }}
      *
 {% block documentation %}
-{% if document %}
+{% if swagger %}
      * @ApiDoc(
+     *   section = "{{ entity }}",
      *   description = "Get a {{ entity }}.",
      *   resource = true,
      *   requirements={
@@ -27,14 +28,13 @@
 {% endblock documentation %}
      * @View(serializerEnableMaxDepthChecks=true)
      *
-     * @param Request $request
      * @param $id
      *
      * @return Response
      */
 {% endblock phpdoc_method_header %}
 {% block method_definition %}
-    public function getAction(Request $request, $id)
+    public function getAction($id)
 {% endblock method_definition %}
     {
 {% block method_body %}

@@ -6,11 +6,11 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\Finder\SplFileInfo;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Tdn\PilotBundle\Manipulator\ManipulatorInterface;
 use Tdn\PilotBundle\Model\GeneratedFileInterface;
-use Tdn\PilotBundle\OutputEngine\OutputEngineInterface;
-use Tdn\PilotBundle\OutputEngine\TwigOutputEngine;
+use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
+use Tdn\PilotBundle\Template\Strategy\TwigStrategy;
 use Tdn\PilotBundle\TdnPilotBundle;
 use \Mockery;
 
@@ -36,12 +36,12 @@ abstract class AbstractManipulatorTest extends \PHPUnit_Framework_TestCase
     private $bundle;
 
     /**
-     * @var OutputEngineInterface
+     * @var TemplateStrategyInterface
      */
-    private $outputEngine;
+    private $templateStrategy;
 
     /**
-     * @var ClassMetadataInfo
+     * @var ClassMetadata
      */
     private $metadata;
 
@@ -70,7 +70,7 @@ abstract class AbstractManipulatorTest extends \PHPUnit_Framework_TestCase
 
     public function testOutputEngine()
     {
-        $this->assertEquals($this->getOutputEngine(), $this->getManipulator()->getOutputEngine());
+        $this->assertEquals($this->getTemplateStrategy(), $this->getManipulator()->getTemplateStrategy());
     }
 
     public function testBundle()
@@ -103,15 +103,21 @@ abstract class AbstractManipulatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->getOutDir(), $this->getManipulator()->getTargetDirectory());
     }
 
-    public function testOverwrite()
+    public function testMessages()
     {
-        $this->assertEquals(false, $this->getManipulator()->hasOverwrite());
         $manipulator = $this->getManipulator();
-        $manipulator->setOverwrite(true);
-        $this->assertEquals(true, $manipulator->hasOverwrite());
+        $this->assertEquals($this->getExpectedMessages(), $manipulator->getMessages());
     }
 
-    public function testGeneratedFiles()
+    public function testOverwrite()
+    {
+        $this->assertEquals(false, $this->getManipulator()->shouldOverwrite());
+        $manipulator = $this->getManipulator();
+        $manipulator->setOverwrite(true);
+        $this->assertEquals(true, $manipulator->shouldOverwrite());
+    }
+
+    public function testGeneratedFiles($type = null)
     {
         $manipulator = $this->getManipulator();
         $manipulator->setTargetDirectory($this->getOutDir()); //Ensure test directory
@@ -121,7 +127,7 @@ abstract class AbstractManipulatorTest extends \PHPUnit_Framework_TestCase
         $generatedFiles = $manipulator->generate();
 
         foreach ($generatedFiles as $generatedFile) {
-            $expectedContents = $this->getGeneratedFiles()[$generatedFile->getFullPath()]->getContents();
+            $expectedContents = $this->getGeneratedFiles($type)[$generatedFile->getFullPath()]->getContents();
             $this->assertEquals(
                 $expectedContents,
                 $generatedFile->getContents(),
@@ -164,22 +170,22 @@ abstract class AbstractManipulatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    protected function setOutputEngine()
+    protected function setTemplateStrategy()
     {
-        $this->outputEngine = new TwigOutputEngine();
-        $this->outputEngine->setSkeletonDirs($this->getSkeletonDirs());
+        $this->templateStrategy = new TwigStrategy();
+        $this->templateStrategy->setSkeletonDirs($this->getSkeletonDirs());
     }
 
     /**
-     * @return OutputEngineInterface
+     * @return TemplateStrategyInterface
      */
-    protected function getOutputEngine()
+    protected function getTemplateStrategy()
     {
-        if (null === $this->outputEngine) {
-            $this->setOutputEngine();
+        if (null === $this->templateStrategy) {
+            $this->setTemplateStrategy();
         }
 
-        return $this->outputEngine;
+        return $this->templateStrategy;
     }
 
     /**
@@ -187,12 +193,11 @@ abstract class AbstractManipulatorTest extends \PHPUnit_Framework_TestCase
      */
     protected function setMetadata()
     {
-        $this->metadata = Mockery::mock('\Doctrine\ORM\Mapping\ClassMetadataInfo');
+        $this->metadata = Mockery::mock('\Doctrine\ORM\Mapping\ClassMetadata');
         $this->metadata
             ->shouldDeferMissing()
             ->shouldReceive(
                 [
-                    'getName'             => 'Foo',
                     'isIdentifierNatural' => true,
                     'getReflectionClass'  => new \ReflectionClass(new \stdClass())
                 ]
@@ -200,10 +205,11 @@ abstract class AbstractManipulatorTest extends \PHPUnit_Framework_TestCase
             ->zeroOrMoreTimes()
         ;
 
-        if ($this->metadata instanceof ClassMetadataInfo) {
+        if ($this->metadata instanceof ClassMetadata) {
+            $this->metadata->name       = 'Foo\BarBundle\Entity\Foo';
             $this->metadata->identifier = ['id'];
             $this->metadata->associationMappings = [];
-            $this->metadata->namespace = '';
+            $this->metadata->namespace = 'Foo\BarBundle\Entity';
             $this->metadata->fieldMappings = [
                 'id' => [
                     'fieldName'  => 'id',
@@ -215,13 +221,23 @@ abstract class AbstractManipulatorTest extends \PHPUnit_Framework_TestCase
                     'fieldName'  => 'description',
                     'type'       => 'string',
                     'columnName' => 'description'
+                ],
+                'name' => [
+                    'fieldName'  => 'name',
+                    'type'       => 'string',
+                    'columnName' => 'name'
+                ],
+                'title' => [
+                    'fieldName'  => 'title',
+                    'type'       => 'string',
+                    'columnName' => 'title'
                 ]
             ];
         }
     }
 
     /**
-     * @return ClassMetadataInfo
+     * @return ClassMetadata
      */
     protected function getMetadata()
     {
@@ -251,6 +267,19 @@ abstract class AbstractManipulatorTest extends \PHPUnit_Framework_TestCase
     protected function getOutDir()
     {
         return $this->outDir;
+    }
+
+    /**
+     * @return Filesystem
+     */
+    protected function getFilesystem()
+    {
+        return $this->filesystem;
+    }
+
+    protected function getExpectedMessages()
+    {
+        return new ArrayCollection();
     }
 
     protected function tearDown()

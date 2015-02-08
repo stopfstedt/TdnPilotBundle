@@ -6,12 +6,15 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Tdn\PilotBundle\Manipulator\RoutingManipulator;
-use Tdn\PilotBundle\OutputEngine\OutputEngineInterface;
+use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 
 /**
  * Class GenerateRoutingCommand
+ *
+ * Adds / Removes routes from the routing file based on an entity.
+ *
  * @package Tdn\SfRoutingGeneratorBundle\Command
  */
 class GenerateRoutingCommand extends AbstractGeneratorCommand
@@ -60,32 +63,30 @@ class GenerateRoutingCommand extends AbstractGeneratorCommand
     }
 
     /**
-     * @param InputInterface          $input
-     * @param OutputEngineInterface   $outputEngine
-     * @param BundleInterface         $bundle
-     * @param ClassMetadataInfo       $metadata
+     * @param TemplateStrategyInterface $templateStrategy
+     * @param BundleInterface           $bundle
+     * @param ClassMetadata             $metadata
      *
      * @return RoutingManipulator
      */
     protected function createManipulator(
-        InputInterface $input,
-        OutputEngineInterface $outputEngine,
+        TemplateStrategyInterface $templateStrategy,
         BundleInterface $bundle,
-        ClassMetadataInfo $metadata
+        ClassMetadata $metadata
     ) {
-        $manipulator = new RoutingManipulator($outputEngine, $bundle, $metadata);
-        $manipulator->setRoutingFile($input->getArgument('routing-file'));
-        $manipulator->setRoutePrefix($input->getOption('route-prefix'));
-        $manipulator->setRemove(($input->getOption('remove') ? true : false));
+        $manipulator = new RoutingManipulator($templateStrategy, $bundle, $metadata);
+        $manipulator->setRoutingFile($this->getInput()->getArgument('routing-file'));
+        $manipulator->setRoutePrefix($this->getInput()->getOption('route-prefix'));
+        $manipulator->setRemove(($this->getInput()->getOption('remove') ? true : false));
 
         return $manipulator;
     }
 
     /**
-     * @return string
+     * @return string[]
      */
-    protected function getFileType()
+    protected function getFiles()
     {
-        return 'Routing';
+        return ['Routing conf'];
     }
 }

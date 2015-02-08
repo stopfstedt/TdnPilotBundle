@@ -4,8 +4,9 @@
      * Delete a {{ entity }}.
      *
 {% block documentation %}
-{% if document %}
+{% if swagger %}
      * @ApiDoc(
+     *   section = "{{ entity }}",
      *   description = "Delete a {{ entity }} entity.",
      *   resource = true,
      *   requirements={
@@ -27,7 +28,6 @@
 {% endblock documentation %}
      * @View(statusCode=204)
      *
-     * @param Request $request
      * @param $id
      * @internal {{ entity }}Interface ${{ entity|lowerfirst }}
      *
@@ -38,14 +38,14 @@
 {% endblock phpdoc_method_annotations %}
      */
 {% block method_definition %}
-    public function deleteAction(Request $request, $id)
+    public function deleteAction($id)
 {% endblock method_definition %}
     {
 {% block method_body %}
         ${{ entity|lowerfirst }} = $this->getOr404($id);
+
         try {
-            $this->get{{ entity }}Handler()
-                ->delete{{ entity }}(${{ entity|lowerfirst }});
+            $this->get{{ entity }}Handler()->delete{{ entity }}(${{ entity|lowerfirst }});
 
             return new Response('', Codes::HTTP_NO_CONTENT);
         } catch (\Exception $exception) {

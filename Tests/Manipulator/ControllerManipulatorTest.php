@@ -37,20 +37,20 @@ class ControllerManipulatorTest extends AbstractManipulatorTest
         $this->assertEquals(false, $manipulator->isResource());
     }
 
-    public function testDocument()
+    public function testSwagger()
     {
         $manipulator = $this->getManipulator();
-        $this->assertEquals(true, $manipulator->hasDocument());
-        $manipulator->setDocument(false);
-        $this->assertEquals(false, $manipulator->hasDocument());
+        $this->assertEquals(true, $manipulator->hasSwagger());
+        $manipulator->setSwagger(false);
+        $this->assertEquals(false, $manipulator->hasSwagger());
     }
 
     public function testGenerateTests()
     {
         $manipulator = $this->getManipulator();
-        $this->assertEquals(false, $manipulator->hasGenerateTests());
+        $this->assertEquals(false, $manipulator->shouldGenerateTests());
         $manipulator->setGenerateTests(true);
-        $this->assertEquals(true, $manipulator->hasGenerateTests());
+        $this->assertEquals(true, $manipulator->shouldGenerateTests());
     }
 
     /**
@@ -59,11 +59,11 @@ class ControllerManipulatorTest extends AbstractManipulatorTest
     protected function getManipulator()
     {
         $manipulator = new ControllerManipulator(
-            $this->getOutputEngine(),
+            $this->getTemplateStrategy(),
             $this->getBundle(),
             $this->getMetadata()
         );
-        $manipulator->setDocument(true);
+        $manipulator->setSwagger(true);
         $manipulator->setResource(true);
         $manipulator->setOverwrite(false);
         $manipulator->setTargetDirectory($this->getOutDir());
@@ -88,11 +88,13 @@ class ControllerManipulatorTest extends AbstractManipulatorTest
     }
 
     /**
+     * @param  string|null              $type
+     *
      * @return GeneratedFileInterface[]
      */
-    protected function getGeneratedFiles()
+    protected function getGeneratedFiles($type = null)
     {
-        $controllerFileMock = $this->getControllerFileMock();
+        $controllerFileMock = $this->getControllerFileMock($type);
 
         return [
             $controllerFileMock->getFullPath() => $controllerFileMock
@@ -100,14 +102,16 @@ class ControllerManipulatorTest extends AbstractManipulatorTest
     }
 
     /**
+     * @param  string|null            $type
+     *
      * @return GeneratedFileInterface
      */
-    protected function getControllerFileMock()
+    protected function getControllerFileMock($type = null)
     {
         $content = @file_get_contents(
             dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
             'data' . DIRECTORY_SEPARATOR .
-            'controller.out'
+            (($type) ?: 'basic') . '.controller.out'
         );
 
         $controllerFileMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');

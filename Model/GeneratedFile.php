@@ -31,11 +31,17 @@ class GeneratedFile implements GeneratedFileInterface
     /**
      * @var bool
      */
-    private $forceNew;
+    private $auxFile;
+
+    /**
+     * @var bool
+     */
+    private $serviceFile;
 
     public function __construct()
     {
-        $this->forceNew = false;
+        $this->auxFile = false;
+        $this->serviceFile = false;
     }
 
     /**
@@ -123,6 +129,12 @@ class GeneratedFile implements GeneratedFileInterface
     }
 
     /**
+     * Gets the content of the file constructed from full path.
+     *
+     * Will return contents in this order: if content is set already
+     * return that. Otherwise try to get the fullpath's content
+     * If that fails, value will be null.
+     *
      * @return string
      */
     public function getContents()
@@ -143,12 +155,12 @@ class GeneratedFile implements GeneratedFileInterface
     }
 
     /**
-     * @param  bool $forceNew
+     * @param  bool $auxFile
      * @return $this
      */
-    public function setForceNew($forceNew)
+    public function setAuxFile($auxFile)
     {
-        $this->forceNew = $forceNew;
+        $this->auxFile = $auxFile;
 
         return $this;
     }
@@ -156,9 +168,25 @@ class GeneratedFile implements GeneratedFileInterface
     /**
      * @return bool
      */
-    public function hasForceNew()
+    public function isAuxFile()
     {
-        return $this->forceNew;
+        return $this->auxFile;
+    }
+
+    /**
+     * @param bool $serviceFile
+     */
+    public function setServiceFile($serviceFile)
+    {
+        $this->serviceFile = $serviceFile;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isServiceFile()
+    {
+        return $this->serviceFile;
     }
 
     /**

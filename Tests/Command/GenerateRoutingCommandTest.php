@@ -32,7 +32,7 @@ class GenerateRoutingCommandTest extends AbstractGeneratorCommandTest
             '--target-directory' => $this->getOutDir(),
             '--route-prefix'     => 'v1',
             '--remove'           => false,
-            'entity'             => 'FooBarBundle:Foo',
+            '--entity'           => 'FooBarBundle:Foo',
             'routing-file'       => 'routing.yml'
         ];
     }
@@ -43,7 +43,7 @@ class GenerateRoutingCommandTest extends AbstractGeneratorCommandTest
     protected function getManipulator()
     {
         $manipulator = Mockery::mock(
-            new RoutingManipulator($this->getOutputEngine(), $this->getBundle(), $this->getMetadata())
+            new RoutingManipulator($this->getTemplateStrategy(), $this->getBundle(), $this->getMetadata())
         );
 
         $manipulator

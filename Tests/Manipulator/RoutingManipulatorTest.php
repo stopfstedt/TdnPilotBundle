@@ -33,9 +33,9 @@ class RoutingManipulatorTest extends AbstractManipulatorTest
     public function testRemove()
     {
         $manipulator = $this->getManipulator();
-        $this->assertFalse($manipulator->hasRemove());
+        $this->assertFalse($manipulator->shouldRemove());
         $manipulator->setRemove(true);
-        $this->assertTrue($manipulator->hasRemove());
+        $this->assertTrue($manipulator->shouldRemove());
     }
 
     /**
@@ -44,7 +44,7 @@ class RoutingManipulatorTest extends AbstractManipulatorTest
     protected function getManipulator()
     {
         $manipulator = new RoutingManipulator(
-            $this->getOutputEngine(),
+            $this->getTemplateStrategy(),
             $this->getBundle(),
             $this->getMetadata()
         );

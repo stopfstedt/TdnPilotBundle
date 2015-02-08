@@ -2,14 +2,16 @@
 
 namespace Tdn\PilotBundle\Command;
 
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Tdn\PilotBundle\Manipulator\HandlerManipulator;
-use Tdn\PilotBundle\OutputEngine\OutputEngineInterface;
+use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 
 /**
  * Class GenerateHandlerCommand
+ *
+ * Generates a REST handler that provide a way of managing your entities in a controller context.
+ *
  * @package Tdn\PilotBundle\Command
  */
 class GenerateHandlerCommand extends AbstractGeneratorCommand
@@ -25,27 +27,25 @@ class GenerateHandlerCommand extends AbstractGeneratorCommand
     const DESCRIPTION = 'Generates an entity REST handler file for a controller.';
 
     /**
-     * @param InputInterface          $input
-     * @param OutputEngineInterface   $outputEngine
-     * @param BundleInterface         $bundle
-     * @param ClassMetadataInfo       $metadata
+     * @param TemplateStrategyInterface $templateStrategy
+     * @param BundleInterface           $bundle
+     * @param ClassMetadata             $metadata
      *
      * @return HandlerManipulator
      */
     protected function createManipulator(
-        InputInterface $input,
-        OutputEngineInterface $outputEngine,
+        TemplateStrategyInterface $templateStrategy,
         BundleInterface $bundle,
-        ClassMetadataInfo $metadata
+        ClassMetadata $metadata
     ) {
-        return new HandlerManipulator($outputEngine, $bundle, $metadata);
+        return new HandlerManipulator($templateStrategy, $bundle, $metadata);
     }
 
     /**
-     * @return string
+     * @return string[]
      */
-    protected function getFileType()
+    protected function getFiles()
     {
-        return 'Rest Handler';
+        return ['Rest Handler'];
     }
 }

@@ -6,9 +6,9 @@ use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Tdn\PilotBundle\Model\GeneratedFileInterface;
-use Tdn\PilotBundle\OutputEngine\OutputEngineInterface;
+use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 
 /**
  * Interface ManipulatorInterface
@@ -17,14 +17,14 @@ use Tdn\PilotBundle\OutputEngine\OutputEngineInterface;
 interface ManipulatorInterface
 {
     /**
-     * @param OutputEngineInterface $outputEngine
+     * @param TemplateStrategyInterface $templateStrategy
      */
-    public function setOutputEngine(OutputEngineInterface $outputEngine);
+    public function setTemplateStrategy(TemplateStrategyInterface $templateStrategy);
 
     /**
-     * @return OutputEngineInterface
+     * @return TemplateStrategyInterface
      */
-    public function getOutputEngine();
+    public function getTemplateStrategy();
 
     /**
      * @param BundleInterface $bundle
@@ -47,12 +47,12 @@ interface ManipulatorInterface
     public function getEntityNamespace();
 
     /**
-     * @param ClassMetadataInfo $metadata
+     * @param ClassMetadata $metadata
      */
-    public function setMetadata(ClassMetadataInfo $metadata);
+    public function setMetadata(ClassMetadata $metadata);
 
     /**
-     * @return ClassMetadataInfo
+     * @return ClassMetadata
      */
     public function getMetadata();
 
@@ -87,6 +87,21 @@ interface ManipulatorInterface
     public function getFileDependencies();
 
     /**
+     * @param Collection $messages
+     */
+    public function setMessages(Collection $messages);
+
+    /**
+     * @param string $message
+     */
+    public function addMessage($message);
+
+    /**
+     * @return ArrayCollection|string[]
+     */
+    public function getMessages();
+
+    /**
      * @param string $targetDirectory
      */
     public function setTargetDirectory($targetDirectory);
@@ -104,7 +119,7 @@ interface ManipulatorInterface
     /**
      * @return bool
      */
-    public function hasOverwrite();
+    public function shouldOverwrite();
 
     /**
      * @return bool

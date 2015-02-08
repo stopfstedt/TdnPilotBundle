@@ -20,9 +20,13 @@ install:
 
 script:
   - bin/phpcs --standard=.phpcs.xml
-  - bin/phpunit --coverage-clover=coverage.clover
+  - mkdir -p build/logs
+  - bin/phpunit -c phpunit.xml.dist
   - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+  - php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml
+
+after_script:
+  - bin/coveralls
 
 notifications:
   irc: "chat.freenode.net#thedevnetwork"

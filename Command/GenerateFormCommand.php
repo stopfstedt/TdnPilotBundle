@@ -2,17 +2,17 @@
 
 namespace Tdn\PilotBundle\Command;
 
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Tdn\PilotBundle\Manipulator\FormManipulator;
-use Tdn\PilotBundle\OutputEngine\OutputEngineInterface;
+use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 
 /**
+ * Class GenerateFormCommand
+ *
  * Generates a form type class for a given Doctrine entity, with optional REST generator support.
  *
- * @author Victor Passapera <vpassapera@gmail.com>
+ * @package Tdn\PilotBundle\Command
  */
 class GenerateFormCommand extends AbstractGeneratorCommand
 {
@@ -27,45 +27,25 @@ class GenerateFormCommand extends AbstractGeneratorCommand
     const DESCRIPTION = 'Generates a form type class based on a doctrine entity.';
 
     /**
-     * @return InputOption[]
-     */
-    protected function getInputArgs()
-    {
-        return [
-            new InputOption(
-                'rest-support',
-                'r',
-                InputOption::VALUE_NONE,
-                'Generate an form type with tdn_entity support'
-            )
-        ];
-    }
-
-    /**
-     * @param InputInterface          $input
-     * @param OutputEngineInterface   $outputEngine
-     * @param BundleInterface         $bundle
-     * @param ClassMetadataInfo       $metadata
+     * @param TemplateStrategyInterface $templateStrategy
+     * @param BundleInterface           $bundle
+     * @param ClassMetadata             $metadata
      *
      * @return FormManipulator
      */
     protected function createManipulator(
-        InputInterface $input,
-        OutputEngineInterface $outputEngine,
+        TemplateStrategyInterface $templateStrategy,
         BundleInterface $bundle,
-        ClassMetadataInfo $metadata
+        ClassMetadata $metadata
     ) {
-        $manipulator = new FormManipulator($outputEngine, $bundle, $metadata);
-        $manipulator->setRestSupport(($input->getOption('rest-support') ? true : false));
-
-        return $manipulator;
+        return new FormManipulator($templateStrategy, $bundle, $metadata);
     }
 
     /**
-     * @return string
+     * @return string[]
      */
-    protected function getFileType()
+    protected function getFiles()
     {
-        return 'Form type';
+        return ['Form type'];
     }
 }

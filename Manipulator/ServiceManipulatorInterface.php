@@ -3,7 +3,7 @@
 namespace Tdn\PilotBundle\Manipulator;
 
 use Tdn\PilotBundle\Model\GeneratedFileInterface;
-use Tdn\PilotBundle\Services\Utils\DependencyInjection\DiXmlManipulator;
+use Tdn\PilotBundle\Services\Utils\DiXmlUtils;
 
 /**
  * Interface ServiceManipulatorInterface
@@ -12,24 +12,14 @@ use Tdn\PilotBundle\Services\Utils\DependencyInjection\DiXmlManipulator;
 interface ServiceManipulatorInterface extends ManipulatorInterface
 {
     /**
-     * @param string|null $extensionFile
+     * @param DiXmlUtils $diManipulator
      */
-    public function setExtensionFile($extensionFile = null);
+    public function setDiUtils(DiXmlUtils $diManipulator);
 
     /**
-     * @return string
+     * @return DiXmlUtils
      */
-    public function getExtensionFile();
-
-    /**
-     * @param DiXmlManipulator $diManipulator
-     */
-    public function setDiManipulator(DiXmlManipulator $diManipulator);
-
-    /**
-     * @return DiXmlManipulator
-     */
-    public function getDiManipulator();
+    public function getDiUtils();
 
     /**
      * @param GeneratedFileInterface|null $file

@@ -2,14 +2,17 @@
 
 namespace Tdn\PilotBundle\Command;
 
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Tdn\PilotBundle\Manipulator\ManagerManipulator;
-use Tdn\PilotBundle\OutputEngine\OutputEngineInterface;
+use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 
 /**
  * Class GenerateManagerCommand
+ *
+ * Generates a entity manager specific for an entity (DAO)
+ * with a repository as a dependency.
+ *
  * @package Tdn\PilotBundle\Command
  */
 class GenerateManagerCommand extends AbstractGeneratorCommand
@@ -22,30 +25,28 @@ class GenerateManagerCommand extends AbstractGeneratorCommand
     /**
      * @var string
      */
-    const DESCRIPTION = 'tdn:generate:manager';
+    const DESCRIPTION = 'Generates an entity manager (Repository + DAO patterns) for a given entity.';
 
     /**
-     * @param InputInterface          $input
-     * @param OutputEngineInterface   $outputEngine
-     * @param BundleInterface         $bundle
-     * @param ClassMetadataInfo       $metadata
+     * @param TemplateStrategyInterface $templateStrategy
+     * @param BundleInterface           $bundle
+     * @param ClassMetadata             $metadata
      *
      * @return ManagerManipulator
      */
     protected function createManipulator(
-        InputInterface $input,
-        OutputEngineInterface $outputEngine,
+        TemplateStrategyInterface $templateStrategy,
         BundleInterface $bundle,
-        ClassMetadataInfo $metadata
+        ClassMetadata $metadata
     ) {
-        return new ManagerManipulator($outputEngine, $bundle, $metadata);
+        return new ManagerManipulator($templateStrategy, $bundle, $metadata);
     }
 
     /**
-     * @return string
+     * @return string[]
      */
-    protected function getFileType()
+    protected function getFiles()
     {
-        return 'Entity Manager';
+        return ['Entity Manager', 'Entity Manager Interface'];
     }
 }
