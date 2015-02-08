@@ -2,6 +2,7 @@
 
 namespace Tdn\SfProjectGeneratorBundle\Command;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -39,9 +40,9 @@ class GenerateControllerCommand extends GeneratorCommand
                 ),
                 new InputOption(
                     'overwrite',
-                    '',
+                    'w',
                     InputOption::VALUE_NONE,
-                    'Do not stop the generation if rest api controller already exist, thus overwriting all generated files'
+                    'Overwrite existing controller.'
                 ),
                 new InputOption(
                     'document',
@@ -80,15 +81,18 @@ EOT
             ->setName('tdn:generate:controller');
     }
 
-    public function setOptions(InputInterface $input)
+    /**
+     * @param InputInterface $input
+     */
+    protected function setOptions(InputInterface $input)
     {
-        $this->options = [
+        $this->options = new ArrayCollection([
             'route-prefix' => $this->getRoutePrefix($input),
-            'overwrite'    => $input->getOption('overwrite'),
-            'resource'     => $input->getOption('resource'),
-            'document'     => $input->getOption('document'),
-            'with-tests'   => ($input->hasOption('with-tests') ?$input->getOption('with-tests') : null) // generateTestClass()
-        ];
+            'overwrite'    => ($input->getOption('overwrite') ? true : false),
+            'resource'     => ($input->getOption('resource') ? true : false),
+            'document'     => ($input->getOption('document') ? true : false),
+            'with-tests'   => ($input->getOption('with-tests') ?$input->getOption('with-tests') : null), // generateTestClass()
+        ]);
     }
 
     /**

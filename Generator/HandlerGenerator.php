@@ -2,16 +2,13 @@
 
 namespace Tdn\SfProjectGeneratorBundle\Generator;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use JMS\PhpManipulator\TokenStream;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Tdn\PhpTypes\Type\String;
-use Tdn\SfProjectGeneratorBundle\Manipulator\ObjectManipulator;
-use Tdn\SfProjectGeneratorBundle\Model\Source;
-use Tdn\SfProjectGeneratorBundle\Model\Method;
-use Tdn\SfProjectGeneratorBundle\Model\Param;
 
 /**
  * Class HandlerGenerator
@@ -25,9 +22,9 @@ class HandlerGenerator extends Generator
      * @param BundleInterface $bundle The bundle in which to create the class
      * @param string $entity The entity relative class name
      * @param ClassMetadataInfo $metadata The entity metadata class
-     * @param array $options [restSupport => (bool)]
+     * @param ArrayCollection $options [restSupport => (bool)]
      */
-    public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata, array $options = null)
+    public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata, ArrayCollection $options = null)
     {
         $dir = $bundle->getPath();
 
@@ -47,7 +44,7 @@ class HandlerGenerator extends Generator
             mkdir(dirname($target));
         }
 
-        if (!$options['overwrite'] && file_exists($target)) {
+        if (!$options->get('overwrite') && file_exists($target)) {
             throw new \RuntimeException(sprintf(
                 'Unable to generate the handler class %s as it already exists.',
                 $target
@@ -57,12 +54,13 @@ class HandlerGenerator extends Generator
         $this->renderFile(
             'handler/handler.php.twig',
             $target,
-            array(
+            [
                 'entity' => $entity,
                 'entity_class' => $entityClass,
                 'namespace' => $bundle->getNamespace(),
                 'entity_namespace' => $entityNamespace,
-            )
+            ],
+            $options->get('overwrite')
         );
 
         $this->declareService($bundle, $entity);
@@ -115,7 +113,7 @@ class HandlerGenerator extends Generator
         );
 
         if (!is_file($handlersFile)) {
-            $this->renderFile("config/services.xml.twig", $handlersFile, array());
+            $this->renderFile("config/services.xml.twig", $handlersFile, []);
         }
 
         $newXML = simplexml_load_file($handlersFile);
@@ -186,21 +184,5 @@ class HandlerGenerator extends Generator
             $newContent = substr_replace($text, $toInput, $position, 0);
             file_put_contents($fileName, $newContent);
         }
-    }
-
-    /**
-     * @param string $filePath
-     */
-    public function setFilePath($filePath)
-    {
-        $this->filePath = $filePath;
-    }
-
-    /**
-     * @param string $generatedName
-     */
-    public function setGeneratedName($generatedName)
-    {
-        $this->generatedName = $generatedName;
     }
 }

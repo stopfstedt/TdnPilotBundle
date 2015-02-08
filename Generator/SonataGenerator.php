@@ -21,29 +21,19 @@ class SonataGenerator extends Generator
      */
     public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata, array $options = null)
     {
-
-    }
-
-    /**
-     * Generates the admin class only.
-     *
-     */
-    public function generateAdminClass(ClassMetadataInfo $metadata, $forceOverwrite)
-    {
-        $dir = $this->bundle->getPath();
-
-        $parts = explode('\\', $this->entity);
+        $dir = $bundle->getPath();
+        $parts = explode('\\', $entity);
         $entityClass = array_pop($parts);
         $entityNamespace = implode('\\', $parts);
 
         $target = sprintf(
-            '%s/Admin/%s/%sAdmin.php',
+            '%s/Admin/%sAdmin.php',
             $dir,
             str_replace('\\', '/', $entityNamespace),
             $entityClass
         );
 
-        if (!$forceOverwrite && file_exists($target)) {
+        if (!$options['overwrite'] && file_exists($target)) {
             throw new \RuntimeException('Unable to generate the sonata admin ' . $target . ' class as it already exists.');
         }
 
@@ -53,13 +43,29 @@ class SonataGenerator extends Generator
 
         $this->renderFile('sonata/admin.php.twig', $target, array(
             'fields'            => $this->getFieldsFromMetadata($metadata),
-            'bundle'            => $this->bundle->getName(),
-            'entity'            => $this->entity,
+            'bundle'            => $bundle->getName(),
+            'entity'            => $entity,
             'entity_class'      => $entityClass,
-            'namespace'         => $this->bundle->getNamespace(),
+            'namespace'         => $bundle->getNamespace(),
             'entity_namespace'  => $entityNamespace
         ));
     }
 
+    /**
+     * @param string $generatedName
+     */
+    public function setGeneratedName($generatedName)
+    {
+        return 'Sonata Admin';
+        // TODO: Implement setGeneratedName() method.
+    }
+
+    /**
+     * @param string $filePath
+     */
+    public function setFilePath($filePath)
+    {
+        // TODO: Implement setFilePath() method.
+    }
 }
 

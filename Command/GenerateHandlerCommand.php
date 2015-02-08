@@ -5,6 +5,7 @@ namespace Tdn\SfProjectGeneratorBundle\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Tdn\SfProjectGeneratorBundle\Generator\HandlerGenerator;
 
 /**
@@ -28,8 +29,8 @@ class GenerateHandlerCommand extends GeneratorCommand
                 new InputOption(
                     'overwrite',
                     'w',
-                    InputOption::VALUE_OPTIONAL,
-                    false
+                    InputOption::VALUE_NONE,
+                    'Overwrite existing handler file.'
                 )
             ))
             ->setDescription(
@@ -54,7 +55,7 @@ EOT
     /**
      * @return EntityGenerator
      */
-    public function createGenerator()
+    protected function createGenerator()
     {
         return new HandlerGenerator();
     }
@@ -70,10 +71,10 @@ EOT
     /**
      * @param InputInterface $input
      */
-    public function setOptions(InputInterface $input)
+    protected function setOptions(InputInterface $input)
     {
-        $this->options = [
-            'overwrite' => ($input->getOption('overwrite') !== false) ? true : false
-        ];
+        $this->options = new ArrayCollection([
+            'overwrite' => ($input->getOption('overwrite') ? true : false)
+        ]);
     }
 }

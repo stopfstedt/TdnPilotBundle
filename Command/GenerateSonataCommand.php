@@ -45,9 +45,9 @@ EOT
     }
 
     /**
-     * @return EntityGenerator
+     * @return SonataGenerator
      */
-    public function createGenerator()
+    protected function createGenerator()
     {
         return new SonataGenerator();
     }
@@ -144,7 +144,7 @@ EOT
     /**
      * @param InputInterface $input
      */
-    public function setOptions(InputInterface $input)
+    protected function setOptions(InputInterface $input)
     {
         $this->options = [];
     }

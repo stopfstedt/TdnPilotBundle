@@ -2,12 +2,14 @@
 
 namespace Tdn\SfProjectGeneratorBundle\Command;
 
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Sensio\Bundle\GeneratorBundle\Command\GeneratorCommand as BaseGeneratorCommand;
 use Sensio\Bundle\GeneratorBundle\Command\Validators;
 use Doctrine\Bundle\DoctrineBundle\Mapping\DisconnectedMetadataFactory;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 use Tdn\SfProjectGeneratorBundle\Generator\GeneratorInterface;
@@ -22,7 +24,7 @@ use Tdn\SfProjectGeneratorBundle\Generator\GeneratorInterface;
 abstract class GeneratorCommand extends BaseGeneratorCommand
 {
     /**
-     * @var array
+     * @var ArrayCollection
      */
     protected $options;
 
@@ -42,13 +44,17 @@ abstract class GeneratorCommand extends BaseGeneratorCommand
      *
      * @param InputInterface $input
      */
-    abstract public function setOptions(InputInterface $input);
+    abstract protected function setOptions(InputInterface $input);
 
     /**
-     * @return array
+     * @return Collection
      */
     protected function getOptions()
     {
+        if (null === $this->options || !$this->options instanceof Collection) {
+            throw new \BadFunctionCallException('Options must be set by child class as an instance of Collection.');
+        }
+
         return $this->options;
     }
 
@@ -155,7 +161,7 @@ abstract class GeneratorCommand extends BaseGeneratorCommand
         $entityClass = $this->getContainer()->get('doctrine')->getAliasNamespace($bundle).'\\'.$entity;
         $metadata = $this->getEntityMetadata($entityClass);
         $bundle   = $this->getApplication()->getKernel()->getBundle($bundle);
-        $generator = $this->getGenerator($bundle);
+        $generator = $this->getGenerator();
         $generator->setFilesystem($this->getContainer()->get('filesystem'));
 
         try {
@@ -163,13 +169,13 @@ abstract class GeneratorCommand extends BaseGeneratorCommand
             $generator->generate($bundle, $entity, $metadata[0], $this->getOptions());
 
             $output->writeln(sprintf(
-                'The new %s %s file has been created under %s.',
+                '<info>The new %s %s file has been created under %s.</info>',
                 $generator->getGeneratedName(),
                 $this->getFileTypeCreated(),
                 $generator->getFilePath()
             ));
         } catch (\Exception $e) {
-            $output->writeln($this->getFailureMessage($e));
+            $output->writeln("<error>" . $this->getFailureMessage($e) . "</error>");
         }
     }
 }

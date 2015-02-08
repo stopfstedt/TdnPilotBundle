@@ -2,6 +2,7 @@
 
 namespace Tdn\SfProjectGeneratorBundle\Generator;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
@@ -17,9 +18,9 @@ class EntityGenerator extends Generator
      * @param BundleInterface   $bundle   The bundle in which to create the class
      * @param string            $entity   The entity relative class name
      * @param ClassMetadataInfo $metadata The entity metadata class
-     * @param array             $options
+     * @param ArrayCollection   $options
      */
-    public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata, array $options = null)
+    public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata, ArrayCollection $options = null)
     {
         $parts       = explode('\\', $entity);
         $entityClass = array_pop($parts);
@@ -27,10 +28,13 @@ class EntityGenerator extends Generator
         $dirPath         = $bundle->getPath().'/Entity';
         $this->filePath = $dirPath.'/'.str_replace('\\', '/', $entity).'Interface.php';
 
-        $this->renderFile('entity/interface.php.twig', $this->filePath, array(
-            'namespace'        => $bundle->getNamespace(),
-            //implement
-        ));
+        $this->renderFile(
+            'entity/interface.php.twig',
+            $this->filePath,
+            [
+                'namespace'        => $bundle->getNamespace(),
+            ]
+        );
     }
 
     /**

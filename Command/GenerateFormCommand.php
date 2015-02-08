@@ -2,6 +2,7 @@
 
 namespace Tdn\SfProjectGeneratorBundle\Command;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
@@ -29,9 +30,15 @@ class GenerateFormCommand extends GeneratorCommand
                     'The entity class name to initialize (shortcut notation)'
                 ),
                 new InputOption(
+                    'overwrite',
+                    'w',
+                    InputOption::VALUE_NONE,
+                    'Overwrite existing form type.'
+                ),
+                new InputOption(
                     'rest-support',
                     '',
-                    InputOption::VALUE_OPTIONAL,
+                    InputOption::VALUE_NONE,
                     'Generate an form type with tdn_entity support'
                 )
             ))
@@ -52,8 +59,6 @@ EOT
             )
             ->setName('tdn:generate:form')
         ;
-
-        return parent::configure();
     }
 
     /**
@@ -65,14 +70,14 @@ EOT
     }
 
     /**
-     * Should set options array.
      * @param InputInterface $input
      */
-    public function setOptions(InputInterface $input)
+    protected function setOptions(InputInterface $input)
     {
-        $this->options = [
-            'rest-support' => ($input->hasOption('rest-support') ? true : false)
-        ];
+        $this->options = new ArrayCollection([
+            'rest-support' => ($input->getOption('rest-support') ? true : false),
+            'overwrite' => ($input->getOption('overwrite') ? true : false)
+        ]);
     }
 
     /**

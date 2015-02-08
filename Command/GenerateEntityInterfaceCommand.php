@@ -44,7 +44,7 @@ EOT
     /**
      * @return EntityGenerator
      */
-    public function createGenerator()
+    protected function createGenerator()
     {
         return new EntityGenerator();
     }
@@ -60,7 +60,7 @@ EOT
     /**
      * @param InputInterface $input
      */
-    public function setOptions(InputInterface $input)
+    protected function setOptions(InputInterface $input)
     {
         $this->options = [];
     }

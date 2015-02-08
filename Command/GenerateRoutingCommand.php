@@ -2,6 +2,7 @@
 
 namespace Tdn\SfProjectGeneratorBundle\Command;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
@@ -43,8 +44,13 @@ class GenerateRoutingCommand extends GeneratorCommand
                 new InputOption(
                     'remove',
                     null,
+                    InputOption::VALUE_NONE
+                ),
+                new InputOption(
+                    'overwrite',
+                    'w',
                     InputOption::VALUE_NONE,
-                    false
+                    'Overwrite existing form type.'
                 )
             ))
             ->setDescription('Generates the routing configuration for a RESTFul controller based on an entity. Removes it with the --remove flag.')
@@ -67,7 +73,7 @@ EOT
     /**
      * @return RoutingGenerator
      */
-    public function createGenerator()
+    protected function createGenerator()
     {
         return new RoutingGenerator();
     }
@@ -80,12 +86,13 @@ EOT
         return 'Routing Configuration';
     }
 
-    public function setOptions(InputInterface $input)
+    protected function setOptions(InputInterface $input)
     {
-        $this->options = [
+        $this->options = new ArrayCollection([
             'routing-file' => $input->getArgument('routing-file'),
-            'remove' => ($input->getOption('remove') === true ? true : false),
-            'prefix' => $input->getOption('route-prefix')
-        ];
+            'remove' => ($input->getOption('remove') ? true : false),
+            'prefix' => $input->getOption('route-prefix'),
+            'overwrite' => ($input->getOption('overwrite') ? true : false)
+        ]);
     }
 }
