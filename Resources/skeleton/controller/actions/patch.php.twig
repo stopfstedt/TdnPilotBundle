@@ -39,7 +39,7 @@
 {% endblock method_definition %}
     {
 {% block method_body %}
-        $answer{{ resource ? "['" ~ entity|lowerfirst ~  "']" }} = $this->get{{ entity }}Handler()->patch($this->getOr404($id), $request->request->all());
+        $answer{{ resource ? "['" ~ entity|lowerfirst ~  "']" }} = $this->get{{ entity }}Handler()->patch($this->getOr404($id), $this->getPostData($request));
 
         return $answer;
 {% endblock method_body %}

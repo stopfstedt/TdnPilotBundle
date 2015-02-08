@@ -59,5 +59,7 @@ class {{ entity }}Controller extends FOSRestController
 
     {%- include 'controller/actions/getOr404.php.twig' %}
 
+    {%- include 'controller/actions/getPostData.php.twig' %}
+
     {%- include 'controller/actions/extra.php.twig' %}{% endblock class_body %}
 }
