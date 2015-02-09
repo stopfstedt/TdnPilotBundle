@@ -61,12 +61,13 @@
         $orderBy = $paramFetcher->get('order_by');
         $criteria = !is_null($paramFetcher->get('filters')) ? $paramFetcher->get('filters') : array();
 
-        $result = $this->get{{ entity }}Handler()->find{{ entity|pluralize }}By(
-            $criteria,
-            $orderBy,
-            $limit,
-            $offset
-        );
+        $result = $this->get{{ entity }}Handler()
+            ->find{{ entity|pluralize }}By(
+                $criteria,
+                $orderBy,
+                $limit,
+                $offset
+            );
         //If there are no matches return an empty array
         $answer{{ resource ? "['" ~ entity|lowerfirst|pluralize ~  "']" }} =
             $result ? $result : new ArrayCollection([]);

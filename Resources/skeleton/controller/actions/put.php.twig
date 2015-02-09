@@ -37,11 +37,18 @@
     {
 {% block method_body %}
         try {
-            if (${{ entity|lowerfirst }} = $this->get{{ entity }}Handler()->find{{ entity }}By(['{{ entity_identifier }}'=> $id])) {
-                $answer{{ resource ? "['" ~ entity|lowerfirst ~  "']" }}= $this->get{{ entity }}Handler()->put(${{ entity|lowerfirst }}, $this->getPostData($request));
+            ${{ entity|lowerfirst }} = $this->get{{ entity }}Handler()
+                ->find{{ entity }}By(['{{ entity_identifier }}'=> $id]);
+            if (${{ entity|lowerfirst }}) {
+                $answer{{ resource ? "['" ~ entity|lowerfirst ~  "']" }} =
+                    $this->get{{ entity }}Handler()->put(
+                        ${{ entity|lowerfirst }},
+                        $this->getPostData($request)
+                    );
                 $code = Codes::HTTP_OK;
             } else {
-                $answer{{ resource ? "['" ~ entity|lowerfirst ~  "']" }} = $this->get{{ entity }}Handler()->post($this->getPostData($request));
+                $answer{{ resource ? "['" ~ entity|lowerfirst ~  "']" }} =
+                    $this->get{{ entity }}Handler()->post($this->getPostData($request));
                 $code = Codes::HTTP_CREATED;
             }
         } catch (InvalidFormException $exception) {
