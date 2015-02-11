@@ -20,7 +20,7 @@
         "sensio/generator-bundle": "*@stable",
         "doctrine/doctrine-bundle": "*@stable",
         "tdn/php-types": "dev-master",
-        "jms/php-manipulator": "dev-master"
+        "fzaninotto/faker": "1.4.0"
     },
     "require-dev": {
         "raulfraile/ladybug": "dev-master",
