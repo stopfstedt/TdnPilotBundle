@@ -12,11 +12,12 @@
 {% endblock method_definition %}
     {
 {% block method_body %}
-        if (!($entity = $this->get{{ entity }}Handler()->find{{ entity }}By(['{{ entity_identifier }}' => $id]))) {
-            throw new NotFoundHttpException(sprintf('The resource \'%s\' was not found.',$id));
+        $entity = $this->get{{ entity }}Handler()
+            ->find{{ entity }}By(['{{ entity_identifier }}' => $id]);
+        if (!$entity) {
+            throw new NotFoundHttpException(sprintf('The resource \'%s\' was not found.', $id));
         }
 
         return $entity;
 {% endblock method_body %}
     }
-

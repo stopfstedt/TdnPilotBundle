@@ -11,7 +11,12 @@
      *   input="{{ form_type|replace({'.php': ''}) }}",
      *   output="{{ namespace }}\Entity\{{ entity_namespace }}{{ entity }}",
      *   requirements={
-     *     {"name"="{{ entity_identifier }}", "dataType"="{{ entity_identifier_type }}", "requirement"="{{ requirement_regex }}", "description"="{{ entity }} identifier."}
+     *     {
+     *         "name"="{{ entity_identifier }}",
+     *         "dataType"="{{ entity_identifier_type }}",
+     *         "requirement"="{{ requirement_regex }}",
+     *         "description"="{{ entity }} identifier."
+     *     }
      *   },
      *   statusCodes={
      *     200 = "Updated {{ entity }}.",
@@ -39,7 +44,11 @@
 {% endblock method_definition %}
     {
 {% block method_body %}
-        $answer{{ resource ? "['" ~ entity|lowerfirst ~  "']" }} = $this->get{{ entity }}Handler()->patch($this->getOr404($id), $request->request->all());
+        $answer{{ resource ? "['" ~ entity|lowerfirst ~  "']" }} =
+            $this->get{{ entity }}Handler()->patch(
+                $this->getOr404($id),
+                $this->getPostData($request)
+            );
 
         return $answer;
 {% endblock method_body %}

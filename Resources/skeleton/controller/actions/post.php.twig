@@ -35,7 +35,7 @@
     {
 {% block method_body %}
         try {
-            $new  =  $this->get{{ entity }}Handler()->post($request->request->all());
+            $new  =  $this->get{{ entity }}Handler()->post($this->getPostData($request));
             $answer{{ resource ? "['" ~ entity|lowerfirst ~  "']" }} = $new;
 
             return $answer;

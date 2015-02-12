@@ -9,7 +9,12 @@
      *   description = "Get a {{ entity }}.",
      *   resource = true,
      *   requirements={
-     *     {"name"="{{ entity_identifier }}", "dataType"="{{ entity_identifier_type }}", "requirement"="{{ requirement_regex }}", "description"="{{ entity }} identifier."}
+     *     {
+     *        "name"="{{ entity_identifier }}",
+     *        "dataType"="{{ entity_identifier_type }}",
+     *        "requirement"="{{ requirement_regex }}",
+     *        "description"="{{ entity }} identifier."
+     *     }
      *   },
      *   output="{{ namespace }}\Entity\{{ entity_namespace }}{{ entity }}",
      *   statusCodes={
