@@ -26,7 +26,10 @@ class {{ entity_class }}Type extends AbstractType
 
 {% endif %}
 {% if rest_support and field.fieldName in associations|keys %}
-            ->add('{{ field.fieldName }}', 'tdn_entity', ['required' => false, 'class' => "{{ field.targetEntity|addslashes }}"])
+    ->add('{{ field.fieldName }}', 'tdn_single_related', [
+        'required' => false,
+        'entityName' => "{{ field.targetEntity|addslashes }}"
+    ])
 {% else %}
             ->add('{{ field.fieldName }}')
 {% endif %}
@@ -50,7 +53,11 @@ class {{ entity_class }}Type extends AbstractType
      */
     public function getName()
     {
-        return '{{ form_type_name }}_form_type';
+        {% if rest_support %}
+            return '{{ rest_form_type_name }}';
+        {% else %}
+            return '{{ form_type_name }}_form_type';
+        {% endif %}
     }
 {% endblock class_body %}
 }

@@ -9,5 +9,13 @@
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <tag name="form.type" alias="tdn_entity" />
         </service>
+        <service id="tdn.type.tdn_many_reated" class="Tdn\SfProjectGeneratorBundle\Form\Type\ManyRelatedType">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <tag name="form.type" alias="dn_many_reated" />
+        </service>
+        <service id="tdn.type.tdn_single_related" class="Tdn\SfProjectGeneratorBundle\Form\Type\SingleRelatedType">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <tag name="form.type" alias="tdn_single_related" />
+        </service>
     </services>
 </container>
