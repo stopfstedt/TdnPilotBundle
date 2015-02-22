@@ -31,7 +31,11 @@ class {{ entity_class }}Type extends AbstractType
                 'entityName' => "{{ field.relatedEntityShrotcut }}"
             ])
 {% else %}
+{% if field.nullable or field.type == 'boolean' %}
+            ->add('{{ field.fieldName }}', null, ['required' => false])
+{% else %}
             ->add('{{ field.fieldName }}')
+{% endif %}
 {% endif %}
 {%- endfor %}
         ;
