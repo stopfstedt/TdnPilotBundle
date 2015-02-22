@@ -49,6 +49,7 @@ class FormGenerator extends Generator
                 'namespace'             => $bundle->getNamespace(),
                 'entity_namespace'      => implode('\\', $parts),
                 'entity_class'          => $entityClass,
+                'entity'                => $entity,
                 'bundle'                => $bundle->getName(),
                 'rest_support'          => $options->get('rest-support'),
                 'form_class'            => $this->generatedName,

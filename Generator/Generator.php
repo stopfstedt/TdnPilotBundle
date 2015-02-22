@@ -52,7 +52,8 @@ abstract class Generator implements GeneratorInterface
     /**
      * Sets an array of directories to look for templates.
      *
-     * The directories must be sorted from bundle specific to app specific (e.g. <bundle-dir>/Resources, app/Resources/<bu
+     * The directories must be sorted from bundle specific to app specific
+     * (e.g. <bundle-dir>/Resources, app/Resources/<bu
      *
      * @param array $skeletonDirs An array of skeleton dirs
      */
@@ -128,9 +129,18 @@ abstract class Generator implements GeneratorInterface
         }
 
         foreach ($metadata->associationMappings as $fieldName => $relation) {
-            if ($relation['type'] == ClassMetadataInfo::ONE_TO_MANY) {
-                unset($fields[$fieldName]);
+            $multiTypes = array(
+                ClassMetadataInfo::ONE_TO_MANY,
+                ClassMetadataInfo::MANY_TO_MANY,
+            );
+            if (in_array($relation['type'], $multiTypes)) {
+                $fields[$fieldName]['realtedType'] = 'many';
+            } else {
+                $fields[$fieldName]['realtedType'] = 'single';
             }
+
+            $fields[$fieldName]['relatedEntityShrotcut'] =
+                $this->getEntityBundleShortcut($fields[$fieldName]['targetEntity']);
         }
 
         return $fields;
@@ -188,5 +198,17 @@ abstract class Generator implements GeneratorInterface
         }
 
         return true;
+    }
+
+    /**
+     * Take an entity name and return the shortcut name
+     * eg Acme\DemoBundle\Entity\Notes -> AcemDemoBundle:Notes
+     * @param string $entity fully qualified class name of the entity
+     */
+    protected function getEntityBundleShortcut($entity)
+    {
+        // wrap in EntityManager's Class Metadata function avoid problems with cached proxy classes
+        $path = explode('\Entity\\', $entity);
+        return str_replace('\\', '', $path[0]).':'.$path[1];
     }
 }
