@@ -134,12 +134,12 @@ abstract class Generator implements GeneratorInterface
                 ClassMetadataInfo::MANY_TO_MANY,
             );
             if (in_array($relation['type'], $multiTypes)) {
-                $fields[$fieldName]['realtedType'] = 'many';
+                $fields[$fieldName]['relatedType'] = 'many';
             } else {
-                $fields[$fieldName]['realtedType'] = 'single';
+                $fields[$fieldName]['relatedType'] = 'single';
             }
 
-            $fields[$fieldName]['relatedEntityShrotcut'] =
+            $fields[$fieldName]['relatedEntityShortcut'] =
                 $this->getEntityBundleShortcut($fields[$fieldName]['targetEntity']);
         }
 

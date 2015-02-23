@@ -26,9 +26,9 @@ class {{ entity_class }}Type extends AbstractType
 
 {% endif %}
 {% if rest_support and field.fieldName in associations|keys %}
-            ->add('{{ field.fieldName }}', 'tdn_{{ field.realtedType }}_related', [
+            ->add('{{ field.fieldName }}', 'tdn_{{ field.relatedType }}_related', [
                 'required' => false,
-                'entityName' => "{{ field.relatedEntityShrotcut }}"
+                'entityName' => "{{ field.relatedEntityShortcut }}"
             ])
 {% else %}
 {% if field.nullable or field.type == 'boolean' %}
