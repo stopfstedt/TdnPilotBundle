@@ -8,7 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Ilios\CoreBundle\Form\Transformer\SingleRelatedTransformer;
+use Tdn\SfProjectGeneratorBundle\Form\DataTransformer\SingleRelatedTransformer;
 
 class SingleRelatedType extends AbstractType
 {
