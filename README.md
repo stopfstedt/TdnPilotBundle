@@ -1,6 +1,8 @@
 # SF Project Generator Bundle (alpha)
 Inspired by [voryx/RESTGeneratorBundle](https://github.com/voryx/restgeneratorbundle).
 
+Unstable API.
+
 ## Description
 This bundle aims to provide developers a way to generate all "boilerplate" code required by projects (not only stubs but actual implementation).
 
@@ -61,19 +63,3 @@ This bundle depends on a number of other symfony bundles, so they need to be con
 <b>This bundle has (at the moment) no configuration of it's own.</b>
 
 See Nelmio/NelmioApiDocBundle and FriendsOfSymfony/FOSRestBundle documentation for configuration details.
-
-## Usage
-Please refer to the generator's documentation:
-[Project Generator.md (all generators in one)]()
-
-[Controller Generator.md]()
-
-[Entity Generator.md]()
-
-[Form Generator.md]()
-
-[Manager Generator.md]()
-
-[Handler Generator.md]()
-
-[Routing Generator.md]()
