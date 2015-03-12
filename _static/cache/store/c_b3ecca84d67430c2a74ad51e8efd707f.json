@@ -1,0 +1,50 @@
+{
+    "name": "Tdn\\PilotBundle\\Command\\GeneratePilotProjectCommand",
+    "line": 19,
+    "short_desc": "Class GeneratePilotProjectCommand",
+    "long_desc": "",
+    "hint": null,
+    "tags": {
+        "package": [
+            [
+                "Tdn\\PilotBundle\\Command"
+            ]
+        ]
+    },
+    "namespace": "Tdn\\PilotBundle\\Command",
+    "file": "Command\/GeneratePilotProjectCommand.php",
+    "hash": "9b9a18f6fa6bee1b5cfd4ea04914c702c72a8bed",
+    "parent": "Tdn\\PilotBundle\\Command\\AbstractGeneratorCommand",
+    "modifiers": 0,
+    "is_trait": false,
+    "is_interface": false,
+    "aliases": {
+        "InputArgument": "Symfony\\Component\\Console\\Input\\InputArgument",
+        "InputOption": "Symfony\\Component\\Console\\Input\\InputOption",
+        "InputInterface": "Symfony\\Component\\Console\\Input\\InputInterface",
+        "OutputInterface": "Symfony\\Component\\Console\\Output\\OutputInterface",
+        "BundleInterface": "Symfony\\Component\\HttpKernel\\Bundle\\BundleInterface",
+        "ClassMetadataInfo": "Doctrine\\ORM\\Mapping\\ClassMetadataInfo",
+        "ManagerManipulator": "Tdn\\PilotBundle\\Manipulator\\ManagerManipulator",
+        "PilotProjectManipulator": "Tdn\\PilotBundle\\Manipulator\\PilotProjectManipulator",
+        "TemplateStrategyInterface": "Tdn\\PilotBundle\\Template\\Strategy\\TemplateStrategyInterface"
+    },
+    "errors": [
+
+    ],
+    "interfaces": [
+
+    ],
+    "traits": [
+
+    ],
+    "properties": [
+
+    ],
+    "methods": [
+
+    ],
+    "constants": [
+
+    ]
+}

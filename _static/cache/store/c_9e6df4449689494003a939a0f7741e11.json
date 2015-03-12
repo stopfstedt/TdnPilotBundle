@@ -1,0 +1,101 @@
+{
+    "name": "Tdn\\PilotBundle\\Command\\GenerateControllerCommand",
+    "line": 16,
+    "short_desc": "Class GenerateControllerCommand",
+    "long_desc": "",
+    "hint": null,
+    "tags": {
+        "package": [
+            [
+                "Tdn\\PilotBundle\\Command"
+            ]
+        ]
+    },
+    "namespace": "Tdn\\PilotBundle\\Command",
+    "file": "Command\/GenerateControllerCommand.php",
+    "hash": "9bb43f0b0e574446e4a5b3dba1f9ac2617c32b60",
+    "parent": "Tdn\\PilotBundle\\Command\\AbstractGeneratorCommand",
+    "modifiers": 0,
+    "is_trait": false,
+    "is_interface": false,
+    "aliases": {
+        "InputOption": "Symfony\\Component\\Console\\Input\\InputOption",
+        "InputInterface": "Symfony\\Component\\Console\\Input\\InputInterface",
+        "BundleInterface": "Symfony\\Component\\HttpKernel\\Bundle\\BundleInterface",
+        "ClassMetadataInfo": "Doctrine\\ORM\\Mapping\\ClassMetadataInfo",
+        "ControllerManipulator": "Tdn\\PilotBundle\\Manipulator\\ControllerManipulator",
+        "TemplateStrategyInterface": "Tdn\\PilotBundle\\Template\\Strategy\\TemplateStrategyInterface"
+    },
+    "errors": [
+
+    ],
+    "interfaces": [
+
+    ],
+    "traits": [
+
+    ],
+    "properties": [
+
+    ],
+    "methods": {
+        "getRoutePrefix": {
+            "name": "getRoutePrefix",
+            "line": 54,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": [
+                [
+                    "string",
+                    false
+                ]
+            ],
+            "hint_desc": "",
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": {
+                "routePrefix": {
+                    "name": "routePrefix",
+                    "line": 54,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "string",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "",
+                    "default": "''",
+                    "is_by_ref": false
+                }
+            }
+        }
+    },
+    "constants": {
+        "NAME": {
+            "name": "NAME",
+            "line": 21,
+            "short_desc": "",
+            "long_desc": ""
+        },
+        "DESCRIPTION": {
+            "name": "DESCRIPTION",
+            "line": 26,
+            "short_desc": "",
+            "long_desc": ""
+        }
+    }
+}

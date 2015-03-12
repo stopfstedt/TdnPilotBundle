@@ -1,0 +1,464 @@
+{
+    "name": "Tdn\\PilotBundle\\Manipulator\\AbstractServiceManipulator",
+    "line": 16,
+    "short_desc": "Abstract Class AbstractServiceManipulator",
+    "long_desc": "",
+    "hint": null,
+    "tags": {
+        "package": [
+            [
+                "Tdn\\PilotBundle\\Manipulator"
+            ]
+        ]
+    },
+    "namespace": "Tdn\\PilotBundle\\Manipulator",
+    "file": "Manipulator\/AbstractServiceManipulator.php",
+    "hash": "5dbc41706600dd428906b78ce25fc25fc036f53b",
+    "parent": "Tdn\\PilotBundle\\Manipulator\\AbstractManipulator",
+    "modifiers": 16,
+    "is_trait": false,
+    "is_interface": false,
+    "aliases": {
+        "BundleInterface": "Symfony\\Component\\HttpKernel\\Bundle\\BundleInterface",
+        "ClassMetadataInfo": "Doctrine\\ORM\\Mapping\\ClassMetadataInfo",
+        "ArrayCollection": "Doctrine\\Common\\Collections\\ArrayCollection",
+        "TemplateStrategyInterface": "Tdn\\PilotBundle\\Template\\Strategy\\TemplateStrategyInterface",
+        "GeneratedFileInterface": "Tdn\\PilotBundle\\Model\\GeneratedFileInterface",
+        "DiXmlUtils": "Tdn\\PilotBundle\\Services\\Utils\\DiXmlUtils"
+    },
+    "errors": [
+
+    ],
+    "interfaces": {
+        "Tdn\\PilotBundle\\Manipulator\\ServiceManipulatorInterface": "Tdn\\PilotBundle\\Manipulator\\ServiceManipulatorInterface"
+    },
+    "traits": [
+
+    ],
+    "properties": [
+
+    ],
+    "methods": {
+        "__construct": {
+            "name": "__construct",
+            "line": 43,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": {
+                "templateStrategy": {
+                    "name": "templateStrategy",
+                    "line": 44,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "Tdn\\PilotBundle\\Template\\Strategy\\TemplateStrategyInterface",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "TemplateStrategyInterface",
+                    "default": null,
+                    "is_by_ref": false
+                },
+                "bundle": {
+                    "name": "bundle",
+                    "line": 45,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "Symfony\\Component\\HttpKernel\\Bundle\\BundleInterface",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "BundleInterface",
+                    "default": null,
+                    "is_by_ref": false
+                },
+                "metadata": {
+                    "name": "metadata",
+                    "line": 46,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "Doctrine\\ORM\\Mapping\\ClassMetadataInfo",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "ClassMetadataInfo",
+                    "default": null,
+                    "is_by_ref": false
+                }
+            }
+        },
+        "setXmlServiceFile": {
+            "name": "setXmlServiceFile",
+            "line": 56,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": {
+                "file": {
+                    "name": "file",
+                    "line": 56,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "Tdn\\PilotBundle\\Model\\GeneratedFileInterface",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "GeneratedFileInterface",
+                    "default": "null",
+                    "is_by_ref": false
+                }
+            }
+        },
+        "getXmlServiceFile": {
+            "name": "getXmlServiceFile",
+            "line": 67,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": [
+                [
+                    "\\SimpleXMLElement",
+                    false
+                ]
+            ],
+            "hint_desc": "",
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": [
+
+            ]
+        },
+        "setExtensionFile": {
+            "name": "setExtensionFile",
+            "line": 79,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": {
+                "extensionFile": {
+                    "name": "extensionFile",
+                    "line": 79,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "string",
+                            false
+                        ],
+                        [
+                            "null",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "",
+                    "default": "null",
+                    "is_by_ref": false
+                }
+            }
+        },
+        "getExtensionFile": {
+            "name": "getExtensionFile",
+            "line": 91,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": [
+                [
+                    "string",
+                    false
+                ]
+            ],
+            "hint_desc": "",
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": [
+
+            ]
+        },
+        "setUpdatingDiConfFile": {
+            "name": "setUpdatingDiConfFile",
+            "line": 103,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": {
+                "updatingDiFile": {
+                    "name": "updatingDiFile",
+                    "line": 103,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "bool",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "",
+                    "default": null,
+                    "is_by_ref": false
+                }
+            }
+        },
+        "isUpdatingDiConfFile": {
+            "name": "isUpdatingDiConfFile",
+            "line": 111,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": [
+                [
+                    "bool",
+                    false
+                ]
+            ],
+            "hint_desc": "",
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": [
+
+            ]
+        },
+        "setDiUtils": {
+            "name": "setDiUtils",
+            "line": 119,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": {
+                "diUtils": {
+                    "name": "diUtils",
+                    "line": 119,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "Tdn\\PilotBundle\\Services\\Utils\\DiXmlUtils",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "DiXmlUtils",
+                    "default": null,
+                    "is_by_ref": false
+                }
+            }
+        },
+        "getDiUtils": {
+            "name": "getDiUtils",
+            "line": 127,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": [
+                [
+                    "\\Tdn\\PilotBundle\\Services\\Utils\\DiXmlUtils",
+                    false
+                ]
+            ],
+            "hint_desc": "",
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": [
+
+            ]
+        },
+        "formatOutput": {
+            "name": "formatOutput",
+            "line": 137,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": [
+                [
+                    "string",
+                    false
+                ]
+            ],
+            "hint_desc": "",
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": {
+                "output": {
+                    "name": "output",
+                    "line": 137,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "string",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "",
+                    "default": null,
+                    "is_by_ref": false
+                }
+            }
+        },
+        "generate": {
+            "name": "generate",
+            "line": 145,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": [
+                [
+                    "\\Doctrine\\Common\\Collections\\ArrayCollection",
+                    false
+                ],
+                [
+                    "\\Tdn\\PilotBundle\\Model\\GeneratedFileInterface",
+                    true
+                ]
+            ],
+            "hint_desc": "",
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": [
+
+            ]
+        }
+    },
+    "constants": [
+
+    ]
+}

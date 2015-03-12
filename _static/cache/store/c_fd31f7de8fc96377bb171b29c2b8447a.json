@@ -1,0 +1,155 @@
+{
+    "name": "Tdn\\PilotBundle\\Form\\DataTransformer\\AbstractRelatedTransformer",
+    "line": 14,
+    "short_desc": "Class AbstractRelatedTransformer",
+    "long_desc": "",
+    "hint": null,
+    "tags": {
+        "package": [
+            [
+                "Tdn\\PilotBundle\\Form\\DataTransformer"
+            ]
+        ]
+    },
+    "namespace": "Tdn\\PilotBundle\\Form\\DataTransformer",
+    "file": "Form\/DataTransformer\/AbstractRelatedTransformer.php",
+    "hash": "f64e0ebd92e33c3215654c07048b24d51f617a68",
+    "parent": null,
+    "modifiers": 16,
+    "is_trait": false,
+    "is_interface": false,
+    "aliases": {
+        "DataTransformerInterface": "Symfony\\Component\\Form\\DataTransformerInterface",
+        "TransformationFailedException": "Symfony\\Component\\Form\\Exception\\TransformationFailedException",
+        "ObjectManager": "Doctrine\\Common\\Persistence\\ObjectManager",
+        "ClassMetadata": "Doctrine\\Common\\Persistence\\Mapping\\ClassMetadata"
+    },
+    "errors": [
+
+    ],
+    "interfaces": {
+        "Symfony\\Component\\Form\\DataTransformerInterface": "Symfony\\Component\\Form\\DataTransformerInterface"
+    },
+    "traits": [
+
+    ],
+    "properties": [
+
+    ],
+    "methods": {
+        "__construct": {
+            "name": "__construct",
+            "line": 31,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": {
+                "objectManager": {
+                    "name": "objectManager",
+                    "line": 31,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "Doctrine\\Common\\Persistence\\ObjectManager",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "ObjectManager",
+                    "default": null,
+                    "is_by_ref": false
+                },
+                "entityName": {
+                    "name": "entityName",
+                    "line": 31,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "string",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "",
+                    "default": null,
+                    "is_by_ref": false
+                }
+            }
+        },
+        "getObjectManager": {
+            "name": "getObjectManager",
+            "line": 97,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": [
+                [
+                    "\\Doctrine\\Common\\Persistence\\ObjectManager",
+                    false
+                ]
+            ],
+            "hint_desc": "",
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": [
+
+            ]
+        },
+        "getEntityName": {
+            "name": "getEntityName",
+            "line": 105,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": [
+                [
+                    "string",
+                    false
+                ]
+            ],
+            "hint_desc": "",
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": [
+
+            ]
+        }
+    },
+    "constants": [
+
+    ]
+}

@@ -1,0 +1,65 @@
+{
+    "name": "Tdn\\PilotBundle\\Command\\GenerateRoutingCommand",
+    "line": 17,
+    "short_desc": "Class GenerateRoutingCommand",
+    "long_desc": "",
+    "hint": null,
+    "tags": {
+        "package": [
+            [
+                "Tdn\\SfRoutingGeneratorBundle\\Command"
+            ]
+        ]
+    },
+    "namespace": "Tdn\\PilotBundle\\Command",
+    "file": "Command\/GenerateRoutingCommand.php",
+    "hash": "65a72349e6899cbbca2439015cd77118d7802c1f",
+    "parent": "Tdn\\PilotBundle\\Command\\AbstractGeneratorCommand",
+    "modifiers": 0,
+    "is_trait": false,
+    "is_interface": false,
+    "aliases": {
+        "InputInterface": "Symfony\\Component\\Console\\Input\\InputInterface",
+        "InputOption": "Symfony\\Component\\Console\\Input\\InputOption",
+        "InputArgument": "Symfony\\Component\\Console\\Input\\InputArgument",
+        "BundleInterface": "Symfony\\Component\\HttpKernel\\Bundle\\BundleInterface",
+        "ClassMetadataInfo": "Doctrine\\ORM\\Mapping\\ClassMetadataInfo",
+        "RoutingManipulator": "Tdn\\PilotBundle\\Manipulator\\RoutingManipulator",
+        "TemplateStrategyInterface": "Tdn\\PilotBundle\\Template\\Strategy\\TemplateStrategyInterface"
+    },
+    "errors": [
+
+    ],
+    "interfaces": [
+
+    ],
+    "traits": [
+
+    ],
+    "properties": [
+
+    ],
+    "methods": [
+
+    ],
+    "constants": {
+        "DEFAULT_ROUTING": {
+            "name": "DEFAULT_ROUTING",
+            "line": 22,
+            "short_desc": "",
+            "long_desc": ""
+        },
+        "NAME": {
+            "name": "NAME",
+            "line": 27,
+            "short_desc": "",
+            "long_desc": ""
+        },
+        "DESCRIPTION": {
+            "name": "DESCRIPTION",
+            "line": 32,
+            "short_desc": "",
+            "long_desc": ""
+        }
+    }
+}

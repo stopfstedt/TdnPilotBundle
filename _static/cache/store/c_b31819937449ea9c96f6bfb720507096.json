@@ -1,0 +1,57 @@
+{
+    "name": "Tdn\\PilotBundle\\Command\\GenerateHandlerCommand",
+    "line": 15,
+    "short_desc": "Class GenerateHandlerCommand",
+    "long_desc": "",
+    "hint": null,
+    "tags": {
+        "package": [
+            [
+                "Tdn\\PilotBundle\\Command"
+            ]
+        ]
+    },
+    "namespace": "Tdn\\PilotBundle\\Command",
+    "file": "Command\/GenerateHandlerCommand.php",
+    "hash": "fce4ecca9e69e987d3069ab6ba76a40ef47f0488",
+    "parent": "Tdn\\PilotBundle\\Command\\AbstractGeneratorCommand",
+    "modifiers": 0,
+    "is_trait": false,
+    "is_interface": false,
+    "aliases": {
+        "InputInterface": "Symfony\\Component\\Console\\Input\\InputInterface",
+        "BundleInterface": "Symfony\\Component\\HttpKernel\\Bundle\\BundleInterface",
+        "ClassMetadataInfo": "Doctrine\\ORM\\Mapping\\ClassMetadataInfo",
+        "HandlerManipulator": "Tdn\\PilotBundle\\Manipulator\\HandlerManipulator",
+        "TemplateStrategyInterface": "Tdn\\PilotBundle\\Template\\Strategy\\TemplateStrategyInterface"
+    },
+    "errors": [
+
+    ],
+    "interfaces": [
+
+    ],
+    "traits": [
+
+    ],
+    "properties": [
+
+    ],
+    "methods": [
+
+    ],
+    "constants": {
+        "NAME": {
+            "name": "NAME",
+            "line": 20,
+            "short_desc": "",
+            "long_desc": ""
+        },
+        "DESCRIPTION": {
+            "name": "DESCRIPTION",
+            "line": 25,
+            "short_desc": "",
+            "long_desc": ""
+        }
+    }
+}

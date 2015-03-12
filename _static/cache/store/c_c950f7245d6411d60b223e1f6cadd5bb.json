@@ -1,0 +1,142 @@
+{
+    "name": "Tdn\\PilotBundle\\Form\\DataTransformer\\SingleRelatedTransformer",
+    "line": 15,
+    "short_desc": "Transforms Relationship data for entity based forms",
+    "long_desc": "Class SingleRelatedTransformer",
+    "hint": null,
+    "tags": {
+        "package": [
+            [
+                "Tdn\\PilotBundle\\Form\\DataTransformer"
+            ]
+        ]
+    },
+    "namespace": "Tdn\\PilotBundle\\Form\\DataTransformer",
+    "file": "Form\/DataTransformer\/SingleRelatedTransformer.php",
+    "hash": "6d040e9bfaaba03f34bfb450ba9f919753f4f2cb",
+    "parent": "Tdn\\PilotBundle\\Form\\DataTransformer\\AbstractRelatedTransformer",
+    "modifiers": 0,
+    "is_trait": false,
+    "is_interface": false,
+    "aliases": {
+        "ObjectManager": "Doctrine\\Common\\Persistence\\ObjectManager",
+        "ClassMetadata": "Doctrine\\Common\\Persistence\\Mapping\\ClassMetadata",
+        "TransformationFailedException": "Symfony\\Component\\Form\\Exception\\TransformationFailedException"
+    },
+    "errors": [
+
+    ],
+    "interfaces": [
+
+    ],
+    "traits": [
+
+    ],
+    "properties": [
+
+    ],
+    "methods": {
+        "transform": {
+            "name": "transform",
+            "line": 23,
+            "short_desc": "Transforms an entity to a string: __toString or id, in that order.",
+            "long_desc": "",
+            "hint": [
+                [
+                    "string",
+                    false
+                ],
+                [
+                    "null",
+                    false
+                ]
+            ],
+            "hint_desc": "",
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": {
+                "entity": {
+                    "name": "entity",
+                    "line": 23,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "object",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "",
+                    "default": null,
+                    "is_by_ref": false
+                }
+            }
+        },
+        "reverseTransform": {
+            "name": "reverseTransform",
+            "line": 40,
+            "short_desc": "Transforms an id to an entity.",
+            "long_desc": "",
+            "hint": [
+                [
+                    "null",
+                    false
+                ],
+                [
+                    "object",
+                    false
+                ]
+            ],
+            "hint_desc": "",
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+                [
+                    "\\Symfony\\Component\\Form\\Exception\\TransformationFailedException",
+                    "if entity is not found."
+                ]
+            ],
+            "errors": [
+
+            ],
+            "parameters": {
+                "identifier": {
+                    "name": "identifier",
+                    "line": 40,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "string",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "",
+                    "default": null,
+                    "is_by_ref": false
+                }
+            }
+        }
+    },
+    "constants": [
+
+    ]
+}

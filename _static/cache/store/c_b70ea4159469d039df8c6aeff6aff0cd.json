@@ -1,0 +1,377 @@
+{
+    "name": "Tdn\\PilotBundle\\Command\\AbstractGeneratorCommand",
+    "line": 27,
+    "short_desc": "Some items borrowed from the GenerateDoctrineCommand and consolidated.",
+    "long_desc": "Class AbstractGeneratorCommand",
+    "hint": null,
+    "tags": {
+        "package": [
+            [
+                "Tdn\\PilotBundle\\Command"
+            ]
+        ]
+    },
+    "namespace": "Tdn\\PilotBundle\\Command",
+    "file": "Command\/AbstractGeneratorCommand.php",
+    "hash": "b1c4343bd7bc2c92ab88a927327d2b90478b781a",
+    "parent": "Symfony\\Bundle\\FrameworkBundle\\Command\\ContainerAwareCommand",
+    "modifiers": 16,
+    "is_trait": false,
+    "is_interface": false,
+    "aliases": {
+        "InputArgument": "Symfony\\Component\\Console\\Input\\InputArgument",
+        "InputOption": "Symfony\\Component\\Console\\Input\\InputOption",
+        "ContainerAwareCommand": "Symfony\\Bundle\\FrameworkBundle\\Command\\ContainerAwareCommand",
+        "InputInterface": "Symfony\\Component\\Console\\Input\\InputInterface",
+        "OutputInterface": "Symfony\\Component\\Console\\Output\\OutputInterface",
+        "BundleInterface": "Symfony\\Component\\HttpKernel\\Bundle\\BundleInterface",
+        "ConfirmationQuestion": "Symfony\\Component\\Console\\Question\\ConfirmationQuestion",
+        "QuestionHelper": "Sensio\\Bundle\\GeneratorBundle\\Command\\Helper\\QuestionHelper",
+        "DisconnectedMetadataFactory": "Doctrine\\Bundle\\DoctrineBundle\\Mapping\\DisconnectedMetadataFactory",
+        "ManagerRegistry": "Doctrine\\Common\\Persistence\\ManagerRegistry",
+        "ClassMetadataInfo": "Doctrine\\ORM\\Mapping\\ClassMetadataInfo",
+        "Validators": "Sensio\\Bundle\\GeneratorBundle\\Command\\Validators",
+        "ManipulatorInterface": "Tdn\\PilotBundle\\Manipulator\\ManipulatorInterface",
+        "GeneratedFileInterface": "Tdn\\PilotBundle\\Model\\GeneratedFileInterface",
+        "TemplateStrategyInterface": "Tdn\\PilotBundle\\Template\\Strategy\\TemplateStrategyInterface",
+        "String": "Tdn\\PhpTypes\\Type\\String"
+    },
+    "errors": [
+
+    ],
+    "interfaces": [
+
+    ],
+    "traits": [
+
+    ],
+    "properties": [
+
+    ],
+    "methods": {
+        "setManipulator": {
+            "name": "setManipulator",
+            "line": 79,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": {
+                "manipulator": {
+                    "name": "manipulator",
+                    "line": 79,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "Tdn\\PilotBundle\\Manipulator\\ManipulatorInterface",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "ManipulatorInterface",
+                    "default": null,
+                    "is_by_ref": false
+                }
+            }
+        },
+        "getManipulator": {
+            "name": "getManipulator",
+            "line": 92,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": [
+                [
+                    "\\Tdn\\PilotBundle\\Manipulator\\ManipulatorInterface",
+                    false
+                ]
+            ],
+            "hint_desc": "",
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": {
+                "input": {
+                    "name": "input",
+                    "line": 93,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "Symfony\\Component\\Console\\Input\\InputInterface",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "InputInterface",
+                    "default": null,
+                    "is_by_ref": false
+                },
+                "templateStrategy": {
+                    "name": "templateStrategy",
+                    "line": 94,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "Tdn\\PilotBundle\\Template\\Strategy\\TemplateStrategyInterface",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "TemplateStrategyInterface",
+                    "default": null,
+                    "is_by_ref": false
+                },
+                "bundle": {
+                    "name": "bundle",
+                    "line": 95,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "Symfony\\Component\\HttpKernel\\Bundle\\BundleInterface",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "BundleInterface",
+                    "default": null,
+                    "is_by_ref": false
+                },
+                "metadata": {
+                    "name": "metadata",
+                    "line": 96,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "Doctrine\\ORM\\Mapping\\ClassMetadataInfo",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "ClassMetadataInfo",
+                    "default": null,
+                    "is_by_ref": false
+                }
+            }
+        },
+        "setEntity": {
+            "name": "setEntity",
+            "line": 116,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": {
+                "entity": {
+                    "name": "entity",
+                    "line": 116,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "string",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "",
+                    "default": null,
+                    "is_by_ref": false
+                }
+            }
+        },
+        "getEntity": {
+            "name": "getEntity",
+            "line": 124,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": [
+                [
+                    "string",
+                    false
+                ]
+            ],
+            "hint_desc": "",
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": [
+
+            ]
+        },
+        "parseShortcutNotation": {
+            "name": "parseShortcutNotation",
+            "line": 133,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": [
+                [
+                    "string",
+                    true
+                ]
+            ],
+            "hint_desc": "",
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": {
+                "shortcut": {
+                    "name": "shortcut",
+                    "line": 133,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "",
+                    "default": null,
+                    "is_by_ref": false
+                }
+            }
+        },
+        "setMetadata": {
+            "name": "setMetadata",
+            "line": 152,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": {
+                "metadata": {
+                    "name": "metadata",
+                    "line": 152,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "Doctrine\\ORM\\Mapping\\ClassMetadataInfo",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "ClassMetadataInfo",
+                    "default": null,
+                    "is_by_ref": false
+                }
+            }
+        },
+        "getMetadata": {
+            "name": "getMetadata",
+            "line": 160,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": [
+                [
+                    "\\Doctrine\\ORM\\Mapping\\ClassMetadataInfo",
+                    false
+                ]
+            ],
+            "hint_desc": "",
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": [
+
+            ]
+        }
+    },
+    "constants": {
+        "NAME": {
+            "name": "NAME",
+            "line": 33,
+            "short_desc": "Override in child class",
+            "long_desc": ""
+        },
+        "DESCRIPTION": {
+            "name": "DESCRIPTION",
+            "line": 39,
+            "short_desc": "Override in child class",
+            "long_desc": ""
+        }
+    }
+}

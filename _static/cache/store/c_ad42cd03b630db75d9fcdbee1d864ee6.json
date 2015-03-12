@@ -1,0 +1,310 @@
+{
+    "name": "Tdn\\PilotBundle\\Manipulator\\ServiceManipulatorInterface",
+    "line": 12,
+    "short_desc": "Interface ServiceManipulatorInterface",
+    "long_desc": "",
+    "hint": null,
+    "tags": {
+        "package": [
+            [
+                "Tdn\\PilotBundle\\Manipulator"
+            ]
+        ]
+    },
+    "namespace": "Tdn\\PilotBundle\\Manipulator",
+    "file": "Manipulator\/ServiceManipulatorInterface.php",
+    "hash": "8589c4964497fcff43d0b1fb7ee2f4edebb07a3b",
+    "parent": null,
+    "modifiers": null,
+    "is_trait": false,
+    "is_interface": true,
+    "aliases": {
+        "GeneratedFileInterface": "Tdn\\PilotBundle\\Model\\GeneratedFileInterface",
+        "DiXmlUtils": "Tdn\\PilotBundle\\Services\\Utils\\DiXmlUtils"
+    },
+    "errors": [
+
+    ],
+    "interfaces": {
+        "Tdn\\PilotBundle\\Manipulator\\ManipulatorInterface": "Tdn\\PilotBundle\\Manipulator\\ManipulatorInterface"
+    },
+    "traits": [
+
+    ],
+    "properties": [
+
+    ],
+    "methods": {
+        "setExtensionFile": {
+            "name": "setExtensionFile",
+            "line": 17,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": {
+                "extensionFile": {
+                    "name": "extensionFile",
+                    "line": 17,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "string",
+                            false
+                        ],
+                        [
+                            "null",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "",
+                    "default": "null",
+                    "is_by_ref": false
+                }
+            }
+        },
+        "getExtensionFile": {
+            "name": "getExtensionFile",
+            "line": 22,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": [
+                [
+                    "string",
+                    false
+                ]
+            ],
+            "hint_desc": "",
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": [
+
+            ]
+        },
+        "setDiUtils": {
+            "name": "setDiUtils",
+            "line": 27,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": {
+                "diManipulator": {
+                    "name": "diManipulator",
+                    "line": 27,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "Tdn\\PilotBundle\\Services\\Utils\\DiXmlUtils",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "DiXmlUtils",
+                    "default": null,
+                    "is_by_ref": false
+                }
+            }
+        },
+        "getDiUtils": {
+            "name": "getDiUtils",
+            "line": 32,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": [
+                [
+                    "\\Tdn\\PilotBundle\\Services\\Utils\\DiXmlUtils",
+                    false
+                ]
+            ],
+            "hint_desc": "",
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": [
+
+            ]
+        },
+        "setXmlServiceFile": {
+            "name": "setXmlServiceFile",
+            "line": 37,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": {
+                "file": {
+                    "name": "file",
+                    "line": 37,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "Tdn\\PilotBundle\\Model\\GeneratedFileInterface",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "GeneratedFileInterface",
+                    "default": "null",
+                    "is_by_ref": false
+                }
+            }
+        },
+        "getXmlServiceFile": {
+            "name": "getXmlServiceFile",
+            "line": 42,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": [
+                [
+                    "\\SimpleXMLElement",
+                    false
+                ]
+            ],
+            "hint_desc": "",
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": [
+
+            ]
+        },
+        "setUpdatingDiConfFile": {
+            "name": "setUpdatingDiConfFile",
+            "line": 47,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": {
+                "updatingDiFile": {
+                    "name": "updatingDiFile",
+                    "line": 47,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "bool",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "",
+                    "default": null,
+                    "is_by_ref": false
+                }
+            }
+        },
+        "isUpdatingDiConfFile": {
+            "name": "isUpdatingDiConfFile",
+            "line": 52,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": [
+                [
+                    "bool",
+                    false
+                ]
+            ],
+            "hint_desc": "",
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": [
+
+            ]
+        }
+    },
+    "constants": [
+
+    ]
+}

@@ -1,0 +1,227 @@
+{
+    "name": "Tdn\\PilotBundle\\Form\\Type\\ManyRelatedType",
+    "line": 18,
+    "short_desc": "Class ManyRelatedType",
+    "long_desc": "",
+    "hint": null,
+    "tags": {
+        "package": [
+            [
+                "Tdn\\PilotBundle\\Form\\Type"
+            ]
+        ]
+    },
+    "namespace": "Tdn\\PilotBundle\\Form\\Type",
+    "file": "Form\/Type\/ManyRelatedType.php",
+    "hash": "61a75d24b941d42f567b4aa3e6f70964caddf89c",
+    "parent": "Symfony\\Component\\Form\\AbstractType",
+    "modifiers": 0,
+    "is_trait": false,
+    "is_interface": false,
+    "aliases": {
+        "AbstractType": "Symfony\\Component\\Form\\AbstractType",
+        "FormBuilderInterface": "Symfony\\Component\\Form\\FormBuilderInterface",
+        "OptionsResolver": "Symfony\\Component\\OptionsResolver\\OptionsResolver",
+        "OptionsResolverInterface": "Symfony\\Component\\OptionsResolver\\OptionsResolverInterface",
+        "Options": "Symfony\\Component\\OptionsResolver\\Options",
+        "ObjectManager": "Doctrine\\Common\\Persistence\\ObjectManager",
+        "ManyRelatedTransformer": "Tdn\\PilotBundle\\Form\\DataTransformer\\ManyRelatedTransformer",
+        "ArrayToStringTransformer": "Tdn\\PilotBundle\\Form\\DataTransformer\\ArrayToStringTransformer"
+    },
+    "errors": [
+
+    ],
+    "interfaces": [
+
+    ],
+    "traits": [
+
+    ],
+    "properties": [
+
+    ],
+    "methods": {
+        "__construct": {
+            "name": "__construct",
+            "line": 28,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": {
+                "entityManager": {
+                    "name": "entityManager",
+                    "line": 28,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "Doctrine\\Common\\Persistence\\ObjectManager",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "ObjectManager",
+                    "default": null,
+                    "is_by_ref": false
+                }
+            }
+        },
+        "buildForm": {
+            "name": "buildForm",
+            "line": 33,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": {
+                "builder": {
+                    "name": "builder",
+                    "line": 33,
+                    "short_desc": null,
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "Symfony\\Component\\Form\\FormBuilderInterface",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "FormBuilderInterface",
+                    "default": null,
+                    "is_by_ref": false
+                },
+                "options": {
+                    "name": "options",
+                    "line": 33,
+                    "short_desc": null,
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "array",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "array",
+                    "default": null,
+                    "is_by_ref": false
+                }
+            }
+        },
+        "setDefaultOptions": {
+            "name": "setDefaultOptions",
+            "line": 41,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": {
+                "resolver": {
+                    "name": "resolver",
+                    "line": 41,
+                    "short_desc": null,
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "Symfony\\Component\\OptionsResolver\\OptionsResolverInterface",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "OptionsResolverInterface",
+                    "default": null,
+                    "is_by_ref": false
+                }
+            }
+        },
+        "getParent": {
+            "name": "getParent",
+            "line": 54,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": [
+
+            ]
+        },
+        "getName": {
+            "name": "getName",
+            "line": 59,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": [
+
+            ]
+        }
+    },
+    "constants": [
+
+    ]
+}
