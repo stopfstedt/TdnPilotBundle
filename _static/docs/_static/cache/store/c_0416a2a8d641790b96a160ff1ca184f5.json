@@ -1,0 +1,42 @@
+{
+    "name": "Tdn\\PilotBundle\\TdnPilotBundle",
+    "line": 11,
+    "short_desc": "Class TdnPilotBundle",
+    "long_desc": "",
+    "hint": null,
+    "tags": {
+        "package": [
+            [
+                "Tdn\\PilotBundle"
+            ]
+        ]
+    },
+    "namespace": "Tdn\\PilotBundle",
+    "file": "\/vagrant\/vendor\/tdn\/pilotbundle\/TdnPilotBundle.php",
+    "hash": "b0b586785cc7c8acf580f39accebed2a793fe967",
+    "parent": "Symfony\\Component\\HttpKernel\\Bundle\\Bundle",
+    "modifiers": 0,
+    "is_trait": false,
+    "is_interface": false,
+    "aliases": {
+        "Bundle": "Symfony\\Component\\HttpKernel\\Bundle\\Bundle"
+    },
+    "errors": [
+
+    ],
+    "interfaces": [
+
+    ],
+    "traits": [
+
+    ],
+    "properties": [
+
+    ],
+    "methods": [
+
+    ],
+    "constants": [
+
+    ]
+}
