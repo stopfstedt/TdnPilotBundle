@@ -1,21 +1,19 @@
 {
     "name": "Tdn\\PilotBundle\\Command\\GenerateFormCommand",
-    "line": 17,
-    "short_desc": "Generates a form type class for a given Doctrine entity, with optional REST generator support.",
-    "long_desc": "",
+    "line": 19,
+    "short_desc": "Class GenerateFormCommand",
+    "long_desc": "Generates a form type class for a given Doctrine entity, with optional REST generator support.",
     "hint": null,
     "tags": {
-        "author": [
+        "package": [
             [
-                "Victor",
-                "Passapera",
-                "<vpassapera@gmail.com>"
+                "Tdn\\PilotBundle\\Command"
             ]
         ]
     },
     "namespace": "Tdn\\PilotBundle\\Command",
     "file": "\/vagrant\/vendor\/tdn\/pilotbundle\/Command\/GenerateFormCommand.php",
-    "hash": "10d34f685cdc160d8dcb831dfc065ba0d54970ac",
+    "hash": "33da6ace655fc43cbe0da9555cf48f6eed2f7d8c",
     "parent": "Tdn\\PilotBundle\\Command\\AbstractGeneratorCommand",
     "modifiers": 0,
     "is_trait": false,
@@ -46,13 +44,13 @@
     "constants": {
         "NAME": {
             "name": "NAME",
-            "line": 22,
+            "line": 24,
             "short_desc": "",
             "long_desc": ""
         },
         "DESCRIPTION": {
             "name": "DESCRIPTION",
-            "line": 27,
+            "line": 29,
             "short_desc": "",
             "long_desc": ""
         }

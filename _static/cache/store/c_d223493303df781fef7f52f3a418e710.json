@@ -407,8 +407,8 @@
         "prepare": {
             "name": "prepare",
             "line": 131,
-            "short_desc": "Sets up appropriate file contents.",
-            "long_desc": "",
+            "short_desc": "Sets up a controller based on an entity.",
+            "long_desc": "Sets up controller test files if flag is set.",
             "hint": [
                 [
                     "Tdn\\PilotBundle\\Manipulator\\$this",

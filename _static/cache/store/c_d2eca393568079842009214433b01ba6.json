@@ -1,8 +1,8 @@
 {
     "name": "Tdn\\PilotBundle\\Manipulator\\AbstractManipulator",
-    "line": 18,
+    "line": 24,
     "short_desc": "Abstract Class AbstractManipulator",
-    "long_desc": "",
+    "long_desc": "Parent manipulator class. Each manipulator deals with a specific part\nof a target application (controllers, managers, handlers, routing, etc)\nWhen adding a new type of manipulation, a new manipulator should be\ncreated extending this class.",
     "hint": null,
     "tags": {
         "package": [
@@ -13,7 +13,7 @@
     },
     "namespace": "Tdn\\PilotBundle\\Manipulator",
     "file": "\/vagrant\/vendor\/tdn\/pilotbundle\/Manipulator\/AbstractManipulator.php",
-    "hash": "b6e21dd2c9700a389feae8ed5c5385dd462782d4",
+    "hash": "f05a3cfcf4f8c07ff68b3758216b533b3cf0442d",
     "parent": null,
     "modifiers": 16,
     "is_trait": false,
@@ -43,7 +43,7 @@
     "methods": {
         "__construct": {
             "name": "__construct",
-            "line": 60,
+            "line": 66,
             "short_desc": "",
             "long_desc": "",
             "hint": null,
@@ -62,7 +62,7 @@
             "parameters": {
                 "templateStrategy": {
                     "name": "templateStrategy",
-                    "line": 61,
+                    "line": 67,
                     "short_desc": "",
                     "long_desc": null,
                     "hint": [
@@ -80,7 +80,7 @@
                 },
                 "bundle": {
                     "name": "bundle",
-                    "line": 62,
+                    "line": 68,
                     "short_desc": "",
                     "long_desc": null,
                     "hint": [
@@ -98,7 +98,7 @@
                 },
                 "metadata": {
                     "name": "metadata",
-                    "line": 63,
+                    "line": 69,
                     "short_desc": "",
                     "long_desc": null,
                     "hint": [
@@ -118,7 +118,7 @@
         },
         "setTemplateStrategy": {
             "name": "setTemplateStrategy",
-            "line": 80,
+            "line": 86,
             "short_desc": "",
             "long_desc": "",
             "hint": null,
@@ -137,7 +137,7 @@
             "parameters": {
                 "templateStrategy": {
                     "name": "templateStrategy",
-                    "line": 80,
+                    "line": 86,
                     "short_desc": "",
                     "long_desc": null,
                     "hint": [
@@ -157,7 +157,7 @@
         },
         "getTemplateStrategy": {
             "name": "getTemplateStrategy",
-            "line": 88,
+            "line": 94,
             "short_desc": "",
             "long_desc": "",
             "hint": [
@@ -184,7 +184,7 @@
         },
         "setBundle": {
             "name": "setBundle",
-            "line": 96,
+            "line": 102,
             "short_desc": "",
             "long_desc": "",
             "hint": null,
@@ -203,7 +203,7 @@
             "parameters": {
                 "bundle": {
                     "name": "bundle",
-                    "line": 96,
+                    "line": 102,
                     "short_desc": "",
                     "long_desc": null,
                     "hint": [
@@ -223,7 +223,7 @@
         },
         "getBundle": {
             "name": "getBundle",
-            "line": 104,
+            "line": 110,
             "short_desc": "",
             "long_desc": "",
             "hint": [
@@ -250,7 +250,7 @@
         },
         "getEntity": {
             "name": "getEntity",
-            "line": 112,
+            "line": 118,
             "short_desc": "",
             "long_desc": "",
             "hint": [
@@ -277,7 +277,7 @@
         },
         "getEntityNamespace": {
             "name": "getEntityNamespace",
-            "line": 122,
+            "line": 126,
             "short_desc": "",
             "long_desc": "",
             "hint": [
@@ -304,7 +304,7 @@
         },
         "setMetadata": {
             "name": "setMetadata",
-            "line": 132,
+            "line": 134,
             "short_desc": "",
             "long_desc": "",
             "hint": null,
@@ -323,7 +323,7 @@
             "parameters": {
                 "metadata": {
                     "name": "metadata",
-                    "line": 132,
+                    "line": 134,
                     "short_desc": "",
                     "long_desc": null,
                     "hint": [
@@ -343,7 +343,7 @@
         },
         "getMetadata": {
             "name": "getMetadata",
-            "line": 140,
+            "line": 142,
             "short_desc": "",
             "long_desc": "",
             "hint": [
@@ -370,7 +370,7 @@
         },
         "setGeneratedFiles": {
             "name": "setGeneratedFiles",
-            "line": 148,
+            "line": 150,
             "short_desc": "",
             "long_desc": "",
             "hint": null,
@@ -389,7 +389,7 @@
             "parameters": {
                 "generatedFiles": {
                     "name": "generatedFiles",
-                    "line": 148,
+                    "line": 150,
                     "short_desc": "",
                     "long_desc": null,
                     "hint": [
@@ -409,7 +409,7 @@
         },
         "addGeneratedFile": {
             "name": "addGeneratedFile",
-            "line": 160,
+            "line": 162,
             "short_desc": "",
             "long_desc": "",
             "hint": null,
@@ -428,7 +428,7 @@
             "parameters": {
                 "generatedFile": {
                     "name": "generatedFile",
-                    "line": 160,
+                    "line": 162,
                     "short_desc": "",
                     "long_desc": null,
                     "hint": [
@@ -448,7 +448,7 @@
         },
         "getGeneratedFiles": {
             "name": "getGeneratedFiles",
-            "line": 168,
+            "line": 170,
             "short_desc": "",
             "long_desc": "",
             "hint": [
@@ -479,7 +479,7 @@
         },
         "setFileDependencies": {
             "name": "setFileDependencies",
-            "line": 176,
+            "line": 178,
             "short_desc": "",
             "long_desc": "",
             "hint": null,
@@ -498,7 +498,7 @@
             "parameters": {
                 "fileDependencies": {
                     "name": "fileDependencies",
-                    "line": 176,
+                    "line": 178,
                     "short_desc": "",
                     "long_desc": null,
                     "hint": [
@@ -518,7 +518,7 @@
         },
         "addFileDependency": {
             "name": "addFileDependency",
-            "line": 188,
+            "line": 190,
             "short_desc": "",
             "long_desc": "",
             "hint": null,
@@ -537,7 +537,7 @@
             "parameters": {
                 "fileDependency": {
                     "name": "fileDependency",
-                    "line": 188,
+                    "line": 190,
                     "short_desc": "",
                     "long_desc": null,
                     "hint": [
@@ -557,7 +557,7 @@
         },
         "getFileDependencies": {
             "name": "getFileDependencies",
-            "line": 196,
+            "line": 198,
             "short_desc": "",
             "long_desc": "",
             "hint": [
@@ -588,7 +588,7 @@
         },
         "setTargetDirectory": {
             "name": "setTargetDirectory",
-            "line": 204,
+            "line": 206,
             "short_desc": "",
             "long_desc": "",
             "hint": null,
@@ -607,7 +607,7 @@
             "parameters": {
                 "targetDirectory": {
                     "name": "targetDirectory",
-                    "line": 204,
+                    "line": 206,
                     "short_desc": "",
                     "long_desc": null,
                     "hint": [
@@ -627,7 +627,7 @@
         },
         "getTargetDirectory": {
             "name": "getTargetDirectory",
-            "line": 212,
+            "line": 214,
             "short_desc": "",
             "long_desc": "",
             "hint": [
@@ -654,7 +654,7 @@
         },
         "setOverwrite": {
             "name": "setOverwrite",
-            "line": 220,
+            "line": 222,
             "short_desc": "",
             "long_desc": "",
             "hint": null,
@@ -673,7 +673,7 @@
             "parameters": {
                 "overwrite": {
                     "name": "overwrite",
-                    "line": 220,
+                    "line": 222,
                     "short_desc": "",
                     "long_desc": null,
                     "hint": [
@@ -693,7 +693,7 @@
         },
         "shouldOverwrite": {
             "name": "shouldOverwrite",
-            "line": 228,
+            "line": 230,
             "short_desc": "",
             "long_desc": "",
             "hint": [
@@ -720,9 +720,9 @@
         },
         "isValid": {
             "name": "isValid",
-            "line": 237,
-            "short_desc": "",
-            "long_desc": "",
+            "line": 245,
+            "short_desc": "Ensures the state of the bundle is valid for our generation purposes.",
+            "long_desc": "Iterates through file dependencies and generated files to ensure\nrules set against them pass. This should be always called if extending\nthis method with parent::isValid()",
             "hint": [
                 [
                     "bool",
@@ -736,7 +736,10 @@
             "modifiers": "1",
             "is_by_ref": "",
             "exceptions": [
-
+                [
+                    "\\RunTimeException",
+                    ""
+                ]
             ],
             "errors": [
 
@@ -747,8 +750,8 @@
         },
         "generate": {
             "name": "generate",
-            "line": 253,
-            "short_desc": "",
+            "line": 268,
+            "short_desc": "Generates all the files declared by the manipulator if the\nsystem is in a valid state.",
             "long_desc": "",
             "hint": [
                 [

@@ -32,7 +32,7 @@ class __TwigTemplate_bf77d44bf4d734c50ac3691e14f1988c14973f45d228cb0e78358735b3c
     protected function doDisplay(array $context, array $blocks = array())
     {
         // line 2
-        $context["__internal_0846f23fb6cd72f5975821d7a422a21c18adfa7d9c58e1407a2212b041bd409c"] = $this->env->loadTemplate("macros.twig");
+        $context["__internal_1e0a6a71f4c04a35d77a5e3f4fb9db32380eaf875db801336bbf15e6577ec4f8"] = $this->env->loadTemplate("macros.twig");
         // line 1
         $this->parent->display($context, array_merge($this->blocks, $blocks));
     }
@@ -117,10 +117,10 @@ class __TwigTemplate_bf77d44bf4d734c50ac3691e14f1988c14973f45d228cb0e78358735b3c
                 if (("class" == (isset($context["type"]) ? $context["type"] : $this->getContext($context, "type")))) {
                     // line 29
                     echo "<dt>";
-                    echo $context["__internal_0846f23fb6cd72f5975821d7a422a21c18adfa7d9c58e1407a2212b041bd409c"]->getclass_link((isset($context["value"]) ? $context["value"] : $this->getContext($context, "value")));
+                    echo $context["__internal_1e0a6a71f4c04a35d77a5e3f4fb9db32380eaf875db801336bbf15e6577ec4f8"]->getclass_link((isset($context["value"]) ? $context["value"] : $this->getContext($context, "value")));
                     if ((isset($context["has_namespaces"]) ? $context["has_namespaces"] : $this->getContext($context, "has_namespaces"))) {
                         echo " &mdash; <em>Class in namespace ";
-                        echo $context["__internal_0846f23fb6cd72f5975821d7a422a21c18adfa7d9c58e1407a2212b041bd409c"]->getnamespace_link($this->getAttribute((isset($context["value"]) ? $context["value"] : $this->getContext($context, "value")), "namespace", array()));
+                        echo $context["__internal_1e0a6a71f4c04a35d77a5e3f4fb9db32380eaf875db801336bbf15e6577ec4f8"]->getnamespace_link($this->getAttribute((isset($context["value"]) ? $context["value"] : $this->getContext($context, "value")), "namespace", array()));
                     }
                     echo "</em></dt>
                     <dd>";
@@ -131,9 +131,9 @@ class __TwigTemplate_bf77d44bf4d734c50ac3691e14f1988c14973f45d228cb0e78358735b3c
 (isset($context["type"]) ? $context["type"] : $this->getContext($context, "type")))) {
                     // line 32
                     echo "<dt>";
-                    echo $context["__internal_0846f23fb6cd72f5975821d7a422a21c18adfa7d9c58e1407a2212b041bd409c"]->getmethod_link((isset($context["value"]) ? $context["value"] : $this->getContext($context, "value")));
+                    echo $context["__internal_1e0a6a71f4c04a35d77a5e3f4fb9db32380eaf875db801336bbf15e6577ec4f8"]->getmethod_link((isset($context["value"]) ? $context["value"] : $this->getContext($context, "value")));
                     echo "() &mdash; <em>Method in class ";
-                    echo $context["__internal_0846f23fb6cd72f5975821d7a422a21c18adfa7d9c58e1407a2212b041bd409c"]->getclass_link($this->getAttribute((isset($context["value"]) ? $context["value"] : $this->getContext($context, "value")), "class", array()));
+                    echo $context["__internal_1e0a6a71f4c04a35d77a5e3f4fb9db32380eaf875db801336bbf15e6577ec4f8"]->getclass_link($this->getAttribute((isset($context["value"]) ? $context["value"] : $this->getContext($context, "value")), "class", array()));
                     echo "</em></dt>
                     <dd>";
                     // line 33
@@ -143,9 +143,9 @@ class __TwigTemplate_bf77d44bf4d734c50ac3691e14f1988c14973f45d228cb0e78358735b3c
 (isset($context["type"]) ? $context["type"] : $this->getContext($context, "type")))) {
                     // line 35
                     echo "<dt>\$";
-                    echo $context["__internal_0846f23fb6cd72f5975821d7a422a21c18adfa7d9c58e1407a2212b041bd409c"]->getproperty_link((isset($context["value"]) ? $context["value"] : $this->getContext($context, "value")));
+                    echo $context["__internal_1e0a6a71f4c04a35d77a5e3f4fb9db32380eaf875db801336bbf15e6577ec4f8"]->getproperty_link((isset($context["value"]) ? $context["value"] : $this->getContext($context, "value")));
                     echo " &mdash; <em>Property in class ";
-                    echo $context["__internal_0846f23fb6cd72f5975821d7a422a21c18adfa7d9c58e1407a2212b041bd409c"]->getclass_link($this->getAttribute((isset($context["value"]) ? $context["value"] : $this->getContext($context, "value")), "class", array()));
+                    echo $context["__internal_1e0a6a71f4c04a35d77a5e3f4fb9db32380eaf875db801336bbf15e6577ec4f8"]->getclass_link($this->getAttribute((isset($context["value"]) ? $context["value"] : $this->getContext($context, "value")), "class", array()));
                     echo "</em></dt>
                     <dd>";
                     // line 36

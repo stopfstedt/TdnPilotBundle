@@ -78,7 +78,10 @@
         <a href="../../../Tdn/PilotBundle/Manipulator/ManipulatorInterface.html"><abbr title="Tdn\PilotBundle\Manipulator\ManipulatorInterface">ManipulatorInterface</abbr></a></p>
 
             <div class="description">
-            <p>Abstract Class AbstractManipulator</p>                    </div>
+            <p>Abstract Class AbstractManipulator</p>            <p>Parent manipulator class. Each manipulator deals with a specific part
+of a target application (controllers, managers, handlers, routing, etc)
+When adding a new type of manipulation, a new manipulator should be
+created extending this class.</p>        </div>
     
     
     
@@ -282,8 +285,7 @@
                 </div>
                 <div class="col-md-8 type">
                     <a href="#method_isValid">isValid</a>()
-                                            <p class="no-description">No description</p>
-                                    </div>
+                                            <p>Ensures the state of the bundle is valid for our generation purposes.</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -292,8 +294,8 @@
                 </div>
                 <div class="col-md-8 type">
                     <a href="#method_generate">generate</a>()
-                                            <p class="no-description">No description</p>
-                                    </div>
+                                            <p>Generates all the files declared by the manipulator if the
+system is in a valid state.</p>                </div>
                 <div class="col-md-2"></div>
             </div>
             </div>
@@ -304,7 +306,7 @@
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method___construct">
-        <div class="location">at line 60</div>
+        <div class="location">at line 66</div>
         <code>                    
     <strong>__construct</strong>(<a href="../../../Tdn/PilotBundle/Template/Strategy/TemplateStrategyInterface.html"><abbr title="Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface">TemplateStrategyInterface</abbr></a> $templateStrategy, <abbr title="Symfony\Component\HttpKernel\Bundle\BundleInterface">BundleInterface</abbr> $bundle, <abbr title="Doctrine\ORM\Mapping\ClassMetadataInfo">ClassMetadataInfo</abbr> $metadata)</code>
     </h3>
@@ -342,7 +344,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_setTemplateStrategy">
-        <div class="location">at line 80</div>
+        <div class="location">at line 86</div>
         <code>                    
     <strong>setTemplateStrategy</strong>(<a href="../../../Tdn/PilotBundle/Template/Strategy/TemplateStrategyInterface.html"><abbr title="Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface">TemplateStrategyInterface</abbr></a> $templateStrategy)</code>
     </h3>
@@ -368,7 +370,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getTemplateStrategy">
-        <div class="location">at line 88</div>
+        <div class="location">at line 94</div>
         <code>                    <a href="../../../Tdn/PilotBundle/Template/Strategy/TemplateStrategyInterface.html"><abbr title="Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface">TemplateStrategyInterface</abbr></a>
     <strong>getTemplateStrategy</strong>()</code>
     </h3>
@@ -393,7 +395,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_setBundle">
-        <div class="location">at line 96</div>
+        <div class="location">at line 102</div>
         <code>                    
     <strong>setBundle</strong>(<abbr title="Symfony\Component\HttpKernel\Bundle\BundleInterface">BundleInterface</abbr> $bundle)</code>
     </h3>
@@ -419,7 +421,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getBundle">
-        <div class="location">at line 104</div>
+        <div class="location">at line 110</div>
         <code>                    <abbr title="Symfony\Component\HttpKernel\Bundle\BundleInterface">BundleInterface</abbr>
     <strong>getBundle</strong>()</code>
     </h3>
@@ -444,7 +446,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getEntity">
-        <div class="location">at line 112</div>
+        <div class="location">at line 118</div>
         <code>                    string
     <strong>getEntity</strong>()</code>
     </h3>
@@ -469,7 +471,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getEntityNamespace">
-        <div class="location">at line 122</div>
+        <div class="location">at line 126</div>
         <code>                    string
     <strong>getEntityNamespace</strong>()</code>
     </h3>
@@ -494,7 +496,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_setMetadata">
-        <div class="location">at line 132</div>
+        <div class="location">at line 134</div>
         <code>                    
     <strong>setMetadata</strong>(<abbr title="Doctrine\ORM\Mapping\ClassMetadataInfo">ClassMetadataInfo</abbr> $metadata)</code>
     </h3>
@@ -520,7 +522,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getMetadata">
-        <div class="location">at line 140</div>
+        <div class="location">at line 142</div>
         <code>                    <abbr title="Doctrine\ORM\Mapping\ClassMetadataInfo">ClassMetadataInfo</abbr>
     <strong>getMetadata</strong>()</code>
     </h3>
@@ -545,7 +547,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_setGeneratedFiles">
-        <div class="location">at line 148</div>
+        <div class="location">at line 150</div>
         <code>                    
     <strong>setGeneratedFiles</strong>(<abbr title="Doctrine\Common\Collections\Collection">Collection</abbr> $generatedFiles)</code>
     </h3>
@@ -571,7 +573,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_addGeneratedFile">
-        <div class="location">at line 160</div>
+        <div class="location">at line 162</div>
         <code>                    
     <strong>addGeneratedFile</strong>(<a href="../../../Tdn/PilotBundle/Model/GeneratedFileInterface.html"><abbr title="Tdn\PilotBundle\Model\GeneratedFileInterface">GeneratedFileInterface</abbr></a> $generatedFile)</code>
     </h3>
@@ -597,7 +599,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getGeneratedFiles">
-        <div class="location">at line 168</div>
+        <div class="location">at line 170</div>
         <code>                    <abbr title="Doctrine\Common\Collections\ArrayCollection">ArrayCollection</abbr>|<a href="../../../Tdn/PilotBundle/Model/GeneratedFileInterface.html"><abbr title="Tdn\PilotBundle\Model\GeneratedFileInterface">GeneratedFileInterface</abbr></a>[]
     <strong>getGeneratedFiles</strong>()</code>
     </h3>
@@ -622,7 +624,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_setFileDependencies">
-        <div class="location">at line 176</div>
+        <div class="location">at line 178</div>
         <code>                    
     <strong>setFileDependencies</strong>(<abbr title="Doctrine\Common\Collections\Collection">Collection</abbr> $fileDependencies)</code>
     </h3>
@@ -648,7 +650,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_addFileDependency">
-        <div class="location">at line 188</div>
+        <div class="location">at line 190</div>
         <code>                    
     <strong>addFileDependency</strong>(<abbr title="Symfony\Component\Finder\SplFileInfo">SplFileInfo</abbr> $fileDependency)</code>
     </h3>
@@ -674,7 +676,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getFileDependencies">
-        <div class="location">at line 196</div>
+        <div class="location">at line 198</div>
         <code>                    <abbr title="Doctrine\Common\Collections\ArrayCollection">ArrayCollection</abbr>|<abbr title="Symfony\Component\Finder\SplFileInfo">SplFileInfo</abbr>[]
     <strong>getFileDependencies</strong>()</code>
     </h3>
@@ -699,7 +701,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_setTargetDirectory">
-        <div class="location">at line 204</div>
+        <div class="location">at line 206</div>
         <code>                    
     <strong>setTargetDirectory</strong>(string $targetDirectory)</code>
     </h3>
@@ -725,7 +727,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getTargetDirectory">
-        <div class="location">at line 212</div>
+        <div class="location">at line 214</div>
         <code>                    string
     <strong>getTargetDirectory</strong>()</code>
     </h3>
@@ -750,7 +752,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_setOverwrite">
-        <div class="location">at line 220</div>
+        <div class="location">at line 222</div>
         <code>                    
     <strong>setOverwrite</strong>(bool $overwrite)</code>
     </h3>
@@ -776,7 +778,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_shouldOverwrite">
-        <div class="location">at line 228</div>
+        <div class="location">at line 230</div>
         <code>                    bool
     <strong>shouldOverwrite</strong>()</code>
     </h3>
@@ -801,11 +803,15 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_isValid">
-        <div class="location">at line 237</div>
+        <div class="location">at line 245</div>
         <code>                    bool
     <strong>isValid</strong>()</code>
     </h3>
     <div class="details">
+                    <div class="method-description">
+                                    <p>Ensures the state of the bundle is valid for our generation purposes.</p>                    <p>Iterates through file dependencies and generated files to ensure
+rules set against them pass. This should be always called if extending
+this method with parent::isValid()</p>            </div>
                 <div class="tags">
             
                             <h4>Return Value</h4>
@@ -836,11 +842,14 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_generate">
-        <div class="location">at line 253</div>
+        <div class="location">at line 268</div>
         <code>                    <abbr title="Doctrine\Common\Collections\ArrayCollection">ArrayCollection</abbr>|<a href="../../../Tdn/PilotBundle/Model/GeneratedFileInterface.html"><abbr title="Tdn\PilotBundle\Model\GeneratedFileInterface">GeneratedFileInterface</abbr></a>[]
     <strong>generate</strong>()</code>
     </h3>
     <div class="details">
+                    <div class="method-description">
+                                    <p>Generates all the files declared by the manipulator if the
+system is in a valid state.</p>                                </div>
                 <div class="tags">
             
                             <h4>Return Value</h4>

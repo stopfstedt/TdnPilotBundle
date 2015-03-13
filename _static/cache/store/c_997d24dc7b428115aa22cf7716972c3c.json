@@ -1,8 +1,8 @@
 {
     "name": "Tdn\\PilotBundle\\Form\\DataTransformer\\ManyRelatedTransformer",
-    "line": 15,
-    "short_desc": "Transforms Relationship data for entity based forms",
-    "long_desc": "Class ManyRelatedTransformer",
+    "line": 16,
+    "short_desc": "Class ManyRelatedTransformer",
+    "long_desc": "Transforms Relationship data for entity based forms",
     "hint": null,
     "tags": {
         "package": [
@@ -13,7 +13,7 @@
     },
     "namespace": "Tdn\\PilotBundle\\Form\\DataTransformer",
     "file": "\/vagrant\/vendor\/tdn\/pilotbundle\/Form\/DataTransformer\/ManyRelatedTransformer.php",
-    "hash": "432c580329507871228df714d3b4bed9e19ab565",
+    "hash": "a6e8aa62bb916a4cb1adf440f8c8d0eca969c31d",
     "parent": "Tdn\\PilotBundle\\Form\\DataTransformer\\AbstractRelatedTransformer",
     "modifiers": 0,
     "is_trait": false,
@@ -38,7 +38,7 @@
     "methods": {
         "transform": {
             "name": "transform",
-            "line": 23,
+            "line": 24,
             "short_desc": "Transforms an entity collection to an array of identifiers.",
             "long_desc": "",
             "hint": [
@@ -62,7 +62,7 @@
             "parameters": {
                 "collection": {
                     "name": "collection",
-                    "line": 23,
+                    "line": 24,
                     "short_desc": "",
                     "long_desc": null,
                     "hint": [

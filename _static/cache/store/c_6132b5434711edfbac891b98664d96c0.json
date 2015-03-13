@@ -13,7 +13,7 @@
     },
     "namespace": "Tdn\\PilotBundle\\Manipulator",
     "file": "\/vagrant\/vendor\/tdn\/pilotbundle\/Manipulator\/FormManipulator.php",
-    "hash": "6afd22b7d3aaefa449c31b1c58c7c24888f891f4",
+    "hash": "85b01ea7707ef4796714b8f384ef49a7a9d92275",
     "parent": "Tdn\\PilotBundle\\Manipulator\\AbstractManipulator",
     "modifiers": 0,
     "is_trait": false,
@@ -183,8 +183,8 @@
         "prepare": {
             "name": "prepare",
             "line": 59,
-            "short_desc": "Sets up appropriate file contents.",
-            "long_desc": "",
+            "short_desc": "Sets up a FormType based on entity.",
+            "long_desc": "Sets up InvalidFormException if it doesn't exist exists.",
             "hint": [
                 [
                     "Tdn\\PilotBundle\\Manipulator\\$this",

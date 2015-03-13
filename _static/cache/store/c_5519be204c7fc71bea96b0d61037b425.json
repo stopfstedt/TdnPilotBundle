@@ -1,8 +1,8 @@
 {
     "name": "Tdn\\PilotBundle\\Command\\GenerateRoutingCommand",
-    "line": 17,
+    "line": 20,
     "short_desc": "Class GenerateRoutingCommand",
-    "long_desc": "",
+    "long_desc": "Adds \/ Removes routes from the routing file based on an entity.",
     "hint": null,
     "tags": {
         "package": [
@@ -13,7 +13,7 @@
     },
     "namespace": "Tdn\\PilotBundle\\Command",
     "file": "\/vagrant\/vendor\/tdn\/pilotbundle\/Command\/GenerateRoutingCommand.php",
-    "hash": "65a72349e6899cbbca2439015cd77118d7802c1f",
+    "hash": "a736ab0ac14d6c1e66647f232d72443bb7af5e42",
     "parent": "Tdn\\PilotBundle\\Command\\AbstractGeneratorCommand",
     "modifiers": 0,
     "is_trait": false,
@@ -45,19 +45,19 @@
     "constants": {
         "DEFAULT_ROUTING": {
             "name": "DEFAULT_ROUTING",
-            "line": 22,
+            "line": 25,
             "short_desc": "",
             "long_desc": ""
         },
         "NAME": {
             "name": "NAME",
-            "line": 27,
+            "line": 30,
             "short_desc": "",
             "long_desc": ""
         },
         "DESCRIPTION": {
             "name": "DESCRIPTION",
-            "line": 32,
+            "line": 35,
             "short_desc": "",
             "long_desc": ""
         }

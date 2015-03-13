@@ -13,7 +13,7 @@
     },
     "namespace": "Tdn\\PilotBundle\\DependencyInjection",
     "file": "\/vagrant\/vendor\/tdn\/pilotbundle\/DependencyInjection\/Configuration.php",
-    "hash": "fd0a29287e5b4ed5cdae0f7d354cf264425f988c",
+    "hash": "283a4390e77ac53e353f7f1b91de812a7058c1a6",
     "parent": null,
     "modifiers": 0,
     "is_trait": false,

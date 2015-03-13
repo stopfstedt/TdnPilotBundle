@@ -283,7 +283,7 @@ $context["hint"], "name", array())) {
         ob_start();
         try {
             // line 46
-            $context["__internal_8b15865829f338cba715cdb07325ff8af284b5a355e5f33aa2513efe00830370"] = $this->env->loadTemplate("macros.twig");
+            $context["__internal_a977de4fc016c750beb4a21a9d7c7224f0aa8ebca5d6282f62276440488f5505"] = $this->env->loadTemplate("macros.twig");
             // line 47
             echo "(";
             // line 48
@@ -305,7 +305,7 @@ $context["hint"], "name", array())) {
             foreach ($context['_seq'] as $context["_key"] => $context["parameter"]) {
                 // line 49
                 if ($this->getAttribute($context["parameter"], "hashint", array())) {
-                    echo $context["__internal_8b15865829f338cba715cdb07325ff8af284b5a355e5f33aa2513efe00830370"]->gethint_link($this->getAttribute($context["parameter"], "hint", array()));
+                    echo $context["__internal_a977de4fc016c750beb4a21a9d7c7224f0aa8ebca5d6282f62276440488f5505"]->gethint_link($this->getAttribute($context["parameter"], "hint", array()));
                     echo " ";
                 }
                 // line 50

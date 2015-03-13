@@ -13,7 +13,7 @@
     },
     "namespace": "Tdn\\PilotBundle\\Form\\DataTransformer",
     "file": "\/vagrant\/vendor\/tdn\/pilotbundle\/Form\/DataTransformer\/AbstractRelatedTransformer.php",
-    "hash": "f64e0ebd92e33c3215654c07048b24d51f617a68",
+    "hash": "28374694558c33bfb3a1b3a8a3864d412c6d668d",
     "parent": null,
     "modifiers": 16,
     "is_trait": false,
@@ -37,9 +37,36 @@
 
     ],
     "methods": {
+        "getRelationshipStringStrategies": {
+            "name": "getRelationshipStringStrategies",
+            "line": 39,
+            "short_desc": "The entity to string strategies supported by this class",
+            "long_desc": "",
+            "hint": [
+                [
+                    "string",
+                    true
+                ]
+            ],
+            "hint_desc": "",
+            "tags": [
+
+            ],
+            "modifiers": "9",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": [
+
+            ]
+        },
         "__construct": {
             "name": "__construct",
-            "line": 31,
+            "line": 52,
             "short_desc": "",
             "long_desc": "",
             "hint": null,
@@ -58,7 +85,7 @@
             "parameters": {
                 "objectManager": {
                     "name": "objectManager",
-                    "line": 31,
+                    "line": 52,
                     "short_desc": "",
                     "long_desc": null,
                     "hint": [
@@ -76,7 +103,7 @@
                 },
                 "entityName": {
                     "name": "entityName",
-                    "line": 31,
+                    "line": 52,
                     "short_desc": "",
                     "long_desc": null,
                     "hint": [
@@ -91,12 +118,34 @@
                     "modifiers": "",
                     "default": null,
                     "is_by_ref": false
+                },
+                "relationshipStrategy": {
+                    "name": "relationshipStrategy",
+                    "line": 52,
+                    "short_desc": "",
+                    "long_desc": null,
+                    "hint": [
+                        [
+                            "string",
+                            false
+                        ],
+                        [
+                            "null",
+                            false
+                        ]
+                    ],
+                    "tags": [
+
+                    ],
+                    "modifiers": "",
+                    "default": "null",
+                    "is_by_ref": false
                 }
             }
         },
         "getObjectManager": {
             "name": "getObjectManager",
-            "line": 97,
+            "line": 152,
             "short_desc": "",
             "long_desc": "",
             "hint": [
@@ -123,7 +172,7 @@
         },
         "getEntityName": {
             "name": "getEntityName",
-            "line": 105,
+            "line": 160,
             "short_desc": "",
             "long_desc": "",
             "hint": [
@@ -149,7 +198,18 @@
             ]
         }
     },
-    "constants": [
-
-    ]
+    "constants": {
+        "STRATEGY_STRINGABLE": {
+            "name": "STRATEGY_STRINGABLE",
+            "line": 16,
+            "short_desc": "",
+            "long_desc": ""
+        },
+        "STRATEGY_IDENTIFIER": {
+            "name": "STRATEGY_IDENTIFIER",
+            "line": 17,
+            "short_desc": "",
+            "long_desc": ""
+        }
+    }
 }

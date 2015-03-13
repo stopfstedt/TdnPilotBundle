@@ -1,8 +1,8 @@
 {
     "name": "Tdn\\PilotBundle\\Command\\GeneratePilotProjectCommand",
-    "line": 20,
+    "line": 24,
     "short_desc": "Class GeneratePilotProjectCommand",
-    "long_desc": "",
+    "long_desc": "Generates a pilot project from your entities.",
     "hint": null,
     "tags": {
         "package": [
@@ -13,7 +13,7 @@
     },
     "namespace": "Tdn\\PilotBundle\\Command",
     "file": "\/vagrant\/vendor\/tdn\/pilotbundle\/Command\/GeneratePilotProjectCommand.php",
-    "hash": "938249d8f1dc515e3dc05c0ceefb1fee953f5e82",
+    "hash": "bbaee49bc901d21daaabe3cd0d4f19a97015bcb4",
     "parent": "Tdn\\PilotBundle\\Command\\AbstractGeneratorCommand",
     "modifiers": 0,
     "is_trait": false,
@@ -25,6 +25,7 @@
         "OutputInterface": "Symfony\\Component\\Console\\Output\\OutputInterface",
         "BundleInterface": "Symfony\\Component\\HttpKernel\\Bundle\\BundleInterface",
         "ClassMetadataInfo": "Doctrine\\ORM\\Mapping\\ClassMetadataInfo",
+        "ArrayCollection": "Doctrine\\Common\\Collections\\ArrayCollection",
         "ManipulatorInterface": "Tdn\\PilotBundle\\Manipulator\\ManipulatorInterface",
         "ManagerManipulator": "Tdn\\PilotBundle\\Manipulator\\ManagerManipulator",
         "PilotProjectManipulator": "Tdn\\PilotBundle\\Manipulator\\PilotProjectManipulator",

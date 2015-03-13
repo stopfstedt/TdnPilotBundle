@@ -1,8 +1,8 @@
 {
     "name": "Tdn\\PilotBundle\\Command\\GenerateManagerCommand",
-    "line": 15,
+    "line": 19,
     "short_desc": "Class GenerateManagerCommand",
-    "long_desc": "",
+    "long_desc": "Generates a entity manager specific for an entity (DAO)\nwith a repository as a dependency.",
     "hint": null,
     "tags": {
         "package": [
@@ -13,7 +13,7 @@
     },
     "namespace": "Tdn\\PilotBundle\\Command",
     "file": "\/vagrant\/vendor\/tdn\/pilotbundle\/Command\/GenerateManagerCommand.php",
-    "hash": "19f9c558fa549fec2aa92171a124f4c06c14ba46",
+    "hash": "8bcfaaeb0675faa3b1d2da309ddbb3d47fbfdb94",
     "parent": "Tdn\\PilotBundle\\Command\\AbstractGeneratorCommand",
     "modifiers": 0,
     "is_trait": false,
@@ -43,13 +43,13 @@
     "constants": {
         "NAME": {
             "name": "NAME",
-            "line": 20,
+            "line": 24,
             "short_desc": "",
             "long_desc": ""
         },
         "DESCRIPTION": {
             "name": "DESCRIPTION",
-            "line": 25,
+            "line": 29,
             "short_desc": "",
             "long_desc": ""
         }

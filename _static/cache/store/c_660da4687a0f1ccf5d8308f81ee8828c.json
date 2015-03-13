@@ -522,7 +522,10 @@
             "modifiers": "1",
             "is_by_ref": "",
             "exceptions": [
-
+                [
+                    "\\RuntimeException",
+                    ""
+                ]
             ],
             "errors": [
 

@@ -1,8 +1,8 @@
 {
     "name": "Tdn\\PilotBundle\\Form\\DataTransformer\\ArrayToStringTransformer",
-    "line": 14,
-    "short_desc": "Class transforms norm data into view data.",
-    "long_desc": "Class ArrayToStringTransformer",
+    "line": 15,
+    "short_desc": "Class ArrayToStringTransformer",
+    "long_desc": "Class transforms norm data into view data utilized by the related form types.",
     "hint": null,
     "tags": {
         "package": [
@@ -13,7 +13,7 @@
     },
     "namespace": "Tdn\\PilotBundle\\Form\\DataTransformer",
     "file": "\/vagrant\/vendor\/tdn\/pilotbundle\/Form\/DataTransformer\/ArrayToStringTransformer.php",
-    "hash": "66f72587f3e5bdef67c144cef7f510c48559b191",
+    "hash": "55b81ca323b28cb2210d65adbf1704af1f2c10a1",
     "parent": null,
     "modifiers": 0,
     "is_trait": false,
@@ -37,7 +37,7 @@
     "methods": {
         "transform": {
             "name": "transform",
-            "line": 22,
+            "line": 23,
             "short_desc": "Transforms an array to a csv set of strings",
             "long_desc": "",
             "hint": [
@@ -61,7 +61,7 @@
             "parameters": {
                 "array": {
                     "name": "array",
-                    "line": 22,
+                    "line": 23,
                     "short_desc": "",
                     "long_desc": null,
                     "hint": [
@@ -85,7 +85,7 @@
         },
         "reverseTransform": {
             "name": "reverseTransform",
-            "line": 41,
+            "line": 42,
             "short_desc": "Transforms a string into an array",
             "long_desc": "",
             "hint": [
@@ -109,7 +109,7 @@
             "parameters": {
                 "string": {
                     "name": "string",
-                    "line": 41,
+                    "line": 42,
                     "short_desc": "",
                     "long_desc": null,
                     "hint": [

@@ -9,7 +9,7 @@
     ],
     "namespace": "Tdn\\PilotBundle\\DependencyInjection",
     "file": "\/vagrant\/vendor\/tdn\/pilotbundle\/DependencyInjection\/TdnPilotExtension.php",
-    "hash": "4f3b019ede91ec8fe680390cc489a22cc47799d1",
+    "hash": "058058cd5db29cd084d43c1ab7d44cc1a98c981d",
     "parent": "Symfony\\Component\\HttpKernel\\DependencyInjection\\Extension",
     "modifiers": 0,
     "is_trait": false,

@@ -1,8 +1,8 @@
 {
     "name": "Tdn\\PilotBundle\\Command\\GenerateControllerCommand",
-    "line": 16,
+    "line": 19,
     "short_desc": "Class GenerateControllerCommand",
-    "long_desc": "",
+    "long_desc": "Generates a CRUD controller based on an entity.",
     "hint": null,
     "tags": {
         "package": [
@@ -13,7 +13,7 @@
     },
     "namespace": "Tdn\\PilotBundle\\Command",
     "file": "\/vagrant\/vendor\/tdn\/pilotbundle\/Command\/GenerateControllerCommand.php",
-    "hash": "9bb43f0b0e574446e4a5b3dba1f9ac2617c32b60",
+    "hash": "60c04e161922c9b814181dd2d94a2b821980ad42",
     "parent": "Tdn\\PilotBundle\\Command\\AbstractGeneratorCommand",
     "modifiers": 0,
     "is_trait": false,
@@ -41,9 +41,9 @@
     "methods": {
         "getRoutePrefix": {
             "name": "getRoutePrefix",
-            "line": 54,
-            "short_desc": "",
-            "long_desc": "",
+            "line": 62,
+            "short_desc": "Gets the route prefix for the resource",
+            "long_desc": "Gets a route prefix to use when using annotations. Otherwise the route prefix\nis set through the `RoutingManipulator`.",
             "hint": [
                 [
                     "string",
@@ -65,7 +65,7 @@
             "parameters": {
                 "routePrefix": {
                     "name": "routePrefix",
-                    "line": 54,
+                    "line": 62,
                     "short_desc": "",
                     "long_desc": null,
                     "hint": [
@@ -87,13 +87,13 @@
     "constants": {
         "NAME": {
             "name": "NAME",
-            "line": 21,
+            "line": 24,
             "short_desc": "",
             "long_desc": ""
         },
         "DESCRIPTION": {
             "name": "DESCRIPTION",
-            "line": 26,
+            "line": 29,
             "short_desc": "",
             "long_desc": ""
         }

@@ -40,7 +40,7 @@
         "prepare": {
             "name": "prepare",
             "line": 21,
-            "short_desc": "Sets up appropriate file contents.",
+            "short_desc": "Generates REST Handler based on entity.",
             "long_desc": "",
             "hint": [
                 [

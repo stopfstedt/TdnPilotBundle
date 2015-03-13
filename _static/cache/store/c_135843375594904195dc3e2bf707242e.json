@@ -1,8 +1,8 @@
 {
     "name": "Tdn\\PilotBundle\\Form\\Type\\ManyRelatedType",
-    "line": 18,
+    "line": 16,
     "short_desc": "Class ManyRelatedType",
-    "long_desc": "",
+    "long_desc": "Defines a relationship with an entity as a OneToMany",
     "hint": null,
     "tags": {
         "package": [
@@ -13,18 +13,13 @@
     },
     "namespace": "Tdn\\PilotBundle\\Form\\Type",
     "file": "\/vagrant\/vendor\/tdn\/pilotbundle\/Form\/Type\/ManyRelatedType.php",
-    "hash": "61a75d24b941d42f567b4aa3e6f70964caddf89c",
-    "parent": "Symfony\\Component\\Form\\AbstractType",
+    "hash": "07e5859087b97d7503ef9cbfebbad9c94d146275",
+    "parent": "Tdn\\PilotBundle\\Form\\Type\\AbstractRelatedType",
     "modifiers": 0,
     "is_trait": false,
     "is_interface": false,
     "aliases": {
-        "AbstractType": "Symfony\\Component\\Form\\AbstractType",
         "FormBuilderInterface": "Symfony\\Component\\Form\\FormBuilderInterface",
-        "OptionsResolver": "Symfony\\Component\\OptionsResolver\\OptionsResolver",
-        "OptionsResolverInterface": "Symfony\\Component\\OptionsResolver\\OptionsResolverInterface",
-        "Options": "Symfony\\Component\\OptionsResolver\\Options",
-        "ObjectManager": "Doctrine\\Common\\Persistence\\ObjectManager",
         "ManyRelatedTransformer": "Tdn\\PilotBundle\\Form\\DataTransformer\\ManyRelatedTransformer",
         "ArrayToStringTransformer": "Tdn\\PilotBundle\\Form\\DataTransformer\\ArrayToStringTransformer"
     },
@@ -41,48 +36,9 @@
 
     ],
     "methods": {
-        "__construct": {
-            "name": "__construct",
-            "line": 28,
-            "short_desc": "",
-            "long_desc": "",
-            "hint": null,
-            "hint_desc": null,
-            "tags": [
-
-            ],
-            "modifiers": "1",
-            "is_by_ref": "",
-            "exceptions": [
-
-            ],
-            "errors": [
-
-            ],
-            "parameters": {
-                "entityManager": {
-                    "name": "entityManager",
-                    "line": 28,
-                    "short_desc": "",
-                    "long_desc": null,
-                    "hint": [
-                        [
-                            "Doctrine\\Common\\Persistence\\ObjectManager",
-                            false
-                        ]
-                    ],
-                    "tags": [
-
-                    ],
-                    "modifiers": "ObjectManager",
-                    "default": null,
-                    "is_by_ref": false
-                }
-            }
-        },
         "buildForm": {
             "name": "buildForm",
-            "line": 33,
+            "line": 19,
             "short_desc": "",
             "long_desc": "",
             "hint": null,
@@ -101,7 +57,7 @@
             "parameters": {
                 "builder": {
                     "name": "builder",
-                    "line": 33,
+                    "line": 19,
                     "short_desc": null,
                     "long_desc": null,
                     "hint": [
@@ -119,7 +75,7 @@
                 },
                 "options": {
                     "name": "options",
-                    "line": 33,
+                    "line": 19,
                     "short_desc": null,
                     "long_desc": null,
                     "hint": [
@@ -137,70 +93,9 @@
                 }
             }
         },
-        "setDefaultOptions": {
-            "name": "setDefaultOptions",
-            "line": 41,
-            "short_desc": "",
-            "long_desc": "",
-            "hint": null,
-            "hint_desc": null,
-            "tags": [
-
-            ],
-            "modifiers": "1",
-            "is_by_ref": "",
-            "exceptions": [
-
-            ],
-            "errors": [
-
-            ],
-            "parameters": {
-                "resolver": {
-                    "name": "resolver",
-                    "line": 41,
-                    "short_desc": null,
-                    "long_desc": null,
-                    "hint": [
-                        [
-                            "Symfony\\Component\\OptionsResolver\\OptionsResolverInterface",
-                            false
-                        ]
-                    ],
-                    "tags": [
-
-                    ],
-                    "modifiers": "OptionsResolverInterface",
-                    "default": null,
-                    "is_by_ref": false
-                }
-            }
-        },
-        "getParent": {
-            "name": "getParent",
-            "line": 54,
-            "short_desc": "",
-            "long_desc": "",
-            "hint": null,
-            "hint_desc": null,
-            "tags": [
-
-            ],
-            "modifiers": "1",
-            "is_by_ref": "",
-            "exceptions": [
-
-            ],
-            "errors": [
-
-            ],
-            "parameters": [
-
-            ]
-        },
         "getName": {
             "name": "getName",
-            "line": 59,
+            "line": 27,
             "short_desc": "",
             "long_desc": "",
             "hint": null,

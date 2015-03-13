@@ -77,7 +77,7 @@
     <strong>GenerateHandlerCommand</strong>        extends <a href="../../../Tdn/PilotBundle/Command/AbstractGeneratorCommand.html"><abbr title="Tdn\PilotBundle\Command\AbstractGeneratorCommand">AbstractGeneratorCommand</abbr></a></p>
 
             <div class="description">
-            <p>Class GenerateHandlerCommand</p>                    </div>
+            <p>Class GenerateHandlerCommand</p>            <p>Generates a REST handler that provide a way of managing your entities in a controller context.</p>        </div>
     
     
             <h2>Constants</h2>
@@ -153,9 +153,8 @@
                     string[]
                 </div>
                 <div class="col-md-8 type">
-                    <a href="#method_parseShortcutNotation">parseShortcutNotation</a>($shortcut)
-                                            <p class="no-description">No description</p>
-                                    </div>
+                    <a href="#method_parseShortcutNotation">parseShortcutNotation</a>(string $shortcut)
+                                            <p>Returns an array containing the bundle and the entity.</p>                </div>
                 <div class="col-md-2"><small>from&nbsp;<a href="../../../Tdn/PilotBundle/Command/AbstractGeneratorCommand.html#method_parseShortcutNotation"><abbr title="Tdn\PilotBundle\Command\AbstractGeneratorCommand">AbstractGeneratorCommand</abbr></a></small></div>
             </div>
                     <div class="row">
@@ -186,7 +185,7 @@
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method_setManipulator">
-        <div class="location">in <a href="../../../Tdn/PilotBundle/Command/AbstractGeneratorCommand.html#method_setManipulator"><abbr title="Tdn\PilotBundle\Command\AbstractGeneratorCommand">AbstractGeneratorCommand</abbr></a> at line 79</div>
+        <div class="location">in <a href="../../../Tdn/PilotBundle/Command/AbstractGeneratorCommand.html#method_setManipulator"><abbr title="Tdn\PilotBundle\Command\AbstractGeneratorCommand">AbstractGeneratorCommand</abbr></a> at line 81</div>
         <code>                    
     <strong>setManipulator</strong>(<a href="../../../Tdn/PilotBundle/Manipulator/ManipulatorInterface.html"><abbr title="Tdn\PilotBundle\Manipulator\ManipulatorInterface">ManipulatorInterface</abbr></a> $manipulator)</code>
     </h3>
@@ -212,7 +211,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getManipulator">
-        <div class="location">in <a href="../../../Tdn/PilotBundle/Command/AbstractGeneratorCommand.html#method_getManipulator"><abbr title="Tdn\PilotBundle\Command\AbstractGeneratorCommand">AbstractGeneratorCommand</abbr></a> at line 92</div>
+        <div class="location">in <a href="../../../Tdn/PilotBundle/Command/AbstractGeneratorCommand.html#method_getManipulator"><abbr title="Tdn\PilotBundle\Command\AbstractGeneratorCommand">AbstractGeneratorCommand</abbr></a> at line 94</div>
         <code>                    <a href="../../../Tdn/PilotBundle/Manipulator/ManipulatorInterface.html"><abbr title="Tdn\PilotBundle\Manipulator\ManipulatorInterface">ManipulatorInterface</abbr></a>
     <strong>getManipulator</strong>(<abbr title="Symfony\Component\Console\Input\InputInterface">InputInterface</abbr> $input, <a href="../../../Tdn/PilotBundle/Template/Strategy/TemplateStrategyInterface.html"><abbr title="Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface">TemplateStrategyInterface</abbr></a> $templateStrategy, <abbr title="Symfony\Component\HttpKernel\Bundle\BundleInterface">BundleInterface</abbr> $bundle, <abbr title="Doctrine\ORM\Mapping\ClassMetadataInfo">ClassMetadataInfo</abbr> $metadata)</code>
     </h3>
@@ -266,7 +265,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_setEntity">
-        <div class="location">in <a href="../../../Tdn/PilotBundle/Command/AbstractGeneratorCommand.html#method_setEntity"><abbr title="Tdn\PilotBundle\Command\AbstractGeneratorCommand">AbstractGeneratorCommand</abbr></a> at line 116</div>
+        <div class="location">in <a href="../../../Tdn/PilotBundle/Command/AbstractGeneratorCommand.html#method_setEntity"><abbr title="Tdn\PilotBundle\Command\AbstractGeneratorCommand">AbstractGeneratorCommand</abbr></a> at line 118</div>
         <code>                    
     <strong>setEntity</strong>(string $entity)</code>
     </h3>
@@ -292,7 +291,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getEntity">
-        <div class="location">in <a href="../../../Tdn/PilotBundle/Command/AbstractGeneratorCommand.html#method_getEntity"><abbr title="Tdn\PilotBundle\Command\AbstractGeneratorCommand">AbstractGeneratorCommand</abbr></a> at line 124</div>
+        <div class="location">in <a href="../../../Tdn/PilotBundle/Command/AbstractGeneratorCommand.html#method_getEntity"><abbr title="Tdn\PilotBundle\Command\AbstractGeneratorCommand">AbstractGeneratorCommand</abbr></a> at line 126</div>
         <code>                    string
     <strong>getEntity</strong>()</code>
     </h3>
@@ -317,17 +316,19 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_parseShortcutNotation">
-        <div class="location">in <a href="../../../Tdn/PilotBundle/Command/AbstractGeneratorCommand.html#method_parseShortcutNotation"><abbr title="Tdn\PilotBundle\Command\AbstractGeneratorCommand">AbstractGeneratorCommand</abbr></a> at line 133</div>
+        <div class="location">in <a href="../../../Tdn/PilotBundle/Command/AbstractGeneratorCommand.html#method_parseShortcutNotation"><abbr title="Tdn\PilotBundle\Command\AbstractGeneratorCommand">AbstractGeneratorCommand</abbr></a> at line 140</div>
         <code>                    string[]
-    <strong>parseShortcutNotation</strong>($shortcut)</code>
+    <strong>parseShortcutNotation</strong>(string $shortcut)</code>
     </h3>
     <div class="details">
+                    <div class="method-description">
+                                    <p>Returns an array containing the bundle and the entity.</p>                                </div>
                 <div class="tags">
                             <h4>Parameters</h4>
 
                     <table class="table table-condensed">
                     <tr>
-                <td></td>
+                <td>string</td>
                 <td>$shortcut</td>
                 <td>
 </td>
@@ -353,7 +354,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_setMetadata">
-        <div class="location">in <a href="../../../Tdn/PilotBundle/Command/AbstractGeneratorCommand.html#method_setMetadata"><abbr title="Tdn\PilotBundle\Command\AbstractGeneratorCommand">AbstractGeneratorCommand</abbr></a> at line 152</div>
+        <div class="location">in <a href="../../../Tdn/PilotBundle/Command/AbstractGeneratorCommand.html#method_setMetadata"><abbr title="Tdn\PilotBundle\Command\AbstractGeneratorCommand">AbstractGeneratorCommand</abbr></a> at line 159</div>
         <code>                    
     <strong>setMetadata</strong>(<abbr title="Doctrine\ORM\Mapping\ClassMetadataInfo">ClassMetadataInfo</abbr> $metadata)</code>
     </h3>
@@ -379,7 +380,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getMetadata">
-        <div class="location">in <a href="../../../Tdn/PilotBundle/Command/AbstractGeneratorCommand.html#method_getMetadata"><abbr title="Tdn\PilotBundle\Command\AbstractGeneratorCommand">AbstractGeneratorCommand</abbr></a> at line 160</div>
+        <div class="location">in <a href="../../../Tdn/PilotBundle/Command/AbstractGeneratorCommand.html#method_getMetadata"><abbr title="Tdn\PilotBundle\Command\AbstractGeneratorCommand">AbstractGeneratorCommand</abbr></a> at line 167</div>
         <code>                    <abbr title="Doctrine\ORM\Mapping\ClassMetadataInfo">ClassMetadataInfo</abbr>
     <strong>getMetadata</strong>()</code>
     </h3>

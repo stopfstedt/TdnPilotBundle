@@ -39,8 +39,8 @@
         "prepare": {
             "name": "prepare",
             "line": 20,
-            "short_desc": "Sets up appropriate file contents.",
-            "long_desc": "",
+            "short_desc": "Sets up an Entity Manager based on entity.",
+            "long_desc": "Sets up an Entity Manager interface.",
             "hint": [
                 [
                     "Tdn\\PilotBundle\\Manipulator\\$this",

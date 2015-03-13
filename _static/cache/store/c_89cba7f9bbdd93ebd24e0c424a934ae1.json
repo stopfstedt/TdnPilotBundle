@@ -1,7 +1,7 @@
 {
-    "name": "Tdn\\PilotBundle\\Form\\Type\\SingleRelatedType",
-    "line": 17,
-    "short_desc": "Class SingleRelatedType",
+    "name": "Tdn\\PilotBundle\\Form\\Type\\AbstractRelatedType",
+    "line": 16,
+    "short_desc": "Abstract Class ManyRelatedType",
     "long_desc": "",
     "hint": null,
     "tags": {
@@ -12,20 +12,19 @@
         ]
     },
     "namespace": "Tdn\\PilotBundle\\Form\\Type",
-    "file": "\/vagrant\/vendor\/tdn\/pilotbundle\/Form\/Type\/SingleRelatedType.php",
-    "hash": "2fcc539bb4b350ca0be4215e762bda46a2e84534",
+    "file": "\/vagrant\/vendor\/tdn\/pilotbundle\/Form\/Type\/AbstractRelatedType.php",
+    "hash": "6099aec0067061cbe02253ab23ca945c453bbcf7",
     "parent": "Symfony\\Component\\Form\\AbstractType",
-    "modifiers": 0,
+    "modifiers": 16,
     "is_trait": false,
     "is_interface": false,
     "aliases": {
         "AbstractType": "Symfony\\Component\\Form\\AbstractType",
-        "FormBuilderInterface": "Symfony\\Component\\Form\\FormBuilderInterface",
         "OptionsResolver": "Symfony\\Component\\OptionsResolver\\OptionsResolver",
         "OptionsResolverInterface": "Symfony\\Component\\OptionsResolver\\OptionsResolverInterface",
         "Options": "Symfony\\Component\\OptionsResolver\\Options",
         "ObjectManager": "Doctrine\\Common\\Persistence\\ObjectManager",
-        "SingleRelatedTransformer": "Tdn\\PilotBundle\\Form\\DataTransformer\\SingleRelatedTransformer"
+        "AbstractRelatedTransformer": "Tdn\\PilotBundle\\Form\\DataTransformer\\AbstractRelatedTransformer"
     },
     "errors": [
 
@@ -42,45 +41,6 @@
     "methods": {
         "__construct": {
             "name": "__construct",
-            "line": 27,
-            "short_desc": "",
-            "long_desc": "",
-            "hint": null,
-            "hint_desc": null,
-            "tags": [
-
-            ],
-            "modifiers": "1",
-            "is_by_ref": "",
-            "exceptions": [
-
-            ],
-            "errors": [
-
-            ],
-            "parameters": {
-                "entityManager": {
-                    "name": "entityManager",
-                    "line": 27,
-                    "short_desc": "",
-                    "long_desc": null,
-                    "hint": [
-                        [
-                            "Doctrine\\Common\\Persistence\\ObjectManager",
-                            false
-                        ]
-                    ],
-                    "tags": [
-
-                    ],
-                    "modifiers": "ObjectManager",
-                    "default": null,
-                    "is_by_ref": false
-                }
-            }
-        },
-        "buildForm": {
-            "name": "buildForm",
             "line": 32,
             "short_desc": "",
             "long_desc": "",
@@ -98,40 +58,44 @@
 
             ],
             "parameters": {
-                "builder": {
-                    "name": "builder",
+                "objectManager": {
+                    "name": "objectManager",
                     "line": 32,
-                    "short_desc": null,
+                    "short_desc": "",
                     "long_desc": null,
                     "hint": [
                         [
-                            "Symfony\\Component\\Form\\FormBuilderInterface",
+                            "Doctrine\\Common\\Persistence\\ObjectManager",
                             false
                         ]
                     ],
                     "tags": [
 
                     ],
-                    "modifiers": "FormBuilderInterface",
+                    "modifiers": "ObjectManager",
                     "default": null,
                     "is_by_ref": false
                 },
-                "options": {
-                    "name": "options",
+                "relationshipStrategy": {
+                    "name": "relationshipStrategy",
                     "line": 32,
-                    "short_desc": null,
+                    "short_desc": "",
                     "long_desc": null,
                     "hint": [
                         [
-                            "array",
+                            "string",
+                            false
+                        ],
+                        [
+                            "null",
                             false
                         ]
                     ],
                     "tags": [
 
                     ],
-                    "modifiers": "array",
-                    "default": null,
+                    "modifiers": "",
+                    "default": "null",
                     "is_by_ref": false
                 }
             }
@@ -175,13 +139,18 @@
                 }
             }
         },
-        "getParent": {
-            "name": "getParent",
-            "line": 51,
+        "getRelationshipStrategy": {
+            "name": "getRelationshipStrategy",
+            "line": 54,
             "short_desc": "",
             "long_desc": "",
-            "hint": null,
-            "hint_desc": null,
+            "hint": [
+                [
+                    "string",
+                    false
+                ]
+            ],
+            "hint_desc": "",
             "tags": [
 
             ],
@@ -197,9 +166,36 @@
 
             ]
         },
-        "getName": {
-            "name": "getName",
-            "line": 56,
+        "getObjectManager": {
+            "name": "getObjectManager",
+            "line": 62,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": [
+                [
+                    "\\Doctrine\\Common\\Persistence\\ObjectManager",
+                    false
+                ]
+            ],
+            "hint_desc": "",
+            "tags": [
+
+            ],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [
+
+            ],
+            "errors": [
+
+            ],
+            "parameters": [
+
+            ]
+        },
+        "getParent": {
+            "name": "getParent",
+            "line": 67,
             "short_desc": "",
             "long_desc": "",
             "hint": null,

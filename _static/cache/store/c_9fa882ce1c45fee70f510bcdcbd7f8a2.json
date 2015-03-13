@@ -316,7 +316,7 @@
         "prepare": {
             "name": "prepare",
             "line": 107,
-            "short_desc": "Sets up appropriate file contents.",
+            "short_desc": "Sets up routing file contents based on state for a specific entity (adding\/removing).",
             "long_desc": "",
             "hint": [
                 [
@@ -358,7 +358,10 @@
             "modifiers": "1",
             "is_by_ref": "",
             "exceptions": [
-
+                [
+                    "\\RuntimeException",
+                    ""
+                ]
             ],
             "errors": [
 
