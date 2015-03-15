@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>Class Tdn\PilotBundle\Manipulator\AbstractManipulator</title>
+
+	<link rel="stylesheet" href="resources/style.css?e99947befd7bf673c6b43ff75e9e0f170c88a60e">
+
+</head>
+
+<body>
+<div id="left">
+	<div id="menu">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+
+		<div id="groups">
+				<h3>Namespaces</h3>
+			<ul>
+				<li class="active">
+					<a href="namespace-Tdn.html">
+						Tdn<span></span>
+					</a>
+
+						<ul>
+				<li class="active">
+					<a href="namespace-Tdn.PilotBundle.html">
+						PilotBundle<span></span>
+					</a>
+
+						<ul>
+				<li>
+					<a href="namespace-Tdn.PilotBundle.Command.html">
+						Command					</a>
+
+						</li>
+				<li>
+					<a href="namespace-Tdn.PilotBundle.DependencyInjection.html">
+						DependencyInjection					</a>
+
+						</li>
+				<li>
+					<a href="namespace-Tdn.PilotBundle.Form.html">
+						Form<span></span>
+					</a>
+
+						<ul>
+				<li>
+					<a href="namespace-Tdn.PilotBundle.Form.DataTransformer.html">
+						DataTransformer					</a>
+
+						</li>
+				<li>
+					<a href="namespace-Tdn.PilotBundle.Form.Type.html">
+						Type					</a>
+
+						</li>
+							</ul></li>
+				<li class="active">
+					<a href="namespace-Tdn.PilotBundle.Manipulator.html">
+						Manipulator					</a>
+
+						</li>
+				<li>
+					<a href="namespace-Tdn.PilotBundle.Model.html">
+						Model					</a>
+
+						</li>
+				<li>
+					<a href="namespace-Tdn.PilotBundle.Services.html">
+						Services<span></span>
+					</a>
+
+						<ul>
+				<li>
+					<a href="namespace-Tdn.PilotBundle.Services.Utils.html">
+						Utils					</a>
+
+						</li>
+							</ul></li>
+				<li>
+					<a href="namespace-Tdn.PilotBundle.Template.html">
+						Template<span></span>
+					</a>
+
+						<ul>
+				<li>
+					<a href="namespace-Tdn.PilotBundle.Template.Strategy.html">
+						Strategy					</a>
+
+						</li>
+							</ul></li></ul></li></ul></li>
+			</ul>
+		</div>
+
+		<hr>
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li class="active"><a href="class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html">AbstractManipulator</a></li>
+				<li><a href="class-Tdn.PilotBundle.Manipulator.AbstractServiceManipulator.html">AbstractServiceManipulator</a></li>
+				<li><a href="class-Tdn.PilotBundle.Manipulator.ControllerManipulator.html">ControllerManipulator</a></li>
+				<li><a href="class-Tdn.PilotBundle.Manipulator.FormManipulator.html">FormManipulator</a></li>
+				<li><a href="class-Tdn.PilotBundle.Manipulator.HandlerManipulator.html">HandlerManipulator</a></li>
+				<li><a href="class-Tdn.PilotBundle.Manipulator.ManagerManipulator.html">ManagerManipulator</a></li>
+				<li><a href="class-Tdn.PilotBundle.Manipulator.RoutingManipulator.html">RoutingManipulator</a></li>
+			</ul>
+
+			<h3>Interfaces</h3>
+			<ul>
+				<li><a href="class-Tdn.PilotBundle.Manipulator.ManipulatorInterface.html">ManipulatorInterface</a></li>
+				<li><a href="class-Tdn.PilotBundle.Manipulator.ServiceManipulatorInterface.html">ServiceManipulatorInterface</a></li>
+			</ul>
+
+
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="">
+		<input type="hidden" name="ie" value="UTF-8">
+		<input type="text" name="q" class="text" placeholder="Search">
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+				<a href="namespace-Tdn.PilotBundle.Manipulator.html" title="Summary of Tdn\PilotBundle\Manipulator"><span>Namespace</span></a>
+			</li>
+			<li class="active">
+<span>Class</span>			</li>
+		</ul>
+		<ul>
+		</ul>
+		<ul>
+		</ul>
+	</div>
+
+<div id="content" class="class">
+	<h1>Class AbstractManipulator</h1>
+
+
+	<div class="description">
+	<p>Abstract Class AbstractManipulator</p>
+
+<p>Parent manipulator class. Each manipulator deals with a specific part
+of a target application (controllers, managers, handlers, routing, etc)
+When adding a new type of manipulation, a new manipulator should be
+created extending this class.</p>
+	</div>
+
+	<dl class="tree">
+		<dd style="padding-left:0px">
+<b><span>Tdn\PilotBundle\Manipulator\AbstractManipulator</span></b>			
+			 implements 
+				<a href="class-Tdn.PilotBundle.Manipulator.ManipulatorInterface.html"><span>Tdn\PilotBundle\Manipulator\ManipulatorInterface</span></a>
+			
+			
+		</dd>
+	</dl>
+
+
+	<div>
+		<h4>Direct known subclasses</h4>
+			<a href="class-Tdn.PilotBundle.Manipulator.AbstractServiceManipulator.html">Tdn\PilotBundle\Manipulator\AbstractServiceManipulator</a>, 
+			<a href="class-Tdn.PilotBundle.Manipulator.ControllerManipulator.html">Tdn\PilotBundle\Manipulator\ControllerManipulator</a>, 
+			<a href="class-Tdn.PilotBundle.Manipulator.FormManipulator.html">Tdn\PilotBundle\Manipulator\FormManipulator</a>, 
+			<a href="class-Tdn.PilotBundle.Manipulator.RoutingManipulator.html">Tdn\PilotBundle\Manipulator\RoutingManipulator</a>
+	</div>
+
+	<div>
+		<h4>Indirect known subclasses</h4>
+			<a href="class-Tdn.PilotBundle.Manipulator.HandlerManipulator.html">Tdn\PilotBundle\Manipulator\HandlerManipulator</a>, 
+			<a href="class-Tdn.PilotBundle.Manipulator.ManagerManipulator.html">Tdn\PilotBundle\Manipulator\ManagerManipulator</a>
+	</div>
+
+
+
+
+
+	<div class="info">
+		<b>Abstract</b><br>
+		
+		<b>Namespace:</b> <a href="namespace-Tdn.html">Tdn</a>\<a href="namespace-Tdn.PilotBundle.html">PilotBundle</a>\<a href="namespace-Tdn.PilotBundle.Manipulator.html">Manipulator</a><br>
+		<b>Package:</b> Tdn\PilotBundle\Manipulator<br>
+
+			<b>Located at</b> <a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#14-397" title="Go to source code">Manipulator/AbstractManipulator.php</a>
+		<br>
+	</div>
+
+
+
+	<table class="summary methods" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="__construct" id="___construct">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#___construct">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#61-84" title="Go to source code">__construct</a>( <span><code><a href="class-Tdn.PilotBundle.Template.Strategy.TemplateStrategyInterface.html">Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface</a></code> <var>$templateStrategy</var></span>, <span>Symfony\Component\HttpKernel\Bundle\BundleInterface <var>$bundle</var></span>, <span>Doctrine\ORM\Mapping\ClassMetadataInfo <var>$metadata</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$templateStrategy</var></dt>
+					<dd></dd>
+					<dt><var>$bundle</var></dt>
+					<dd></dd>
+					<dt><var>$metadata</var></dt>
+					<dd></dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setTemplateStrategy" id="_setTemplateStrategy">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setTemplateStrategy">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#86-89" title="Go to source code">setTemplateStrategy</a>( <span><code><a href="class-Tdn.PilotBundle.Template.Strategy.TemplateStrategyInterface.html">Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface</a></code> <var>$templateStrategy</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$templateStrategy</var></dt>
+					<dd></dd>
+				</dl></div>
+
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Tdn.PilotBundle.Manipulator.ManipulatorInterface.html#_setTemplateStrategy">Tdn\PilotBundle\Manipulator\ManipulatorInterface::setTemplateStrategy()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getTemplateStrategy" id="_getTemplateStrategy">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Tdn.PilotBundle.Template.Strategy.TemplateStrategyInterface.html">Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getTemplateStrategy">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#91-97" title="Go to source code">getTemplateStrategy</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Tdn.PilotBundle.Template.Strategy.TemplateStrategyInterface.html">Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface</a></code>
+				</div>
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Tdn.PilotBundle.Manipulator.ManipulatorInterface.html#_getTemplateStrategy">Tdn\PilotBundle\Manipulator\ManipulatorInterface::getTemplateStrategy()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setBundle" id="_setBundle">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setBundle">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#99-105" title="Go to source code">setBundle</a>( <span>Symfony\Component\HttpKernel\Bundle\BundleInterface <var>$bundle</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$bundle</var></dt>
+					<dd></dd>
+				</dl></div>
+
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Tdn.PilotBundle.Manipulator.ManipulatorInterface.html#_setBundle">Tdn\PilotBundle\Manipulator\ManipulatorInterface::setBundle()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getBundle" id="_getBundle">
+
+		<td class="attributes"><code>
+			 public 
+
+			Symfony\Component\HttpKernel\Bundle\BundleInterface
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getBundle">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#107-113" title="Go to source code">getBundle</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Symfony\Component\HttpKernel\Bundle\BundleInterface
+				</div>
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Tdn.PilotBundle.Manipulator.ManipulatorInterface.html#_getBundle">Tdn\PilotBundle\Manipulator\ManipulatorInterface::getBundle()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getEntity" id="_getEntity">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getEntity">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#115-121" title="Go to source code">getEntity</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string
+				</div>
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Tdn.PilotBundle.Manipulator.ManipulatorInterface.html#_getEntity">Tdn\PilotBundle\Manipulator\ManipulatorInterface::getEntity()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getEntityNamespace" id="_getEntityNamespace">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getEntityNamespace">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#123-129" title="Go to source code">getEntityNamespace</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string
+				</div>
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Tdn.PilotBundle.Manipulator.ManipulatorInterface.html#_getEntityNamespace">Tdn\PilotBundle\Manipulator\ManipulatorInterface::getEntityNamespace()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setMetadata" id="_setMetadata">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setMetadata">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#131-137" title="Go to source code">setMetadata</a>( <span>Doctrine\ORM\Mapping\ClassMetadataInfo <var>$metadata</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$metadata</var></dt>
+					<dd></dd>
+				</dl></div>
+
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Tdn.PilotBundle.Manipulator.ManipulatorInterface.html#_setMetadata">Tdn\PilotBundle\Manipulator\ManipulatorInterface::setMetadata()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getMetadata" id="_getMetadata">
+
+		<td class="attributes"><code>
+			 public 
+
+			Doctrine\ORM\Mapping\ClassMetadataInfo
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getMetadata">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#139-145" title="Go to source code">getMetadata</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Doctrine\ORM\Mapping\ClassMetadataInfo
+				</div>
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Tdn.PilotBundle.Manipulator.ManipulatorInterface.html#_getMetadata">Tdn\PilotBundle\Manipulator\ManipulatorInterface::getMetadata()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setGeneratedFiles" id="_setGeneratedFiles">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setGeneratedFiles">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#147-157" title="Go to source code">setGeneratedFiles</a>( <span>Doctrine\Common\Collections\Collection <var>$generatedFiles</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$generatedFiles</var></dt>
+					<dd></dd>
+				</dl></div>
+
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Tdn.PilotBundle.Manipulator.ManipulatorInterface.html#_setGeneratedFiles">Tdn\PilotBundle\Manipulator\ManipulatorInterface::setGeneratedFiles()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="addGeneratedFile" id="_addGeneratedFile">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_addGeneratedFile">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#159-165" title="Go to source code">addGeneratedFile</a>( <span><code><a href="class-Tdn.PilotBundle.Model.GeneratedFileInterface.html">Tdn\PilotBundle\Model\GeneratedFileInterface</a></code> <var>$generatedFile</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$generatedFile</var></dt>
+					<dd></dd>
+				</dl></div>
+
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Tdn.PilotBundle.Manipulator.ManipulatorInterface.html#_addGeneratedFile">Tdn\PilotBundle\Manipulator\ManipulatorInterface::addGeneratedFile()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getGeneratedFiles" id="_getGeneratedFiles">
+
+		<td class="attributes"><code>
+			 public 
+
+			Doctrine\Common\Collections\ArrayCollection|<code><a href="class-Tdn.PilotBundle.Model.GeneratedFileInterface.html">Tdn\PilotBundle\Model\GeneratedFileInterface</a>[]</code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getGeneratedFiles">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#167-173" title="Go to source code">getGeneratedFiles</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Doctrine\Common\Collections\ArrayCollection|<code><a href="class-Tdn.PilotBundle.Model.GeneratedFileInterface.html">Tdn\PilotBundle\Model\GeneratedFileInterface</a>[]</code>
+				</div>
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Tdn.PilotBundle.Manipulator.ManipulatorInterface.html#_getGeneratedFiles">Tdn\PilotBundle\Manipulator\ManipulatorInterface::getGeneratedFiles()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setFileDependencies" id="_setFileDependencies">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setFileDependencies">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#175-185" title="Go to source code">setFileDependencies</a>( <span>Doctrine\Common\Collections\Collection <var>$fileDependencies</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$fileDependencies</var></dt>
+					<dd></dd>
+				</dl></div>
+
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Tdn.PilotBundle.Manipulator.ManipulatorInterface.html#_setFileDependencies">Tdn\PilotBundle\Manipulator\ManipulatorInterface::setFileDependencies()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="addFileDependency" id="_addFileDependency">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_addFileDependency">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#187-193" title="Go to source code">addFileDependency</a>( <span>Symfony\Component\Finder\SplFileInfo <var>$fileDependency</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$fileDependency</var></dt>
+					<dd></dd>
+				</dl></div>
+
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Tdn.PilotBundle.Manipulator.ManipulatorInterface.html#_addFileDependency">Tdn\PilotBundle\Manipulator\ManipulatorInterface::addFileDependency()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getFileDependencies" id="_getFileDependencies">
+
+		<td class="attributes"><code>
+			 public 
+
+			Doctrine\Common\Collections\ArrayCollection|Symfony\Component\Finder\SplFileInfo
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getFileDependencies">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#195-201" title="Go to source code">getFileDependencies</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Doctrine\Common\Collections\ArrayCollection|Symfony\Component\Finder\SplFileInfo
+				</div>
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Tdn.PilotBundle.Manipulator.ManipulatorInterface.html#_getFileDependencies">Tdn\PilotBundle\Manipulator\ManipulatorInterface::getFileDependencies()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setTargetDirectory" id="_setTargetDirectory">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setTargetDirectory">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#203-209" title="Go to source code">setTargetDirectory</a>( <span>string <var>$targetDirectory</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$targetDirectory</var></dt>
+					<dd></dd>
+				</dl></div>
+
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Tdn.PilotBundle.Manipulator.ManipulatorInterface.html#_setTargetDirectory">Tdn\PilotBundle\Manipulator\ManipulatorInterface::setTargetDirectory()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getTargetDirectory" id="_getTargetDirectory">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getTargetDirectory">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#211-217" title="Go to source code">getTargetDirectory</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string
+				</div>
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Tdn.PilotBundle.Manipulator.ManipulatorInterface.html#_getTargetDirectory">Tdn\PilotBundle\Manipulator\ManipulatorInterface::getTargetDirectory()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setOverwrite" id="_setOverwrite">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setOverwrite">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#219-225" title="Go to source code">setOverwrite</a>( <span>boolean <var>$overwrite</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$overwrite</var></dt>
+					<dd></dd>
+				</dl></div>
+
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Tdn.PilotBundle.Manipulator.ManipulatorInterface.html#_setOverwrite">Tdn\PilotBundle\Manipulator\ManipulatorInterface::setOverwrite()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="shouldOverwrite" id="_shouldOverwrite">
+
+		<td class="attributes"><code>
+			 public 
+
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_shouldOverwrite">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#227-233" title="Go to source code">shouldOverwrite</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					boolean
+				</div>
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Tdn.PilotBundle.Manipulator.ManipulatorInterface.html#_shouldOverwrite">Tdn\PilotBundle\Manipulator\ManipulatorInterface::shouldOverwrite()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="isValid" id="_isValid">
+
+		<td class="attributes"><code>
+			 public 
+
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_isValid">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#235-260" title="Go to source code">isValid</a>( )</code>
+
+		<div class="description short">
+			<p>Ensures the state of the bundle is valid for our generation purposes.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Ensures the state of the bundle is valid for our generation purposes.</p>
+
+<p>Iterates through file dependencies and generated files to ensure
+rules set against them pass. This should be always called if extending
+this method with parent::isValid()</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					boolean
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					RunTimeException
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Tdn.PilotBundle.Manipulator.ManipulatorInterface.html#_isValid">Tdn\PilotBundle\Manipulator\ManipulatorInterface::isValid()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="generate" id="_generate">
+
+		<td class="attributes"><code>
+			 public 
+
+			Doctrine\Common\Collections\ArrayCollection|<code><a href="class-Tdn.PilotBundle.Model.GeneratedFileInterface.html">Tdn\PilotBundle\Model\GeneratedFileInterface</a>[]</code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_generate">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#262-277" title="Go to source code">generate</a>( )</code>
+
+		<div class="description short">
+			<p>Generates all the files declared by the manipulator if the
+system is in a valid state.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Generates all the files declared by the manipulator if the
+system is in a valid state.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Doctrine\Common\Collections\ArrayCollection|<code><a href="class-Tdn.PilotBundle.Model.GeneratedFileInterface.html">Tdn\PilotBundle\Model\GeneratedFileInterface</a>[]</code>
+				</div>
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Tdn.PilotBundle.Manipulator.ManipulatorInterface.html#_generate">Tdn\PilotBundle\Manipulator\ManipulatorInterface::generate()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="isDependencyValid" id="_isDependencyValid">
+
+		<td class="attributes"><code>
+			 protected 
+
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_isDependencyValid">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#279-298" title="Go to source code">isDependencyValid</a>( <span>Symfony\Component\Finder\SplFileInfo <var>$fileDependency</var></span> )</code>
+
+		<div class="description short">
+			<p>Ensures that dependency files exist</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Ensures that dependency files exist</p>
+
+<p>Certain objects we're generating declare their dependencies
+on other objects. This ensures those dependencies exist.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$fileDependency</var></dt>
+					<dd></dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					boolean
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="isGeneratedFileValid" id="_isGeneratedFileValid">
+
+		<td class="attributes"><code>
+			 protected 
+
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_isGeneratedFileValid">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#300-322" title="Go to source code">isGeneratedFileValid</a>( <span><code><a href="class-Tdn.PilotBundle.Model.GeneratedFileInterface.html">Tdn\PilotBundle\Model\GeneratedFileInterface</a></code> <var>$generatedFile</var></span> )</code>
+
+		<div class="description short">
+			<p>Ensures that files can be written without conflict</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Ensures that files can be written without conflict</p>
+
+<p>Of if a conflict is present, that the class has been configured
+to properly handle that conflict.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$generatedFile</var></dt>
+					<dd></dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					boolean
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getFieldsFromMetadata" id="_getFieldsFromMetadata">
+
+		<td class="attributes"><code>
+			 protected 
+
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getFieldsFromMetadata">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#324-361" title="Go to source code">getFieldsFromMetadata</a>( <span>Doctrine\ORM\Mapping\ClassMetadataInfo <var>$metadata</var></span> )</code>
+
+		<div class="description short">
+			<p>Gets the entity's fields.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Gets the entity's fields.</p>
+
+<p>Returns an array of fields. Fields can be both column fields and
+association fields.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$metadata</var></dt>
+					<dd></dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					array<br>$fields
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getEntityBundleShortcut" id="_getEntityBundleShortcut">
+
+		<td class="attributes"><code>
+			 protected 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getEntityBundleShortcut">#</a>
+		<code><a href="source-class-Tdn.PilotBundle.Manipulator.AbstractManipulator.html#363-378" title="Go to source code">getEntityBundleShortcut</a>( <span>string <var>$entity</var></span> )</code>
+
+		<div class="description short">
+			<p>Gets the short version of a Entity's FQDN</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Gets the short version of a Entity's FQDN</p>
+
+<p>Take an entity name and return the shortcut name
+eg Acme\DemoBundle\Entity\Notes -> AcemDemoBundle:Notes</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$entity</var></dt>
+					<dd>Fully qualified class name of the entity</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					string
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
+
+	<table class="summary inherited">
+	<caption>Methods inherited from <a href="class-Tdn.PilotBundle.Manipulator.ManipulatorInterface.html#methods">Tdn\PilotBundle\Manipulator\ManipulatorInterface</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-Tdn.PilotBundle.Manipulator.ManipulatorInterface.html#_prepare">prepare()</a>
+		</code></td>
+	</tr>
+	</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+	<div id="footer">
+		 API documentation generated by <a href="http://apigen.org">ApiGen</a>
+	</div>
+</div>
+</div>
+<script src="resources/combined.js"></script>
+<script src="elementlist.js"></script>
+</body>
+</html>
