@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Install - TdnPilotBundle</title>
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  <link href="../_static/docs/css/highlight.css" rel="stylesheet">
+  <link href="../_static/docs/css/theme.css" rel="stylesheet">
+  <link href="../_static/docs/css/theme_extra.css" rel="stylesheet">
+  <link href="../_static/docs/_static/docs/css/highlight.css" rel="stylesheet">
+  <link href="../_static/docs/_static/docs/css/theme.css" rel="stylesheet">
+  <link href="../_static/docs/_static/docs/css/theme_extra.css" rel="stylesheet">
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script>
+  <script src="../js/theme.js"></script>
+  <script src="../_static/docs/js/highlight.pack.js"></script>
+  <script src="../_static/docs/js/theme.js"></script>
+  <script src="../_static/docs/_static/docs/js/highlight.pack.js"></script>
+  <script src="../_static/docs/_static/docs/js/theme.js"></script>
+
+  <style>
+    body {font-size: 90%;}
+    pre, code {font-size: 100%;}
+    h3, h4, h5, h6 {color: #2980b9; font-weight: 300}
+  </style> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> TdnPilotBundle</a>
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+      <ul class="current">
+    
+        
+        <span>Installation</span>
+            
+                <li class="toctree-l1 ">
+                    <a class="" href="dependencies">Dependencies</a>
+                    
+                </li>
+            
+                <li class="toctree-l1 ">
+                    <a class="" href="caveats">Caveats</a>
+                    
+                </li>
+            
+                <li class="toctree-l1 current">
+                    <a class="current" href=".">Install</a>
+                    
+                        <ul>
+                        
+                            <li class="toctree-l2"><a href="#installation">Installation</a></li>
+                            
+                                <li><a class="toctree-l3" href="#prerequisites">Prerequisites</a></li>
+                            
+                                <li><a class="toctree-l3" href="#composer-install">Composer install</a></li>
+                            
+                                <li><a class="toctree-l3" href="#update-kernel">Update kernel</a></li>
+                            
+                                <li><a class="toctree-l3" href="#configure">Configure</a></li>
+                            
+                                <li><a class="toctree-l3" href="#configuration">Configuration</a></li>
+                            
+                        
+                        </ul>
+                    
+                </li>
+            
+        
+
+    
+        
+        <span>Usage</span>
+            
+                <li class="toctree-l1 ">
+                    <a class="" href="../usage">Overview</a>
+                    
+                </li>
+            
+                <li class="toctree-l1 ">
+                    <a class="" href="../usage/generate-project">Project command</a>
+                    
+                </li>
+            
+                <li class="toctree-l1 ">
+                    <a class="" href="../usage/generate-controller">Controller command</a>
+                    
+                </li>
+            
+                <li class="toctree-l1 ">
+                    <a class="" href="../usage/generate-form">Form command</a>
+                    
+                </li>
+            
+                <li class="toctree-l1 ">
+                    <a class="" href="../usage/generate-handler">Handler command</a>
+                    
+                </li>
+            
+                <li class="toctree-l1 ">
+                    <a class="" href="../usage/generate-manager">Manager command</a>
+                    
+                </li>
+            
+                <li class="toctree-l1 ">
+                    <a class="" href="../usage/generate-routing">Routing command</a>
+                    
+                </li>
+            
+                <li class="toctree-l1 ">
+                    <a class="" href="../usage/generate-sonata">Sonata command</a>
+                    
+                </li>
+            
+        
+
+    
+        
+        <span>Contributing</span>
+            
+                <li class="toctree-l1 ">
+                    <a class="" href="../contributing">Overview</a>
+                    
+                </li>
+            
+                <li class="toctree-l1 ">
+                    <a class="" href="../contributing/guidelines">Contribution Guidelines</a>
+                    
+                </li>
+            
+                <li class="toctree-l1 ">
+                    <a class="" href="../contributing/test-checks">Tests & Checks</a>
+                    
+                </li>
+            
+        
+
+    
+</ul>
+
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="icon icon-reorder"></i>
+        <a href=".."></a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    <li>Install</li>
+    <li class="wy-breadcrumbs-aside"><a href="https://thedevnetwork.github.io/TdnPilotBundle/_static/api/index.html">API</a> |<a href="https://github.com/TheDevNetwork/TdnPilotBundle.git" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              <h1 id="installation">Installation</h1>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>This bundle requires symfony &gt;= 2.3+.</p>
+<p>In addition the following requirements must be met:</p>
+<ul>
+<li>The command <code>doctrine:schema:validate</code> passes.</li>
+<li>Entities are in a loadable/working state.</li>
+<li>All <a href="dependencies">dependencies</a> are properly installed and configured</li>
+<li>Project falls within the parameters listed in <a href="caveats">caveats</a> page (projects following sf2 standards should).</li>
+</ul>
+<p><sub><strong>Note</strong>: Some <a href="dependencies">dependencies</a> will not be pulled in to production automatically. Please make sure
+you have installed and configured the bundles listed in the <a href="dependencies">dependencies</a> section to enable appropriate commands.</sub></p>
+<h2 id="composer-install">Composer install</h2>
+<p>Require the "tdn/pilotbundle" package in composer.json</p>
+<pre><code class="bash">$ composer require --dev tdn/pilotbundle dev-master
+</code></pre>
+
+<p><sub>We are using git flow since release of 1.0.0, master will only contain stable tags</sub></p>
+<h2 id="update-kernel">Update kernel</h2>
+<p>Add the bundle to your application kernel dev/test bundles and configure:</p>
+<pre><code class="php">public function registerBundles()
+{
+    $bundles = array(
+        //...
+        //...
+    );
+
+    //...
+
+    if (in_array($this-&gt;getEnvironment(), array('dev', 'test'))) {
+        //...
+        $bundles[] = new Tdn\PilotBundle\TdnPilotBundle();
+        //...
+    }
+}
+</code></pre>
+
+<h2 id="configure">Configure</h2>
+<p>Enable the bundle's configuration in <code>app/config/config.yml</code>:</p>
+<pre><code class="yaml"># app/config/config.yml
+tdn_pilot: ~
+</code></pre>
+
+<h2 id="configuration">Configuration</h2>
+<h4 id="full-configuration">Full configuration</h4>
+<pre><code class="yaml">tdn_pilot:
+    template:
+        strategy: twig_template_strategy # Or create your own service implementing TemplateStrategyInterface
+</code></pre>
+
+
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../usage" class="btn btn-neutral float-right" title="Overview"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="caveats" class="btn btn-neutral" title="Caveats"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+    <!-- Copyright etc -->
+    </p>
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        
+            <a href="https://github.com/TheDevNetwork/TdnPilotBundle.git" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+        
+      <span><a href="caveats" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      <span style="margin-left: 15px"><a href="../usage" style="color: #fcfcfc">Next &raquo;</a></span>
+    </span>
+</div>
+</body>
+</html>
