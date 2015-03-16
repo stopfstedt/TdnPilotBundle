@@ -42,23 +42,6 @@
 
 						</li>
 				<li>
-					<a href="namespace-Tdn.PilotBundle.Form.html">
-						Form<span></span>
-					</a>
-
-						<ul>
-				<li>
-					<a href="namespace-Tdn.PilotBundle.Form.DataTransformer.html">
-						DataTransformer					</a>
-
-						</li>
-				<li>
-					<a href="namespace-Tdn.PilotBundle.Form.Type.html">
-						Type					</a>
-
-						</li>
-							</ul></li>
-				<li>
 					<a href="namespace-Tdn.PilotBundle.Manipulator.html">
 						Manipulator					</a>
 
@@ -186,10 +169,10 @@
 </span><span id="41" class="l"><a href="#41"> 41: </a>                <span class="php-quote">'The object will return with the resource name'</span>
 </span><span id="42" class="l"><a href="#42"> 42: </a>            ),
 </span><span id="43" class="l"><a href="#43"> 43: </a>            <span class="php-keyword1">new</span> InputOption(
-</span><span id="44" class="l"><a href="#44"> 44: </a>                <span class="php-quote">'document-api'</span>,
-</span><span id="45" class="l"><a href="#45"> 45: </a>                <span class="php-quote">'a'</span>,
+</span><span id="44" class="l"><a href="#44"> 44: </a>                <span class="php-quote">'with-swagger'</span>,
+</span><span id="45" class="l"><a href="#45"> 45: </a>                <span class="php-quote">'s'</span>,
 </span><span id="46" class="l"><a href="#46"> 46: </a>                InputOption::VALUE_NONE,
-</span><span id="47" class="l"><a href="#47"> 47: </a>                <span class="php-quote">'Use NelmioApiDocBundle to document the controller'</span>
+</span><span id="47" class="l"><a href="#47"> 47: </a>                <span class="php-quote">'Use NelmioApiDocBundle (which uses swagger-ui) to document the controller'</span>
 </span><span id="48" class="l"><a href="#48"> 48: </a>            )
 </span><span id="49" class="l"><a href="#49"> 49: </a>        ];
 </span><span id="50" class="l"><a href="#50"> 50: </a>    }
@@ -232,7 +215,7 @@
 </span><span id="87" class="l"><a href="#87"> 87: </a>    ) {
 </span><span id="88" class="l"><a href="#88"> 88: </a>        <span class="php-var">$manipulator</span> = <span class="php-keyword1">new</span> ControllerManipulator(<span class="php-var">$templateStrategy</span>, <span class="php-var">$bundle</span>, <span class="php-var">$metadata</span>);
 </span><span id="89" class="l"><a href="#89"> 89: </a>        <span class="php-var">$manipulator</span>-&gt;setResource((<span class="php-var">$input</span>-&gt;getOption(<span class="php-quote">'resource'</span>) ? <span class="php-keyword1">true</span> : <span class="php-keyword1">false</span>));
-</span><span id="90" class="l"><a href="#90"> 90: </a>        <span class="php-var">$manipulator</span>-&gt;setDocument((<span class="php-var">$input</span>-&gt;getOption(<span class="php-quote">'document-api'</span>) ? <span class="php-keyword1">true</span> : <span class="php-keyword1">false</span>));
+</span><span id="90" class="l"><a href="#90"> 90: </a>        <span class="php-var">$manipulator</span>-&gt;setSwagger((<span class="php-var">$input</span>-&gt;getOption(<span class="php-quote">'with-swagger'</span>) ? <span class="php-keyword1">true</span> : <span class="php-keyword1">false</span>));
 </span><span id="91" class="l"><a href="#91"> 91: </a>        <span class="php-var">$manipulator</span>-&gt;setRoutePrefix(<span class="php-var">$this</span>-&gt;getRoutePrefix(<span class="php-var">$input</span>-&gt;getOption(<span class="php-quote">'route-prefix'</span>)));
 </span><span id="92" class="l"><a href="#92"> 92: </a>        <span class="php-var">$manipulator</span>-&gt;setGenerateTests(<span class="php-keyword1">false</span>);
 </span><span id="93" class="l"><a href="#93"> 93: </a>
@@ -255,6 +238,6 @@
 </div>
 </div>
 <script src="resources/combined.js?783afaeac345598d4af0e7240f360eaceff57d07"></script>
-<script src="elementlist.js?d8cc77f333b795c7cf2541ad69f13e6398b8ef68"></script>
+<script src="elementlist.js?235bf9bcb90cfc07dd4ccee693ea7e9d9070e271"></script>
 </body>
 </html>

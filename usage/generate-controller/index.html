@@ -197,7 +197,7 @@
 <li>target-directory: Override the default output directory. <strong>optional</strong>
 <sub>Defaults to <code>&lt;Bundle&gt;/Controller/</code>.</sub></li>
 <li>resource: Whether end point is a resource. Returns output similar to <a href="http://jsonapi.org/">jsonapi standards</a>. <strong>optional</strong></li>
-<li>document-api: Whether to use NelmioApiDocBundle to document your end points. <strong>optional</strong> (recommended)
+<li>with-swagger: Whether to use NelmioApiDocBundle (which uses swagger) to document your end points. <strong>optional</strong> (recommended)
 <sub>NelmioApiDocBundle must be enabled</sub></li>
 </ul>
 <p>In addition to this document, you can also pass in the <code>--help</code> flag for more information when running the command.</p>
@@ -258,7 +258,7 @@
 </code></pre>
 
 <p>All flags (recommended):</p>
-<pre><code class="bash">$ ./bin/console tdn:generate:controller --resource --document-api FooBarBundle:Foo
+<pre><code class="bash">$ ./bin/console tdn:generate:controller --resource --with-swagger FooBarBundle:Foo
 </code></pre>
 
 <p>Creates:</p>

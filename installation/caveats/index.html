@@ -64,11 +64,10 @@
                     
                         <ul>
                         
-                            <li class="toctree-l2"><a href="#caveats">Caveats</a></li>
+                            <li class="toctree-l2"><a href="#directory-structure">Directory Structure</a></li>
                             
-                                <li><a class="toctree-l3" href="#directory-structure">Directory Structure</a></li>
-                            
-                                <li><a class="toctree-l3" href="#entity-gotchas">Entity Gotchas</a></li>
+                        
+                            <li class="toctree-l2"><a href="#entity-gotchas">Entity Gotchas</a></li>
                             
                         
                         </ul>
@@ -178,9 +177,20 @@
 </div>
           <div role="main">
             <div class="section">
-              <h1 id="caveats">Caveats</h1>
-<h2 id="directory-structure">Directory Structure</h2>
-<p>[Reserved for later]</p>
+              <h2 id="directory-structure">Directory Structure</h2>
+<p>Bundles following the <a href="http://symfony.com/doc/current/best_practices/index.html">symfony2 best practices</a> should already meet the expectations here.</p>
+<p>The following namespace structure is expected for bundles:</p>
+<ul>
+<li>Controllers: <code>&lt;BundleNamespace&gt;\Controllers</code></li>
+<li>Form Types: <code>&lt;BundleNamespace&gt;\Form\Type</code></li>
+<li>Rest Handler: <code>&lt;BundleNamespace&gt;\Handler</code></li>
+<li>Entities: <code>&lt;BundleNamespace&gt;\Entity</code></li>
+<li>Entity Manager: <code>&lt;BundleNamespace&gt;\Entity\Manager</code></li>
+</ul>
+<p>Resource Directory:</p>
+<ul>
+<li>Bundle Config: <BundleRoot>/Resources/config`</li>
+</ul>
 <h2 id="entity-gotchas">Entity Gotchas</h2>
 <p>To guarantee that this bundle will work, entities must follow these basic guidelines:</p>
 <ul>
@@ -191,46 +201,142 @@
 <p>Type rules:</p>
 <ul>
 <li>Collections<ul>
-<li>Should be annotated in docblocks: <code>&lt;CollectionType&gt;|ObjectType[]</code></li>
+<li>Should be annotated in docblocks <code>&lt;CollectionType&gt;|ObjectTypeInterface[]</code></li>
+<li>As noted in the [doctrine documentation for removing associations] your entity setters might have to accept
+null to properly remove a relationship, so having a remove method is redundant unless you're using public vars.
+Remember, doctrine always looks at the owning side. Remove methods will not be tested, as we'll be using the
+strategy outlined in the aforementioned documentation.</li>
 </ul>
 </li>
 <li>Booleans<ul>
 <li>Getters should be named: <code>is|has|should|may|supports&lt;VarName&gt;()</code></li>
 </ul>
 </li>
-<li>Others<ul>
+<li>Arrays<ul>
+<li>should be annotated <code>array</code> or if possible to be more descriptive <code>&lt;type&gt;[]</code> (e.g.  <code>ObjectTypeInterface[]</code>)</li>
+</ul>
+</li>
+<li>Everything else<ul>
 <li>Setters should be named: <code>set&lt;VarName&gt;</code></li>
 <li>Getters should be named: <code>get&lt;VarName&gt;</code></li>
+<li>Should be annotated accordingly (e.g. <code>@param int $myInt</code>, <code>@return int</code>, etc)</li>
 </ul>
 </li>
 </ul>
-<p>Behavioral methods will not be tested, but a stub will be added.</p>
-<p>If your object has dependencies, it must be declared as a service.
-The entity service name must follow this convention: <code>&lt;bundle-name&gt;.entity.&lt;entity-name&gt;</code></p>
+<p>Behavioral methods will not be tested but would be welcomed in a PR if even possible (through AST or otherwise).</p>
+<p>If your object has service dependencies, it SHOULD be declared as a service. *
+The entity service name SHOULD follow this convention: <code>&lt;bundle-name&gt;.entity.&lt;entity-name&gt;</code> *</p>
+<p><code>*</code> Note: This is not currently needed but will be in the next versions of the bundle.</p>
 <p>Most basic example below:</p>
 <pre><code class="php">&lt;?php
 
-namespace Foo\Bar;
+namespace Foo\Bar\Entity;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Type;
 
+/**
+ * Class Abc
+ * @package Foo\BarBundle\Entity
+ *
+ * @ORM\Table(name=&quot;abc&quot;)
+ * @ORM\Entity
+ *
+ * @ExclusionPolicy(&quot;all&quot;)
+ */
 class Abc implements AbcInterface
 {
     /**
+     * @var int
+     *
+     * @ORM\Column(name=&quot;id&quot;, type=&quot;integer&quot;)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy=&quot;AUTO&quot;)
+     *
+     * @Assert\Type(type=&quot;integer&quot;)
+     *
+     * @Expose
+     * @Type(&quot;integer&quot;)
+     */
+    protected $id;
+
+    /**
      * @var string
+     *
+     * @ORM\Column(type=&quot;string&quot;, length=90)
+     *
+     * @Assert\NotBlank()
+     * @Assert\Type(type=&quot;string&quot;)
+     *
+     * @Expose
+     * @Type(&quot;string&quot;)
      */
     protected $foo;
 
     /**
      * @var bool
+     *
+     * @ORM\Column(name=&quot;bar&quot;, type=&quot;boolean&quot;)
+     *
+     * @Assert\NotNull()
+     * @Assert\Type(type=&quot;bool&quot;)
+     *
+     * @Expose
+     * @Type(&quot;boolean&quot;)
      */
     protected $bar;
 
     /**
+     * @var XyzInterface
+     *
+     * @ORM\ManyToOne(targetEntity=&quot;Xyz&quot;, inversedBy=&quot;abcs&quot;)
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name=&quot;xyz_id&quot;, referencedColumnName=&quot;id&quot;)
+     * })
+     *
+     * @Expose
+     * @Type(&quot;Foo\BarBundle\Entity\Xyz&quot;)
+     */
+    protected $xyz;
+
+    /**
      * @var ArrayCollection|ExtraInterface[]
+     *
+     * @ORM\ManyToMany(targetEntity=&quot;Extra&quot;, inversedBy=&quot;abcs&quot;)
+     * @ORM\JoinTable(name=&quot;acbs_extras&quot;,
+     *   joinColumns={
+     *     @ORM\JoinColumn(name=&quot;abc_id&quot;, referencedColumnName=&quot;id&quot;)
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name=&quot;extra_id&quot;, referencedColumnName=&quot;id&quot;)
+     *   }
+     * )
+     *
+     * @Expose
+     * @Type(&quot;ArrayCollection&lt;Foo\BarBundle\Entity\Extra&gt;&quot;)
      */
     protected $extras;
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this-&gt;id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this-&gt;id;
+    }
 
     /**
      * @param string $foo
@@ -257,12 +363,28 @@ class Abc implements AbcInterface
     }
 
     /**
-     * Alternatively: isBar()
+     * Alternatively: is|has|should|may|supports&lt;Bar&gt;()
      * @return bool
      */
     public function hasBar()
     {
         return $this-&gt;bar;
+    }
+
+    /**
+     * @param XyzInterface|null $xyz
+     */
+    public function setXyz(XyzInterface $xyz = null)
+    {
+        $this-&gt;xyz = $xyz;
+    }
+
+    /**
+     * @return XzyInterface
+     */
+    public function getXyz()
+    {
+        return $this-&gt;xyz;
     }
 
     /**

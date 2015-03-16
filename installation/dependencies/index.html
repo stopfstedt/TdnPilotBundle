@@ -59,13 +59,41 @@
                     
                         <ul>
                         
-                            <li class="toctree-l2"><a href="#dependencies">Dependencies</a></li>
+                            <li class="toctree-l2"><a href="#introduction">Introduction</a></li>
                             
-                                <li><a class="toctree-l3" href="#fosrestbundle">FOSRestBundle</a></li>
+                        
+                            <li class="toctree-l2"><a href="#at-a-glance">At a glance</a></li>
                             
-                                <li><a class="toctree-l3" href="#nelmioapidocbundle">NelmioApiDocBundle</a></li>
+                                <li><a class="toctree-l3" href="#required">Required</a></li>
                             
-                                <li><a class="toctree-l3" href="#liipfunctionaltestbundle">LiipFunctionalTestBundle</a></li>
+                                <li><a class="toctree-l3" href="#optional">Optional</a></li>
+                            
+                        
+                            <li class="toctree-l2"><a href="#doctrinebundle">DoctrineBundle</a></li>
+                            
+                        
+                            <li class="toctree-l2"><a href="#fosrestbundle">FOSRestBundle</a></li>
+                            
+                        
+                            <li class="toctree-l2"><a href="#jmsserializerbundle">JMSSerializerBundle</a></li>
+                            
+                        
+                            <li class="toctree-l2"><a href="#jmsdiextrabundle">JMSDiExtraBundle</a></li>
+                            
+                        
+                            <li class="toctree-l2"><a href="#nelmioapidocbundle">NelmioApiDocBundle</a></li>
+                            
+                        
+                            <li class="toctree-l2"><a href="#sonatadoctrineormadminbundle">SonataDoctrineORMAdminBundle</a></li>
+                            
+                        
+                            <li class="toctree-l2"><a href="#sonataadminbundle">SonataAdminBundle</a></li>
+                            
+                        
+                            <li class="toctree-l2"><a href="#liipfunctionaltestbundle">LiipFunctionalTestBundle</a></li>
+                            
+                        
+                            <li class="toctree-l2"><a href="#faker">Faker</a></li>
                             
                         
                         </ul>
@@ -180,26 +208,55 @@
 </div>
           <div role="main">
             <div class="section">
-              <h1 id="dependencies">Dependencies</h1>
-<p>This bundle requires a number of other symfony bundles that are normally used in dev-environments to be configured.
-They provide the functionality that the generated code leverages. The bundles <strong>will not be pulled into production</strong>
-since this bundle should be added under the <code>require-dev</code> part of your composer.json file.</p>
-<p>It is recommended that you add some of them to your composer's <code>require</code> section. Please read on for an explanation
-of where a dependency should be added, what features each dependency brings and working configuration examples.</p>
+              <h2 id="introduction">Introduction</h2>
+<p>There is a few bundles that TdnPilotBundle requires to be installed and configured to run. However this bundle
+can be extended by a number of symfony bundles to provide additional functionality or features. These bundles
+<strong>are not be pulled into the project automatically</strong> and instead you can choose which ones to bring in according
+to your needs (that prevents your dependencies from growing out of control).</p>
 <p>Each bundle will have to be enabled in the appropriate section of your <code>app/AppKernel.php</code> file.</p>
-<p>At a glance:</p>
+<h2 id="at-a-glance">At a glance</h2>
+<h4 id="required">Required</h4>
 <ul>
+<li><a href="#doctrinebundle">doctrine/DoctrineBundle</a></li>
 <li><a href="#fosrestbundle">FriendsOfSymfony/FOSRestBundle</a></li>
-<li><a href="#nelmioapidocbundle">nelmio/NelmioApiDocBundle</a></li>
-<li><a href="#liipfunctionaltestbundle">liip/LiipFunctionalTestBundle</a></li>
+<li><a href="#jmsserializerbundle">schmittjoh/JMSSerializerBundle</a></li>
 </ul>
-<h2 id="fosrestbundle">FOSRestBundle</h2>
-<p><em>Must be added to your composer.json <code>require</code> section</em></p>
-<p>Add to composer:</p>
-<pre><code class="bash">$ composer require friendsofsymfony/rest-bundle ~1.5
+<h4 id="optional">Optional</h4>
+<ul>
+<li>For Annotations</li>
+<li><a href="#jmsdiextrabundle">schmittjoh/JMSDiExtraBundle</a></li>
+<li>For documentation (swagger-ish)</li>
+<li><a href="#nelmioapidocbundle">nelmio/NelmioApiDocBundle</a></li>
+<li>For Sonata Scaffolding</li>
+<li><a href="#sonatadoctrineormadminbundle">sonata-project/SonataDoctrineORMAdminBundle</a></li>
+<li><a href="#sonataadmin">sonata-project/SonataAdminBundle</a></li>
+<li>For Test generation</li>
+<li><a href="#liipfunctionaltestbundle">liip/LiipFunctionalTestBundle</a></li>
+<li><a href="#faker">fzaninotto/faker</a></li>
+</ul>
+<h2 id="doctrinebundle">DoctrineBundle</h2>
+<p><em>Automatically pulled in to all environments</em></p>
+<p>Configuration instructions in their [repo docs][doctrine-bundle-docs].</p>
+<p>DoctrineBundle is used by all the entity managers.</p>
+<p><strong>Example Configuration:</strong></p>
+<pre><code class="yml">doctrine:
+    dbal:
+        driver:   &quot;%database_driver%&quot;
+        host:     &quot;%database_host%&quot;
+        port:     &quot;%database_port%&quot;
+        dbname:   &quot;%database_name%&quot;
+        user:     &quot;%database_user%&quot;
+        password: &quot;%database_password%&quot;
+        charset:  UTF8
+    orm:
+        auto_generate_proxy_classes: &quot;%kernel.debug%&quot;
+        auto_mapping: true
+
 </code></pre>
 
-<p>Configuration instructions in their repo: <a href="http://symfony.com/doc/master/bundles/FOSRestBundle/index.html">docs</a></p>
+<h2 id="fosrestbundle">FOSRestBundle</h2>
+<p><em>Automatically pulled in to all environments</em></p>
+<p>Configuration instructions in their <a href="http://symfony.com/doc/master/bundles/FOSRestBundle/index.html">repo docs</a>.</p>
 <p>FosRestBundle is used by all the controllers generated by this bundle.</p>
 <p>All generated controllers inherit from this bundle.</p>
 <p><strong>Example Configuration:</strong></p>
@@ -233,15 +290,33 @@ fos_rest:
             'Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException': 500
 </code></pre>
 
-<h2 id="nelmioapidocbundle">NelmioApiDocBundle</h2>
-<p><em>Must be added to your composer.json <code>require</code> section</em></p>
+<h2 id="jmsserializerbundle">JMSSerializerBundle</h2>
+<p><em>Automatically pulled in to all environments</em></p>
+<p>Configuration instructions in their [repo docs][jms-serializer-docs].</p>
+<h2 id="jmsdiextrabundle">JMSDiExtraBundle</h2>
+<p><em>Must be added to your composer.json <code>require</code> section to enable <strong>annotation format</strong></em></p>
 <p>Add to composer:</p>
-<pre><code class="bash">$ composer require nelmio/api-doc-bundle ~2.7
+<pre><code class="bash">$ composer require nelmio/api-doc-bundle ~2.8
 </code></pre>
 
-<p>Configuration instructions in their repo <a href="https://github.com/nelmio/NelmioApiDocBundle/blob/master/Resources/doc/index.md">docs</a>.</p>
+<p>Configuration instructions in their [repo docs][jms-di-extra-docs].</p>
+<p>JMSDiExtraBundle allows for DI using annotations. It is used whenever the format is set to <code>annotation</code>
+on some of the commands such as:</p>
+<ul>
+<li>Controller</li>
+</ul>
+<p><strong>Example Configuration:</strong></p>
+<pre><code class="yml"></code></pre>
+
+<h2 id="nelmioapidocbundle">NelmioApiDocBundle</h2>
+<p><em>Must be added to your composer.json <code>require</code> section to enable <strong>swagger documentation</strong></em></p>
+<p>Add to composer:</p>
+<pre><code class="bash">$ composer require nelmio/api-doc-bundle ~2.8
+</code></pre>
+
+<p>Configuration instructions in their <a href="https://github.com/nelmio/NelmioApiDocBundle/blob/master/Resources/doc/index.md">repo docs</a>.</p>
 <p>NelmioApiDocBundle generates documentation for your API through the usage of the <code>@Api</code> annotation.</p>
-<p>It is used any time the <code>--document</code> flag is used in the controller generator.</p>
+<p>It is used any time the <code>--with-swagger</code> flag is used in the controller generator.</p>
 <p><strong>Example Configuration:</strong></p>
 <pre><code class="yml"># app/config/config.yml
 nelmio_api_doc:
@@ -260,14 +335,40 @@ nelmio_api_doc:
             default_format: json
 </code></pre>
 
+<h2 id="sonatadoctrineormadminbundle">SonataDoctrineORMAdminBundle</h2>
+<p><em>Must be added to your composer.json <code>require-dev</code> or <code>require</code> section to enable <strong>sonata scaffolding</strong></em></p>
+<p>Add to composer:</p>
+<pre><code class="bash">$ composer require sonata-project/doctrine-orm-admin-bundle ~2.7
+</code></pre>
+
+<p><strong>Example Configuration:</strong></p>
+<pre><code class="yml"></code></pre>
+
+<h2 id="sonataadminbundle">SonataAdminBundle</h2>
+<ul>
+<li>Will be pulled automatically by SonataDoctrineORMAdminBundle*</li>
+</ul>
+<p><strong>Example Configuration:</strong></p>
+<pre><code class="yml"></code></pre>
+
 <h2 id="liipfunctionaltestbundle">LiipFunctionalTestBundle</h2>
-<p><em>Automatically pulled in to <code>dev</code> and <code>test</code> environments</em></p>
+<p><em>Must be added to your composer.json <code>require-dev</code> section to enable <strong>test generation</strong></em></p>
+<p>Add to composer:</p>
+<pre><code class="bash">$ composer require --dev nelmio/api-doc-bundle ~2.7
+</code></pre>
+
 <p>Configuration instructions in their repo </p>
 <p>This bundle is used in the generation of tests for your entities.</p>
-<p>Configuration instructions in their repo <a href="https://github.com/liip/LiipFunctionalTestBundle">docs</a>.
-<strong>Example Configuration</strong></p>
+<p>Configuration instructions in their <a href="https://github.com/liip/LiipFunctionalTestBundle">repo docs</a>.</p>
+<p><strong>Example Configuration</strong></p>
 <pre><code class="yml"># app/config/config_test.yml
 liip_functional_test: ~
+</code></pre>
+
+<h2 id="faker">Faker</h2>
+<p><em>Must be added to your composer.json <code>require-dev</code> section to enable <strong>fixture generation</strong></em></p>
+<p>Add to composer:</p>
+<pre><code class="bash">$ composer require --dev fzaninotto/faker ~1.4
 </code></pre>
 
 

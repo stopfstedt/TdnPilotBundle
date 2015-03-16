@@ -136,13 +136,16 @@
                     
                         <ul>
                         
-                            <li class="toctree-l2"><a href="#running-the-checks">Running the checks</a></li>
+                            <li class="toctree-l2"><a href="#summary">Summary</a></li>
                             
-                                <li><a class="toctree-l3" href="#git-hook">Git Hook</a></li>
+                        
+                            <li class="toctree-l2"><a href="#git-hook">Git Hook</a></li>
                             
-                                <li><a class="toctree-l3" href="#phpunit">PHPUnit</a></li>
+                        
+                            <li class="toctree-l2"><a href="#phpunit">PHPUnit</a></li>
                             
-                                <li><a class="toctree-l3" href="#phpcs">PHPCS</a></li>
+                        
+                            <li class="toctree-l2"><a href="#phpcs">PHPCS</a></li>
                             
                         
                         </ul>
@@ -180,27 +183,29 @@
 </div>
           <div role="main">
             <div class="section">
-              <h1 id="running-the-checks">Running the checks</h1>
+              <h2 id="summary">Summary</h2>
 <p>The bundle comes with a unit test suite and a coding standard.</p>
 <p>To perform these checks please review their respective sections below or enable the provided git hook.</p>
-<h3 id="git-hook">Git Hook</h3>
-<p>The git hook provides some additional checks that are relevant:</p>
+<h2 id="git-hook">Git Hook</h2>
+<p>If you choose to enable the pre-commit hook, make sure to enable the following checks:</p>
 <ul>
+<li>phpcs</li>
+<li>phpunit</li>
 <li>phplint</li>
 </ul>
-<p>And an automated way of fixing code style errors:</p>
+<p>And optionally, an automated way of fixing code style errors:</p>
 <ul>
 <li>php-cs-fixer</li>
 </ul>
-<h3 id="phpunit">PHPUnit</h3>
+<h2 id="phpunit">PHPUnit</h2>
 <p>All the configuration for PHPUnit tests are located in the <code>.phpunit.xml.dist</code> file.</p>
-<p>To run (from the project root):</p>
+<p>To manually run (from the project root):</p>
 <pre><code class="bash">$ bin/phpunit -c .
 </code></pre>
 
-<h3 id="phpcs">PHPCS</h3>
+<h2 id="phpcs">PHPCS</h2>
 <p>All of the configurations for PHP Code Sniffer are located in the <code>.phpcs.xml</code> file.</p>
-<p>To run (from the project root):</p>
+<p>To manually run (from the project root):</p>
 <pre><code class="bash">$ bin/phpcs --standard=.phpcs.xml
 </code></pre>
 

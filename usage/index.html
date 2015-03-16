@@ -80,9 +80,22 @@
                     
                         <ul>
                         
-                            <li class="toctree-l2"><a href="#usage">Usage</a></li>
+                            <li class="toctree-l2"><a href="#introduction">Introduction</a></li>
                             
-                                <li><a class="toctree-l3" href="#commands">Commands</a></li>
+                        
+                            <li class="toctree-l2"><a href="#commands">Commands</a></li>
+                            
+                                <li><a class="toctree-l3" href="#tdngenerateproject">tdn:generate:project</a></li>
+                            
+                                <li><a class="toctree-l3" href="#tdngeneratemanager">tdn:generate:manager</a></li>
+                            
+                                <li><a class="toctree-l3" href="#tdngenerateform">tdn:generate:form</a></li>
+                            
+                                <li><a class="toctree-l3" href="#tdngeneratehandler">tdn:generate:handler</a></li>
+                            
+                                <li><a class="toctree-l3" href="#tdngeneratecontroller">tdn:generate:controller</a></li>
+                            
+                                <li><a class="toctree-l3" href="#tdngeneraterouting">tdn:generate:routing</a></li>
                             
                         
                         </ul>
@@ -176,7 +189,7 @@
 </div>
           <div role="main">
             <div class="section">
-              <h1 id="usage">Usage</h1>
+              <h2 id="introduction">Introduction</h2>
 <p>If all the previous sections were accomplished the commands should be visible in the console by running</p>
 <pre><code class="bash">$ ./bin/console
 </code></pre>
@@ -189,10 +202,9 @@
 However, if creating the files manually it is recommended that you <strong>extend the generated code instead</strong> 
 and use the DIC to handle dependencies and calls.</p>
 <h2 id="commands">Commands</h2>
-<p>Pilot Project</p>
 <h4 id="tdngenerateproject"><a href="generate-project">tdn:generate:project</a></h4>
 <p>Pilots a project based on entities.</p>
-<p><strong>Each command has validation to check for any files it expects/has dependencies on</strong></p>
+<p><sub><strong>Each command has validation to check for any files it expects/has dependencies on</strong></sub></p>
 <h4 id="tdngeneratemanager"><a href="generate-manager">tdn:generate:manager</a></h4>
 <p>Generates an entity manager (DAO) for a specified entity.</p>
 <h4 id="tdngenerateform"><a href="generate-form">tdn:generate:form</a></h4>

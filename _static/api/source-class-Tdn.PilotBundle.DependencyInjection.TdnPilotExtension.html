@@ -42,23 +42,6 @@
 
 						</li>
 				<li>
-					<a href="namespace-Tdn.PilotBundle.Form.html">
-						Form<span></span>
-					</a>
-
-						<ul>
-				<li>
-					<a href="namespace-Tdn.PilotBundle.Form.DataTransformer.html">
-						DataTransformer					</a>
-
-						</li>
-				<li>
-					<a href="namespace-Tdn.PilotBundle.Form.Type.html">
-						Type					</a>
-
-						</li>
-							</ul></li>
-				<li>
 					<a href="namespace-Tdn.PilotBundle.Manipulator.html">
 						Manipulator					</a>
 
@@ -165,28 +148,25 @@
 </span><span id="20" class="l"><a href="#20">20: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> load(<span class="php-keyword1">array</span> <span class="php-var">$configs</span>, ContainerBuilder <span class="php-var">$container</span>)
 </span><span id="21" class="l"><a href="#21">21: </a>    {
 </span><span id="22" class="l"><a href="#22">22: </a>        <span class="php-var">$config</span> = <span class="php-var">$this</span>-&gt;processConfiguration(<span class="php-keyword1">new</span> Configuration(), <span class="php-var">$configs</span>);
-</span><span id="23" class="l"><a href="#23">23: </a>
-</span><span id="24" class="l"><a href="#24">24: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$config</span>[<span class="php-quote">'template'</span>])) {
-</span><span id="25" class="l"><a href="#25">25: </a>            <span class="php-var">$container</span>-&gt;setAlias(
-</span><span id="26" class="l"><a href="#26">26: </a>                <span class="php-quote">'tdn_pilot.template.strategy.default'</span>,
-</span><span id="27" class="l"><a href="#27">27: </a>                <span class="php-quote">'tdn_pilot.template.strategy.'</span> . <span class="php-var">$config</span>[<span class="php-quote">'template'</span>][<span class="php-quote">'strategy'</span>]
-</span><span id="28" class="l"><a href="#28">28: </a>            );
-</span><span id="29" class="l"><a href="#29">29: </a>        }
-</span><span id="30" class="l"><a href="#30">30: </a>
-</span><span id="31" class="l"><a href="#31">31: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$config</span>[<span class="php-quote">'form'</span>])) {
-</span><span id="32" class="l"><a href="#32">32: </a>            <span class="php-var">$container</span>-&gt;setParameter(
-</span><span id="33" class="l"><a href="#33">33: </a>                <span class="php-quote">'tdn_pilot.form.relationship.string.strategy'</span>,
-</span><span id="34" class="l"><a href="#34">34: </a>                <span class="php-var">$config</span>[<span class="php-quote">'form'</span>][<span class="php-quote">'relationship'</span>][<span class="php-quote">'string_strategy'</span>]
-</span><span id="35" class="l"><a href="#35">35: </a>            );
-</span><span id="36" class="l"><a href="#36">36: </a>        }
-</span><span id="37" class="l"><a href="#37">37: </a>
-</span><span id="38" class="l"><a href="#38">38: </a>        <span class="php-var">$loader</span> = <span class="php-keyword1">new</span> Loader\YamlFileLoader(<span class="php-var">$container</span>, <span class="php-keyword1">new</span> FileLocator(__DIR__ . <span class="php-quote">'/../Resources/config'</span>));
-</span><span id="39" class="l"><a href="#39">39: </a>        <span class="php-var">$loader</span>-&gt;load(<span class="php-quote">'template-strategies.yml'</span>);
-</span><span id="40" class="l"><a href="#40">40: </a>        <span class="php-var">$loader</span>-&gt;load(<span class="php-quote">'transformers.yml'</span>);
-</span><span id="41" class="l"><a href="#41">41: </a>        <span class="php-var">$loader</span>-&gt;load(<span class="php-quote">'form-types.yml'</span>);
-</span><span id="42" class="l"><a href="#42">42: </a>    }
-</span><span id="43" class="l"><a href="#43">43: </a>}
-</span><span id="44" class="l"><a href="#44">44: </a></span></code></pre>
+</span><span id="23" class="l"><a href="#23">23: </a>        <span class="php-comment">//tdn_pilot.template.strategy.twig_template_strategy</span>
+</span><span id="24" class="l"><a href="#24">24: </a>        <span class="php-var">$loader</span> = <span class="php-keyword1">new</span> Loader\YamlFileLoader(<span class="php-var">$container</span>, <span class="php-keyword1">new</span> FileLocator(__DIR__ . <span class="php-quote">'/../Resources/config'</span>));
+</span><span id="25" class="l"><a href="#25">25: </a>        <span class="php-var">$loader</span>-&gt;load(<span class="php-quote">'template-strategies.yml'</span>);
+</span><span id="26" class="l"><a href="#26">26: </a>
+</span><span id="27" class="l"><a href="#27">27: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$config</span>[<span class="php-quote">'template'</span>])) {
+</span><span id="28" class="l"><a href="#28">28: </a>            <span class="php-var">$container</span>-&gt;setAlias(
+</span><span id="29" class="l"><a href="#29">29: </a>                <span class="php-quote">'tdn_pilot.template.strategy.default'</span>,
+</span><span id="30" class="l"><a href="#30">30: </a>                <span class="php-quote">'tdn_pilot.template.strategy.'</span> . <span class="php-var">$config</span>[<span class="php-quote">'template'</span>][<span class="php-quote">'strategy'</span>]
+</span><span id="31" class="l"><a href="#31">31: </a>            );
+</span><span id="32" class="l"><a href="#32">32: </a>        }
+</span><span id="33" class="l"><a href="#33">33: </a>
+</span><span id="34" class="l"><a href="#34">34: </a>    }
+</span><span id="35" class="l"><a href="#35">35: </a>
+</span><span id="36" class="l"><a href="#36">36: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getAlias()
+</span><span id="37" class="l"><a href="#37">37: </a>    {
+</span><span id="38" class="l"><a href="#38">38: </a>        <span class="php-keyword1">return</span> <span class="php-quote">'tdn_pilot'</span>;
+</span><span id="39" class="l"><a href="#39">39: </a>    }
+</span><span id="40" class="l"><a href="#40">40: </a>}
+</span><span id="41" class="l"><a href="#41">41: </a></span></code></pre>
 
 	<div id="footer">
 		 API documentation generated by <a href="http://apigen.org">ApiGen</a>
@@ -194,6 +174,6 @@
 </div>
 </div>
 <script src="resources/combined.js?783afaeac345598d4af0e7240f360eaceff57d07"></script>
-<script src="elementlist.js?d8cc77f333b795c7cf2541ad69f13e6398b8ef68"></script>
+<script src="elementlist.js?235bf9bcb90cfc07dd4ccee693ea7e9d9070e271"></script>
 </body>
 </html>

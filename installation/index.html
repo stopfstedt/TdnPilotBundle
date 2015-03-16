@@ -69,17 +69,21 @@
                     
                         <ul>
                         
-                            <li class="toctree-l2"><a href="#installation">Installation</a></li>
+                            <li class="toctree-l2"><a href="#prerequisites">Prerequisites</a></li>
                             
-                                <li><a class="toctree-l3" href="#prerequisites">Prerequisites</a></li>
+                        
+                            <li class="toctree-l2"><a href="#composer-install">Composer install</a></li>
                             
-                                <li><a class="toctree-l3" href="#composer-install">Composer install</a></li>
+                        
+                            <li class="toctree-l2"><a href="#update-kernel">Update kernel</a></li>
                             
-                                <li><a class="toctree-l3" href="#update-kernel">Update kernel</a></li>
+                        
+                            <li class="toctree-l2"><a href="#configure">Configure</a></li>
                             
-                                <li><a class="toctree-l3" href="#configure">Configure</a></li>
+                        
+                            <li class="toctree-l2"><a href="#configuration">Configuration</a></li>
                             
-                                <li><a class="toctree-l3" href="#configuration">Configuration</a></li>
+                                <li><a class="toctree-l3" href="#full-configuration">Full configuration</a></li>
                             
                         
                         </ul>
@@ -184,8 +188,7 @@
 </div>
           <div role="main">
             <div class="section">
-              <h1 id="installation">Installation</h1>
-<h2 id="prerequisites">Prerequisites</h2>
+              <h2 id="prerequisites">Prerequisites</h2>
 <p>This bundle requires symfony &gt;= 2.3+.</p>
 <p>In addition the following requirements must be met:</p>
 <ul>
@@ -198,7 +201,7 @@
 you have installed and configured the bundles listed in the <a href="dependencies">dependencies</a> section to enable appropriate commands.</sub></p>
 <h2 id="composer-install">Composer install</h2>
 <p>Require the "tdn/pilotbundle" package in composer.json</p>
-<pre><code class="bash">$ composer require --dev tdn/pilotbundle dev-master
+<pre><code class="bash">$ composer require tdn/pilotbundle dev-master
 </code></pre>
 
 <p><sub>We are using git flow since release of 1.0.0, master will only contain stable tags</sub></p>
@@ -208,16 +211,11 @@ you have installed and configured the bundles listed in the <a href="dependencie
 {
     $bundles = array(
         //...
+        new Tdn\PilotBundle\TdnPilotBundle(),
         //...
     );
 
     //...
-
-    if (in_array($this-&gt;getEnvironment(), array('dev', 'test'))) {
-        //...
-        $bundles[] = new Tdn\PilotBundle\TdnPilotBundle();
-        //...
-    }
 }
 </code></pre>
 
