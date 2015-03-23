@@ -57,8 +57,14 @@ class HandlerManipulator extends AbstractServiceManipulator
                 ($this->getTargetDirectory()) ?: $this->getBundle()->getPath()
             ))
             ->setContents($this->getServiceFileContents($serviceFile)) //Kinda bad...fix later (Needs to be called last)
+            ->setServiceFile(true)
         ;
 
+        $this->addMessage(sprintf(
+            'Make sure to load "%s" in the %s file to enable the new services.',
+            $serviceFile->getFilename() . '.' . $serviceFile->getExtension(),
+            $this->getDefaultExtensionFile()
+        ));
         $this->addGeneratedFile($serviceFile);
     }
 
@@ -67,7 +73,7 @@ class HandlerManipulator extends AbstractServiceManipulator
      */
     protected function getHandlerFileContent()
     {
-        return $this->getOutputEngine()->render('handler/handler.php.twig', [
+        return $this->getTemplateStrategy()->render('handler/handler.php.twig', [
             'entity' => $this->getEntity(),
             'namespace' => $this->getBundle()->getNamespace(),
         ]);
@@ -100,10 +106,10 @@ class HandlerManipulator extends AbstractServiceManipulator
 
         $this->setXmlServiceFile($handlerFile);
         $newXml = $this->getXmlServiceFile();
-        $this->getDiManipulator()->setDiXmlTags($newXml, $serviceClass, $paramKey, $serviceId);
-        $service = $this->getDiManipulator()->getDiXmlServiceTag($serviceId, $newXml);
-        $this->getDiManipulator()->addEmArgTo($service);
-        $this->getDiManipulator()->addClassArgTo(
+        $this->getDiUtils()->setDiXmlTags($newXml, $serviceClass, $paramKey, $serviceId);
+        $service = $this->getDiUtils()->getDiXmlServiceTag($serviceId, $newXml);
+        $this->getDiUtils()->addEmArgTo($service);
+        $this->getDiUtils()->addClassArgTo(
             $service,
             $this->getBundle()->getNamespace(),
             $this->getEntityNamespace(),

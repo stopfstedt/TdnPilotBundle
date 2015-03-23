@@ -30,7 +30,7 @@ class GenerateHandlerCommandTest extends AbstractGeneratorCommandTest
             'command'            => $this->getCommand()->getName(),
             '--overwrite'        => false,
             '--target-directory' => $this->getOutDir(),
-            'entity'             => 'FooBarBundle:Foo'
+            '--entity'           => 'FooBarBundle:Foo'
         ];
     }
 
@@ -40,7 +40,7 @@ class GenerateHandlerCommandTest extends AbstractGeneratorCommandTest
     protected function getManipulator()
     {
         $manipulator = Mockery::mock(
-            new HandlerManipulator($this->getOutputEngine(), $this->getBundle(), $this->getMetadata())
+            new HandlerManipulator($this->getTemplateStrategy(), $this->getBundle(), $this->getMetadata())
         );
 
         $manipulator

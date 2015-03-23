@@ -2,9 +2,12 @@
 
 namespace Tdn\PilotBundle\Manipulator;
 
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Symfony\Component\Finder\SplFileInfo;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Tdn\PhpTypes\Type\String;
 use Tdn\PilotBundle\Model\GeneratedFile;
+use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 
 /**
  * Class FormManipulator
@@ -12,27 +15,6 @@ use Tdn\PilotBundle\Model\GeneratedFile;
  */
 class FormManipulator extends AbstractManipulator
 {
-    /**
-     * @var boolean
-     */
-    private $restSupport;
-
-    /**
-     * @param bool $restSupport
-     */
-    public function setRestSupport($restSupport)
-    {
-        $this->restSupport = $restSupport;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasRestSupport()
-    {
-        return $this->restSupport;
-    }
-
     /**
      * Sets up a FormType based on entity.
      * Sets up InvalidFormException if it doesn't exist exists.
@@ -82,7 +64,7 @@ class FormManipulator extends AbstractManipulator
         ;
 
         //File created only once.
-        if (!is_file($formTypeException->getFullPath()) || $this->hasOverwrite()) {
+        if (!is_file($formTypeException->getFullPath()) || $this->shouldOverwrite()) {
             $formTypeException->setContents($this->generateFormTypeExceptionContent());
             $this->addGeneratedFile($formTypeException);
         }
@@ -94,7 +76,7 @@ class FormManipulator extends AbstractManipulator
      */
     protected function generateFormTypeContent($fileName)
     {
-        return $this->getOutputEngine()->render(
+        return $this->getTemplateStrategy()->render(
             'form/FormType.php.twig',
             [
                 'fields'                => $this->getFieldsFromMetadata($this->getMetadata()),
@@ -103,13 +85,8 @@ class FormManipulator extends AbstractManipulator
                 'entity_namespace'      => $this->getEntityNamespace(),
                 'entity_class'          => $this->getEntity(),
                 'bundle'                => $this->getBundle()->getName(),
-                'rest_support'          => $this->hasRestSupport(),
-                'form_class'            => $fileName,
-                'rest_form_type_name'   => (string) String::create($fileName)->toLowerCase(),
-                'form_type_name'        =>
-                    (string) String::create($this->getBundle()->getNamespace() . '_' . $fileName)
-                        ->replace('\\', '_')
-                        ->toLowerCase()
+                'entity_identifier'     => $this->getEntityIdentifier(),
+                'form_class'            => String::create($fileName)->underscored()->toLowerCase(),
             ]
         );
     }
@@ -119,7 +96,7 @@ class FormManipulator extends AbstractManipulator
      */
     protected function generateFormTypeExceptionContent()
     {
-        return $this->getOutputEngine()->render(
+        return $this->getTemplateStrategy()->render(
             'form/form_exception.php.twig',
             [
                 'namespace' => $this->getBundle()->getNamespace()
@@ -138,5 +115,24 @@ class FormManipulator extends AbstractManipulator
         );
 
         $this->addFileDependency(new SplFileInfo($managerFile, null, null));
+    }
+
+    /**
+     * Find entity identifier.
+     *
+     * Figures out what an entity's identifier is from it's metadata
+     * And returns the name of the identifier.
+     *
+     * @throws \RuntimeException
+     *
+     * @return mixed
+     */
+    protected function getEntityIdentifier()
+    {
+        if (count($this->getMetadata()->getIdentifierFieldNames()) !== 1) {
+            throw new \RuntimeException('Only one identifier allowed at this time.');
+        }
+
+        return $this->getMetadata()->getIdentifierFieldNames()[0];
     }
 }

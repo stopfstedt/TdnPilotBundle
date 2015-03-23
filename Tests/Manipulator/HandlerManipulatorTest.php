@@ -20,13 +20,12 @@ class HandlerManipulatorTest extends AbstractServiceManipulatorTest
     protected function getManipulator()
     {
         $manipulator = new HandlerManipulator(
-            $this->getOutputEngine(),
+            $this->getTemplateStrategy(),
             $this->getBundle(),
             $this->getMetadata()
         );
 
         $manipulator->setOverwrite(false);
-        $manipulator->setExtensionFile($this->getExtensionFile());
         $manipulator->setTargetDirectory($this->getOutDir());
 
         return $manipulator->prepare();
@@ -71,6 +70,17 @@ class HandlerManipulatorTest extends AbstractServiceManipulatorTest
             $handlerFileMock->getFullPath()    => $handlerFileMock,
             $handlerServiceMock->getFullPath() => $handlerServiceMock
         ];
+    }
+
+    protected function getExpectedMessages()
+    {
+        return new ArrayCollection([
+            sprintf(
+                'Make sure to load "%s" in the %s file to enable the new services.',
+                'handlers.xml',
+                $this->getDefaultDiFile()
+            )
+        ]);
     }
 
     /**

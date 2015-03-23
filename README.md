@@ -9,40 +9,28 @@
 [![Codacy][codacy shield]][codacy page]
 [![SensioLabsInsight][sensio shield]][sensio page]
 
+![Icon][pilot icon]
+
 TdnPilotBundle
 ==============
-A pilot project generator (scaffolding) for [Symfony 2][symfony 2].
-
-**Under development**
+A pilot project generator (kick ass scaffolding) for [Symfony 2][symfony 2].
 
 Description
 -----------
-This is a <b>very opinionated</b> bundle that aims to scaffold a working application from your entities.
+TdnPilotBundle is a <b>very opinionated</b> bundle that scaffolds
+a restful application (or selected parts) from your doctrine entities.
 
-Entities must follow some basic guidelines to take full advantage of the application.
-
-These are outlined in the [entity rules] doc.
+##### Why opinionated?
+While symfony by design leaves a lot of options opens to developers this bundle makes quite a
+few assumptions as to how your application should be generated. It includes a number of bundles
+that normally developers are free to not use in their application (or use an alternative).
 
 ##### Generated code features:
 * Create working application from entities
 * CRUD application that follows PSR-4
 * Generated code follows SF2 Best practices
 
-##### What it generates
-You can generate any or all of these. There are holistic and individual commands available.
-
-* REST Controllers 
-  * With API Documentation
-* Form Types
-  * With relationships
-* Rest Handlers
-  * As service
-* Entity Managers
-  * With interface
-  * As service
-* Routing
-
-See the [road map](#road-map) for upcoming features.
+See the [road map](#road-map) for overview of features in progress and planned for later versions.
 
 Documentation
 -------------
@@ -51,22 +39,32 @@ For documentation, see:
 
     Resources/doc/
 
-[Read the documentation](/Resources/doc/index.md)
+For a better documentation format please view [the documentation page].
+
+For source API please checkout the [api docs].
 
 Road Map
 --------
-![Next version][next version shield]
-- [ ] Implement Project generator: Scaffolds a project based on your entities (proxies all commands)
-- [ ] Optional event driven architecture with "--create-events" option when generating controller
-  - [ ] `<Bundle>Events::<Action>_INITIALIZE`
-  - [ ] `<Bundle>Events::<Action>_SUCCESS`
-  - [ ] `<Bundle>Events::<Action>_FAILURE`
-  - [ ] `<Bundle>Events::<Action>_COMPLETED`
+![Under development][milestone shield]
+- [x] REST Controllers
+  - [x] API Documentation
+- [x] Form Types
+- [x] Rest Handlers (as services)
+- [x] Entity Managers (as services)
+- [x] Routing
+- [ ] Project generator: Scaffolds a project based on your entities (proxies all commands)
 - [ ] Support multiple formats (Yaml, annotations, xml) for generated service files
+  - [ ] Add option to use DiExtraBundle for generated code
 - [ ] Generate Sonata admin
-- [ ] Generate simple PHPUnit tests for entities (Must follow [entity rules])
 
 ![Planned][planned shield]
+- [ ] Enable form events with `--events`
+- [ ] Generate simple PHPUnit tests for entities including symfony constraints.
+- [ ] Create a more RESTFUL interface for relationships e.g. `PUT /notes/1/label/2` 
+  to create a relationship of one-to-many between notes and labels.
+- [ ] Add hypermedia support
+- [ ] Add option to implement symfony ACL and use @Secure and @PreAuthorize in controllers.
+- [ ] Generate a working configuration between popular FOS UserBundle, RestBundle, and WSSE Authorization tokens.
 - [ ] Generate Entity Interfaces
 - [ ] Generate Behat functional api tests
 - [ ] Generate initial serializer annotations
@@ -88,7 +86,9 @@ Applications using TdnPilotBundle
 
 Contributing
 ------------
-Please read [CONTRIBUTING](CONTRIBUTING.md).
+
+If you are contributing or otherwise developing in this bundle, please read the [CONTRIBUTING](CONTRIBUTING.md) file
+and the [contributing section] of the docs.
 
 License
 -------
@@ -98,6 +98,7 @@ bundle:
 
     Resources/meta/LICENSE
 
+[the documentation page]: https://thedevnetwork.github.io/TdnPilotBundle
 [version eye shield]: https://www.versioneye.com/user/projects/54f6e619dd0a3627be000052/badge.svg?style=flat-square
 [version eye]: https://www.versioneye.com/user/projects/54f6e619dd0a3627be000052
 [github issues]: https://img.shields.io/github/issues/thedevnetwork/tdnpilotbundle.svg?style=flat-square
@@ -116,11 +117,11 @@ bundle:
 [sensio shield]: https://insight.sensiolabs.com/projects/84a6a21c-83e0-4f21-a66f-838d1ddc5e07/mini.png
 [sensio page]: https://insight.sensiolabs.com/projects/84a6a21c-83e0-4f21-a66f-838d1ddc5e07
 [pilot icon]: https://raw.githubusercontent.com/TheDevNetwork/Aux/master/images/icon_plane.png
-[next version shield]: https://img.shields.io/badge/status-next--version-green.svg
+[milestone shield]: https://img.shields.io/badge/milestone-1.0.0-green.svg
 [symfony 2]: http://symfony.com
 [note]: https://img.shields.io/badge/note-*-orange.svg
 [planned shield]: https://img.shields.io/badge/status-planned-5F9FDE.svg
 [ilios core bundle]: https://github.com/ilios/ilios/tree/master/src/Ilios/CoreBundle
 [ilios project]: https://github.com/ilios/ilios
-[Entity Rules]: Resources/doc/entity-rules.md
-
+[contributing section]: https://thedevnetwork.github.io/TdnPilotBundle/_static/docs/contributing/index.html
+[api docs]: https://thedevnetwork.github.io/TdnPilotBundle/_static/api/index.html

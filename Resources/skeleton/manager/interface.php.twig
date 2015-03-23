@@ -5,8 +5,6 @@ namespace {{ namespace }}\Entity\Manager{{ entity_namespace ? '\\' ~ entity_name
 {% endblock %}
 
 {% block use_statements %}
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use {{ namespace }}\Entity\{{ entity }}Interface;
 {% endblock use_statements %}

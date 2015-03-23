@@ -2,6 +2,7 @@
 
 namespace Tdn\PilotBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -21,13 +22,23 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->arrayNode('output')
-                    ->children()
-                        ->scalarNode('engine')->defaultValue('twig_output_engine')->end()
-                    ->end()
+                ->arrayNode('template')
+                    ->addDefaultsIfNotSet()
+                    ->append($this->getStrategy())
                 ->end()
-            ->end();
+        ;
 
         return $treeBuilder;
+    }
+
+    /**
+     * @return ScalarNodeDefinition
+     */
+    protected function getStrategy()
+    {
+        $node = new ScalarNodeDefinition('strategy');
+        $node->defaultValue('twig_template_strategy');
+
+        return $node;
     }
 }

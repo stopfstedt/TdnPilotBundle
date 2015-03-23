@@ -9,10 +9,14 @@ This document will be updated to list important BC breaks and behavioral changes
  Specifically in `AppKernel.php`.
  * Commands have changed.
  Please review docs located in [Resources/doc/](/Resources/doc/) or type in `bin/console` to view changes.
- * New OutputEngineInterface and service were added. It can be changed through the configuration by adding the following to your `app/config/config_dev.yml` file.
- The default value for this parameter is twig_output_engine.
+ * New TemplateStrategyInterface and service were added. It can be changed through the configuration by adding the following to your `app/config/config_dev.yml` file.
+ <sub>Default strategy: twig_template_strategy</sub>
+
 ```yml
 tdn_pilot:
-  output:
-    engine: twig_output_engine # Or create your own service implementing OutputEngineInterface
+  template:
+    strategy: twig_template_strategy # Or create your own service implementing TemplateStrategyInterface
+  form:
+    relationship:
+        string_strategy: identifier
 ```

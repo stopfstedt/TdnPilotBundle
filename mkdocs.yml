@@ -1,0 +1,23 @@
+site_name: TdnPilotBundle
+docs_dir: Resources/doc
+site_dir: build/doc/
+repo_url: https://github.com/TheDevNetwork/TdnPilotBundle.git
+api_url: https://thedevnetwork.github.io/TdnPilotBundle/_static/api/index.html
+use_directory_urls: true
+theme: readthedocs
+pages:
+- ['index.md', 'Introduction']
+- ['installation/dependencies.md', 'Installation', 'Dependencies']
+- ['installation/caveats.md', 'Installation', 'Caveats']
+- ['installation/index.md', 'Installation', 'Install']
+- ['usage/index.md', 'Usage', 'Overview']
+- ['usage/generate-project.md', 'Usage', 'Project command']
+- ['usage/generate-controller.md', 'Usage', 'Controller command']
+- ['usage/generate-form.md', 'Usage', 'Form command']
+- ['usage/generate-handler.md', 'Usage', 'Handler command']
+- ['usage/generate-manager.md', 'Usage', 'Manager command']
+- ['usage/generate-routing.md', 'Usage', 'Routing command']
+- ['usage/generate-sonata.md', 'Usage', 'Sonata command']
+- ['contributing/index.md', 'Contributing', 'Overview']
+- ['contributing/guidelines.md', 'Contributing', 'Contribution Guidelines']
+- ['contributing/test-checks.md', 'Contributing', 'Tests & Checks']

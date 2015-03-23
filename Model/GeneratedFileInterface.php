@@ -54,15 +54,24 @@ interface GeneratedFileInterface
     public function getContents();
 
     /**
-     * @param  bool $forceNew
-     * @return $this
+     * @param  bool $auxFile
      */
-    public function setForceNew($forceNew);
+    public function setAuxFile($auxFile);
 
     /**
      * @return bool
      */
-    public function hasForceNew();
+    public function isAuxFile();
+
+    /**
+     * @param bool $serviceFile
+     */
+    public function setServiceFile($serviceFile);
+
+    /**
+     * @return bool
+     */
+    public function isServiceFile();
 
     /**
      * @return bool

@@ -20,12 +20,11 @@ class ManagerManipulatorTest extends AbstractServiceManipulatorTest
     protected function getManipulator()
     {
         $manipulator = new ManagerManipulator(
-            $this->getOutputEngine(),
+            $this->getTemplateStrategy(),
             $this->getBundle(),
             $this->getMetadata()
         );
 
-        $manipulator->setExtensionFile($this->getExtensionFile());
         $manipulator->setOverwrite(false);
         $manipulator->setTargetDirectory($this->getOutDir());
 
@@ -38,6 +37,17 @@ class ManagerManipulatorTest extends AbstractServiceManipulatorTest
     protected function getFileDependencies()
     {
         return new ArrayCollection();
+    }
+
+    protected function getExpectedMessages()
+    {
+        return new ArrayCollection([
+            sprintf(
+                'Make sure to load "%s" in the %s file to enable the new services.',
+                'managers.xml',
+                $this->getDefaultDiFile()
+            )
+        ]);
     }
 
     /**

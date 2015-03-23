@@ -4,8 +4,11 @@ namespace Tdn\PilotBundle\Manipulator;
 
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Finder\SplFileInfo;
-use Tdn\PhpTypes\Type\String;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Tdn\PilotBundle\Model\GeneratedFile;
+use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
+use Tdn\PhpTypes\Type\String;
 
 /**
  * Class RoutingGenerator
@@ -26,12 +29,28 @@ class RoutingManipulator extends AbstractManipulator
     /**
      * @var bool
      */
-    private $remove = false;
+    private $remove;
 
     /**
      * @var bool
      */
-    private $isInFile = false;
+    private $isInFile;
+
+    /**
+     * @param TemplateStrategyInterface $templateStrategy
+     * @param BundleInterface $bundle
+     * @param ClassMetadata $metadata
+     */
+    public function __construct(
+        TemplateStrategyInterface $templateStrategy,
+        BundleInterface $bundle,
+        ClassMetadata $metadata
+    ) {
+        $this->setRemove(false);
+        $this->isInFile = false;
+
+        return parent::__construct($templateStrategy, $bundle, $metadata);
+    }
 
     /**
      * @param string $routingFile
@@ -76,7 +95,7 @@ class RoutingManipulator extends AbstractManipulator
     /**
      * @return bool
      */
-    public function hasRemove()
+    public function shouldRemove()
     {
         return $this->remove;
     }
@@ -97,8 +116,8 @@ class RoutingManipulator extends AbstractManipulator
                 DIRECTORY_SEPARATOR . 'config',
                 ($this->getTargetDirectory()) ?: $this->getBundle()->getPath()
             ))
-            ->setContents($this->getOutRoutingContents($routing))
-            ->setForceNew(true) //Needed because this might exist but we still want to add routes to it.
+            ->setContents($this->getRoutingContents($routing))
+            ->setAuxFile(true) //Needed because this might exist but we still want to add routes to it.
         ;
 
         $this->addGeneratedFile($routing);
@@ -111,16 +130,16 @@ class RoutingManipulator extends AbstractManipulator
      * @param  GeneratedFile $routingFile
      * @return string
      */
-    protected function getOutRoutingContents(GeneratedFile $routingFile)
+    protected function getRoutingContents(GeneratedFile $routingFile)
     {
         $content = $routingFile->getContents() ?: '';
         $configurationText = $this->getConfigurationText();
         $this->isInFile    = $this->hasConfigurationText($content, $configurationText);
 
-        if (false === $this->hasRemove()) {
+        if (false === $this->shouldRemove()) {
             //If we're not removing a route, but we're overwriting the file and the route exists, remove it then add it
             //No dupes.
-            if ($this->hasOverwrite() && $this->isInFile) {
+            if ($this->shouldOverwrite() && $this->isInFile) {
                 $content = $this->removeFromConfiguration($content, $configurationText);
             }
 
@@ -213,7 +232,6 @@ class RoutingManipulator extends AbstractManipulator
         }
 
         return (string) $content;
-
     }
 
     /**
@@ -237,7 +255,7 @@ class RoutingManipulator extends AbstractManipulator
     public function isValid()
     {
         //Make sure routes are added to the file only once.
-        if (!$this->hasOverwrite() && !$this->hasRemove() && $this->isInFile) {
+        if (!$this->shouldOverwrite() && !$this->shouldRemove() && $this->isInFile) {
             throw new \RuntimeException('Route is already in file.');
         }
 

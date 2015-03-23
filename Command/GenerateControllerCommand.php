@@ -3,14 +3,16 @@
 namespace Tdn\PilotBundle\Command;
 
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Tdn\PilotBundle\Manipulator\ControllerManipulator;
-use Tdn\PilotBundle\OutputEngine\OutputEngineInterface;
+use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 
 /**
  * Class GenerateControllerCommand
+ *
+ * Generates a CRUD controller based on an entity.
+ *
  * @package Tdn\PilotBundle\Command
  */
 class GenerateControllerCommand extends AbstractGeneratorCommand
@@ -38,15 +40,26 @@ class GenerateControllerCommand extends AbstractGeneratorCommand
                 'The object will return with the resource name'
             ),
             new InputOption(
-                'document-api',
-                'a',
+                'with-swagger',
+                'g',
                 InputOption::VALUE_NONE,
-                'Use NelmioApiDocBundle to document the controller'
+                'Use NelmioApiDocBundle (which uses swagger-ui) to document the controller'
+            ),
+            new InputOption(
+                'route-prefix',
+                'p',
+                InputOption::VALUE_NONE,
+                'If using annotations, you should also add a route prefix to the controller.'
             )
         ];
     }
 
     /**
+     * Gets the route prefix for the resource
+     *
+     * Gets a route prefix to use when using annotations. Otherwise the route prefix
+     * is set through the `RoutingManipulator`.
+     *
      * @param  string $routePrefix
      *
      * @return string
@@ -64,33 +77,31 @@ class GenerateControllerCommand extends AbstractGeneratorCommand
     }
 
     /**
-     * @param InputInterface          $input
-     * @param OutputEngineInterface   $outputEngine
-     * @param BundleInterface         $bundle
-     * @param ClassMetadataInfo       $metadata
+     * @param TemplateStrategyInterface $templateStrategy
+     * @param BundleInterface           $bundle
+     * @param ClassMetadata             $metadata
      *
      * @return ControllerManipulator
      */
     protected function createManipulator(
-        InputInterface $input,
-        OutputEngineInterface $outputEngine,
+        TemplateStrategyInterface $templateStrategy,
         BundleInterface $bundle,
-        ClassMetadataInfo $metadata
+        ClassMetadata $metadata
     ) {
-        $manipulator = new ControllerManipulator($outputEngine, $bundle, $metadata);
-        $manipulator->setResource(($input->getOption('resource') ? true : false));
-        $manipulator->setDocument(($input->getOption('document-api') ? true : false));
-        $manipulator->setRoutePrefix($this->getRoutePrefix($input->getOption('route-prefix')));
+        $manipulator = new ControllerManipulator($templateStrategy, $bundle, $metadata);
+        $manipulator->setResource(($this->getInput()->getOption('resource') ? true : false));
+        $manipulator->setSwagger(($this->getInput()->getOption('with-swagger') ? true : false));
+        $manipulator->setRoutePrefix($this->getRoutePrefix($this->getInput()->getOption('route-prefix')));
         $manipulator->setGenerateTests(false);
 
         return $manipulator;
     }
 
     /**
-     * @return string
+     * @return string[]
      */
-    protected function getFileType()
+    protected function getFiles()
     {
-        return 'Rest Controller';
+        return ['Rest Controller'];
     }
 }

@@ -30,7 +30,7 @@ class GenerateFormCommandTest extends AbstractGeneratorCommandTest
             'command'            => $this->getCommand()->getName(),
             '--overwrite'        => false,
             '--target-directory' => $this->getOutDir(),
-            'entity'             => 'FooBarBundle:Foo'
+            '--entity'           => 'FooBarBundle:Foo'
         ];
     }
 
@@ -40,7 +40,7 @@ class GenerateFormCommandTest extends AbstractGeneratorCommandTest
     protected function getManipulator()
     {
         $manipulator = Mockery::mock(
-            new FormManipulator($this->getOutputEngine(), $this->getBundle(), $this->getMetadata())
+            new FormManipulator($this->getTemplateStrategy(), $this->getBundle(), $this->getMetadata())
         );
 
         $manipulator

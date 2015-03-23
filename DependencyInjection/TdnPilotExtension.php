@@ -20,15 +20,21 @@ class TdnPilotExtension extends Extension
     public function load(array $configs, ContainerBuilder $container)
     {
         $config = $this->processConfiguration(new Configuration(), $configs);
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-        $loader->load('output_engines.xml');
-        $loader->load('types.xml');
+        //tdn_pilot.template.strategy.twig_template_strategy
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader->load('template-strategies.yml');
 
-        if (isset($config['output'])) {
+        if (isset($config['template'])) {
             $container->setAlias(
-                'tdn_pilot.output.engine.default',
-                'tdn_pilot.output.engine.' . $config['output']['engine']
+                'tdn_pilot.template.strategy.default',
+                'tdn_pilot.template.strategy.' . $config['template']['strategy']
             );
         }
+
+    }
+
+    public function getAlias()
+    {
+        return 'tdn_pilot';
     }
 }

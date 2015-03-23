@@ -12,6 +12,6 @@
 {% endblock method_definition %}
     {
 {% block method_body %}
-        return $request->request->get({{ resource ? "'" ~ entity|lowerfirst ~  "'" }}, array());
+        return $request->request->get({{ "'" ~ entity_form_type ~ "'" }});
 {% endblock method_body %}
     }

@@ -25,23 +25,24 @@ class {{ entity_class }}Type extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-{%- for field in fields %}
-{%- if loop.first %}
+    {%- for field in fields -%}
+    {%- if field.fieldName in associations|keys -%}
+            {%- if field.nullable is defined and field.nullable == true -%}
+            {%- include 'form/_fieldScenario/nullableEntity.php.twig' -%}
+            {%- else -%}
+            {%- include 'form/_fieldScenario/requiredEntity.php.twig' -%}
+            {%- endif -%}
+    {%- else -%}
+        {%- if field.nullable is defined and field.nullable == true or field.type == 'boolean' -%}
+            {%- include 'form/_fieldScenario/nullableField.php.twig'  -%}
+        {%- else -%}
+            {%- if field.fieldName != entity_identifier -%}
+            {%- include 'form/_fieldScenario/field.php.twig' -%}
+            {%- endif -%}
+        {%- endif -%}
+    {%- endif -%}
+    {% endfor %}
 
-{% endif %}
-{% if rest_support and field.fieldName in associations|keys %}
-            ->add('{{ field.fieldName }}', 'tdn_{{ field.relatedType }}_related', [
-                'required' => false,
-                'entityName' => "{{ field.relatedEntityShortcut }}"
-            ])
-{% else %}
-{% if field.nullable is defined and field.nullable == true or field.type == 'boolean' %}
-            ->add('{{ field.fieldName }}', null, ['required' => false])
-{% else %}
-            ->add('{{ field.fieldName }}')
-{% endif %}
-{% endif %}
-{%- endfor %}
         ;
     }
 {% endif %}
@@ -61,11 +62,7 @@ class {{ entity_class }}Type extends AbstractType
      */
     public function getName()
     {
-{% if rest_support %}
-        return '{{ rest_form_type_name }}';
-{% else %}
-        return '{{ form_type_name }}_form_type';
-{% endif %}
+        return '{{ form_class }}';
     }
 {% endblock class_body %}
 }

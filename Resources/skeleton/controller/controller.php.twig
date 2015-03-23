@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use FOS\RestBundle\Controller\FOSRestController;
-{% if document %}
+{% if swagger %}
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 {% endif %}
 use {{ namespace }}\Exception\InvalidFormException;
@@ -28,10 +28,10 @@ use {{ namespace }}\Entity\{{ entity }}Interface;
 
 /**
 {% block phpdoc_class_header %}
- * {{ entity }} controller.
- * @package {{ namespace }}\Controller;
+ * Class {{ entity }}Controller
+ * @package {{ namespace }}\Controller
 {% endblock phpdoc_class_header %}
- * @RouteResource("{{ entity }}")
+ * @RouteResource("{{ entity|pluralize }}")
 {% block phpdoc_class_annotations %}
 {% if 'annotation' == format %}
  * @Route("/{{ route_prefix }}")

@@ -1,0 +1,6 @@
+parameters:
+    foo: bar
+
+services:
+    baz:
+        class: %foo%

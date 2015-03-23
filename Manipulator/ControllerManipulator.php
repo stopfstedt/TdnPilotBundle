@@ -2,9 +2,12 @@
 
 namespace Tdn\PilotBundle\Manipulator;
 
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Symfony\Component\Finder\SplFileInfo;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
+use Tdn\PhpTypes\Type\String;
 use Tdn\PilotBundle\Model\GeneratedFile;
+use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 
 /**
  * Class ControllerManipulator
@@ -15,22 +18,39 @@ class ControllerManipulator extends AbstractManipulator
     /**
      * @var string
      */
-    private $routePrefix = '';
+    private $routePrefix;
 
     /**
      * @var bool
      */
-    private $resource = false;
+    private $resource;
 
     /**
      * @var bool
      */
-    private $document = false;
+    private $swagger;
 
     /**
      * @var bool
      */
-    private $generateTests = false;
+    private $generateTests;
+
+    /**
+     * @param TemplateStrategyInterface $templateStrategy
+     * @param BundleInterface $bundle
+     * @param ClassMetadata   $metadata
+     */
+    public function __construct(
+        TemplateStrategyInterface $templateStrategy,
+        BundleInterface $bundle,
+        ClassMetadata $metadata
+    ) {
+        $this->setResource(false);
+        $this->setSwagger(false);
+        $this->setGenerateTests(false);
+
+        parent::__construct($templateStrategy, $bundle, $metadata);
+    }
 
     /**
      * @param string $routePrefix
@@ -73,19 +93,19 @@ class ControllerManipulator extends AbstractManipulator
     }
 
     /**
-     * @param bool $document
+     * @param bool $swagger
      */
-    public function setDocument($document)
+    public function setSwagger($swagger)
     {
-        $this->document = $document;
+        $this->swagger = $swagger;
     }
 
     /**
      * @return bool
      */
-    public function hasDocument()
+    public function hasSwagger()
     {
-        return $this->document;
+        return $this->swagger;
     }
 
     /**
@@ -99,7 +119,7 @@ class ControllerManipulator extends AbstractManipulator
     /**
      * @return bool
      */
-    public function hasGenerateTests()
+    public function shouldGenerateTests()
     {
         return $this->generateTests;
     }
@@ -113,7 +133,7 @@ class ControllerManipulator extends AbstractManipulator
     {
         $this->addController();
 
-        if ($this->hasGenerateTests()) {
+        if ($this->shouldGenerateTests()) {
             $this->addControllerTests();
         }
 
@@ -156,7 +176,7 @@ class ControllerManipulator extends AbstractManipulator
                 'Tests'
             )) //<TargetDir>|<BundlePath>/Tests/Controller
             ->setContents($this->generateControllerTestContent())
-            ->setForceNew(true)
+            ->setAuxFile(true)
         ;
 
         $this->addGeneratedFile($controllerTest);
@@ -169,7 +189,7 @@ class ControllerManipulator extends AbstractManipulator
     {
         $idType = $this->getIdentifierType($this->getMetadata());
 
-        return $this->getOutputEngine()->render(
+        return $this->getTemplateStrategy()->render(
             'controller/controller.php.twig',
             [
                 'entity_identifier_type' => $idType,
@@ -183,10 +203,13 @@ class ControllerManipulator extends AbstractManipulator
                 'identifier'             => $this->getEntityIdentifier($this->getMetadata()),
                 'namespace'              => $this->getBundle()->getNamespace(),
                 'resource'               => $this->isResource(),
-                'document'               => $this->hasDocument(),
+                'swagger'                => $this->hasSwagger(),
                 'format'                 => 'yml',
                 'form_type'              => $this->getBundle()->getNamespace() .
-                    '\\Form\\' . $this->getEntity() . 'Type.php'
+                    '\\Form\\Type\\' . $this->getEntity() . 'Type',
+                'entity_form_type'       => (string) String::create($this->getEntity() . 'Type')
+                    ->underscored()
+                    ->toLowerCase()
             ]
         );
     }
@@ -198,7 +221,7 @@ class ControllerManipulator extends AbstractManipulator
      */
     protected function generateControllerTestContent()
     {
-        return $this->getOutputEngine()->render(
+        return $this->getTemplateStrategy()->render(
             'controller/controller-test.php.twig',
             [
                 'namespace' => $this->getBundle()->getNamespace(),
@@ -208,11 +231,11 @@ class ControllerManipulator extends AbstractManipulator
     }
 
     /**
-     * @param ClassMetadataInfo $metadata
+     * @param ClassMetadata $metadata
      * @throws \InvalidArgumentException
      * @return string
      */
-    protected function getIdentifierType(ClassMetadataInfo $metadata)
+    protected function getIdentifierType(ClassMetadata $metadata)
     {
         if (count($metadata->identifier) !== 1) {
             throw new \InvalidArgumentException(
@@ -231,10 +254,10 @@ class ControllerManipulator extends AbstractManipulator
     }
 
     /**
-     * @param ClassMetadataInfo $metadata
+     * @param ClassMetadata $metadata
      * @return mixed
      */
-    protected function getEntityIdentifier(ClassMetadataInfo $metadata)
+    protected function getEntityIdentifier(ClassMetadata $metadata)
     {
         if (count($metadata->identifier) !== 1) {
             throw new \InvalidArgumentException(
@@ -278,7 +301,7 @@ class ControllerManipulator extends AbstractManipulator
      */
     public function isValid()
     {
-        if ($this->hasGenerateTests()) {
+        if ($this->shouldGenerateTests()) {
             if (!class_exists('Doctrine\\Bundle\\FixturesBundle\\DoctrineFixturesBundle')) {
                 throw new \RuntimeException(
                     'DoctrineFixturesBundle is not installed. Please install it.'

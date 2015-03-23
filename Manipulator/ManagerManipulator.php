@@ -21,8 +21,8 @@ class ManagerManipulator extends AbstractServiceManipulator
     {
         $entityReflection = $this->getMetadata()->getReflectionClass();
 
-        $constructorMethod = ($entityReflection->hasMethod('__construct')) ?
-            $entityReflection->getMethod('__construct') : null;
+        $constructorMethod = ($entityReflection) ?
+            ($entityReflection->hasMethod('__construct')) ? $entityReflection->getMethod('__construct') : null : null;
 
         $path = sprintf(
             '%s' . DIRECTORY_SEPARATOR . 'Entity' . DIRECTORY_SEPARATOR . 'Manager',
@@ -66,7 +66,7 @@ class ManagerManipulator extends AbstractServiceManipulator
             ->setExtension('php')
             ->setPath($path)
             ->setContents($this->getManagerInterfaceContent($constructorMethod))
-            ->setForceNew(true)
+            ->setAuxFile(true)
         ;
 
         $this->addGeneratedFile($managerInterface);
@@ -87,7 +87,14 @@ class ManagerManipulator extends AbstractServiceManipulator
                 ($this->getTargetDirectory()) ?: $this->getBundle()->getPath()
             ))
             ->setContents($this->getServiceFileContents($serviceFile)) //Kinda bad...fix later (Needs to be called last)
+            ->setServiceFile(true)
         ;
+
+        $this->addMessage(sprintf(
+            'Make sure to load "%s" in the %s file to enable the new services.',
+            $serviceFile->getFilename() . '.' . $serviceFile->getExtension(),
+            $this->getDefaultExtensionFile()
+        ));
 
         $this->addGeneratedFile($serviceFile);
     }
@@ -172,7 +179,7 @@ class ManagerManipulator extends AbstractServiceManipulator
      */
     protected function getManagerContent(\ReflectionMethod $constructorMethod = null)
     {
-        return $this->getOutputEngine()->render(
+        return $this->getTemplateStrategy()->render(
             'manager/manager.php.twig',
             [
                 'entity'                  => $this->getEntity(),
@@ -190,7 +197,7 @@ class ManagerManipulator extends AbstractServiceManipulator
      */
     protected function getManagerInterfaceContent(\ReflectionMethod $constructorMethod = null)
     {
-        return $this->getOutputEngine()->render(
+        return $this->getTemplateStrategy()->render(
             'manager/interface.php.twig',
             [
                 'entity'                  => $this->getEntity(),
@@ -228,10 +235,10 @@ class ManagerManipulator extends AbstractServiceManipulator
 
         $this->setXmlServiceFile($managerFile);
         $newXml = $this->getXmlServiceFile();
-        $this->getDiManipulator()->setDiXmlTags($newXml, $serviceClass, $paramKey, $serviceId);
-        $service = $this->getDiManipulator()->getDiXmlServiceTag($serviceId, $newXml);
-        $this->getDiManipulator()->addEmArgTo($service);
-        $this->getDiManipulator()->addClassArgTo(
+        $this->getDiUtils()->setDiXmlTags($newXml, $serviceClass, $paramKey, $serviceId);
+        $service = $this->getDiUtils()->getDiXmlServiceTag($serviceId, $newXml);
+        $this->getDiUtils()->addEmArgTo($service);
+        $this->getDiUtils()->addClassArgTo(
             $service,
             $this->getBundle()->getNamespace(),
             $this->getEntityNamespace(),

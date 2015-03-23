@@ -137,7 +137,7 @@ class FooController extends FOSRestController
      * @ApiDoc(
      *   resource = true,
      *   description = "Create a Foo.",
-     *   input="Foo\BarBundle\Form\FooType",
+     *   input="Foo\BarBundle\Form\Type\FooType",
      *   output="Foo\BarBundle\Entity\Foo",
      *   statusCodes={
      *     201 = "Created Foo.",
@@ -170,7 +170,7 @@ class FooController extends FOSRestController
      * @ApiDoc(
      *   resource = true,
      *   description = "Update a Foo entity.",
-     *   input="Foo\BarBundle\Form\FooType",
+     *   input="Foo\BarBundle\Form\Type\FooType",
      *   output="Foo\BarBundle\Entity\Foo",
      *   statusCodes={
      *     200 = "Updated Foo.",
@@ -219,7 +219,7 @@ class FooController extends FOSRestController
      * @ApiDoc(
      *   resource = true,
      *   description = "Partial Update to a Foo.",
-     *   input="Foo\BarBundle\Form\FooType",
+     *   input="Foo\BarBundle\Form\Type\FooType",
      *   output="Foo\BarBundle\Entity\Foo",
      *   requirements={
      *     {
@@ -322,7 +322,7 @@ class FooController extends FOSRestController
      */
     protected function getPostData(Request $request)
     {
-        return $request->request->get('foo', array());
+        return $request->request->get('foo_type');
     }
 
     /**

@@ -4,7 +4,7 @@ namespace Tdn\PilotBundle\Tests\Manipulator;
 
 use Tdn\PilotBundle\Manipulator\AbstractServiceManipulator;
 use Tdn\PilotBundle\Manipulator\ServiceManipulatorInterface;
-use Tdn\PilotBundle\Services\Utils\DependencyInjection\DiXmlManipulator;
+use Tdn\PilotBundle\Services\Utils\DiXmlUtils;
 use Tdn\PilotBundle\Model\GeneratedFileInterface;
 use \Mockery;
 
@@ -33,17 +33,6 @@ abstract class AbstractServiceManipulatorTest extends AbstractManipulatorTest
         return $manipulator;
     }
 
-    /**
-     * @return string
-     */
-    protected function getExtensionFile()
-    {
-        return dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
-            'data' . DIRECTORY_SEPARATOR .
-            'foobar.extension.out'
-        ;
-    }
-
     public function testUpdatingDiConfFile()
     {
         $manipulator = $this->getServiceManipulator();
@@ -52,47 +41,12 @@ abstract class AbstractServiceManipulatorTest extends AbstractManipulatorTest
         $this->assertFalse($manipulator->isUpdatingDiConfFile());
     }
 
-    public function testExtensionFile()
+    public function testDiUtils()
     {
         $serviceManipulator = $this->getServiceManipulator();
-        $serviceManipulator->setExtensionFile($this->getExtensionFile());
-        $this->assertEquals($this->getExtensionFile(), $serviceManipulator->getExtensionFile());
-    }
-
-    public function testDiManipulator()
-    {
-        $serviceManipulator = $this->getServiceManipulator();
-        $diManipulator = new DiXmlManipulator();
-        $serviceManipulator->setDiManipulator($diManipulator);
-        $this->assertEquals($diManipulator, $serviceManipulator->getDiManipulator());
-    }
-
-    public function testBasicXmlServiceFile()
-    {
-        $serviceManipulator = $this->getServiceManipulator();
-        $serviceManipulator->setXmlServiceFile();
-        $content = @file_get_contents(
-            dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
-            'data' . DIRECTORY_SEPARATOR .
-            'basic.service.xml.out'
-        );
-
-        $this->assertEquals(simplexml_load_string($content), $serviceManipulator->getXmlServiceFile());
-    }
-
-    public function testGetPopulatedXmlServiceFile()
-    {
-        $serviceFileName = 'foo.service.xml.out';
-        $serviceManipulator = $this->getServiceManipulator();
-        $serviceManipulator->setXmlServiceFile($this->getXmlServiceFileMock($serviceFileName));
-
-        $content = @file_get_contents(
-            dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
-            'data' . DIRECTORY_SEPARATOR .
-            $serviceFileName
-        );
-
-        $this->assertEquals(simplexml_load_string($content), $serviceManipulator->getXmlServiceFile());
+        $diManipulator = new DiXmlUtils();
+        $serviceManipulator->setDiUtils($diManipulator);
+        $this->assertEquals($diManipulator, $serviceManipulator->getDiUtils());
     }
 
     /**
@@ -116,5 +70,14 @@ abstract class AbstractServiceManipulatorTest extends AbstractManipulatorTest
         ;
 
         return $xmlFile;
+    }
+
+    protected function getDefaultDiFile()
+    {
+        return sprintf(
+            '%s/DependencyInjection/%s.php',
+            $this->getBundle()->getPath(),
+            str_replace('Bundle', 'Extension', $this->getBundle()->getName())
+        );
     }
 }
