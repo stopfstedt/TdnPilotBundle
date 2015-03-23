@@ -2,7 +2,6 @@
 
 namespace Tdn\PilotBundle\Command;
 
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;

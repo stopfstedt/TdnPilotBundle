@@ -1,5 +1,6 @@
-
+{%- block field %}
             ->add('{{ field.fieldName }}', 'entity', [
                 'required' => false,
                 'class' => "{{ field.relatedEntityShortcut }}"
             ])
+{% endblock -%}
