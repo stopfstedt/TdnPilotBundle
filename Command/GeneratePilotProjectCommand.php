@@ -58,7 +58,7 @@ class GeneratePilotProjectCommand extends AbstractGeneratorCommand
         BundleInterface $bundle,
         ClassMetadata $metadata
     ) {
-        throw new \RuntimeException('Not implemented in ' . __FILE__);
+        throw new \RuntimeException('Not implemented in ' . get_called_class());
     }
 
     /**
