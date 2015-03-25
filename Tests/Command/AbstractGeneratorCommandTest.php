@@ -13,12 +13,13 @@ use Sensio\Bundle\GeneratorBundle\Command\Helper\QuestionHelper;
 use Sensio\Bundle\GeneratorBundle\Tests\Command\GenerateCommandTest;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Tdn\PilotBundle\Command\AbstractGeneratorCommand;
+use Tdn\PilotBundle\Model\Format;
 use Tdn\PilotBundle\Template\Strategy\TwigStrategy;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 use Tdn\PilotBundle\Manipulator\ManipulatorInterface;
-use Tdn\PilotBundle\Model\GeneratedFile;
-use Tdn\PilotBundle\Services\Utils\EntityUtils;
-use Tdn\PilotBundle\TdnPilotBundle;
+use Tdn\PilotBundle\Model\File;
+use Tdn\PilotBundle\Services\Utils\Doctrine\EntityUtils;
+use Tdn\PilotBundle\Services\Utils\Symfony\ServiceFileUtils;
 use \Mockery as Mockery;
 
 /**
@@ -66,10 +67,10 @@ abstract class AbstractGeneratorCommandTest extends GenerateCommandTest
     /**
      * @return array
      */
-    abstract protected function getOptions();
+    abstract public function getOptions();
 
     /**
-     * @return GeneratedFile[]
+     * @return File[]
      */
     abstract protected function getGeneratedFiles();
 
@@ -93,7 +94,7 @@ abstract class AbstractGeneratorCommandTest extends GenerateCommandTest
         $tester->execute($this->getOptions());
 
         foreach ($this->getGeneratedFiles() as $generatedFile) {
-            $this->assertRegExp('#' . $generatedFile->getFullPath() . '#', $tester->getDisplay());
+            $this->assertRegExp('#' . $generatedFile->getRealPath() . '#', $tester->getDisplay());
         }
     }
 
@@ -108,7 +109,10 @@ abstract class AbstractGeneratorCommandTest extends GenerateCommandTest
             $command->getManipulator(
                 $this->getTemplateStrategy(),
                 $this->getBundle(),
-                $this->getMetadata()
+                $this->getMetadata(),
+                Format::YML,
+                false,
+                $this->getOutDir()
             )
         );
     }
@@ -122,6 +126,14 @@ abstract class AbstractGeneratorCommandTest extends GenerateCommandTest
         $command->setEntity('Foo');
         $this->assertEquals('Foo', $command->getEntity());
     }
+
+    public function testEntityUtils()
+    {
+        $command = $this->getFullCommand();
+        $command->setEntityUtils($this->getEntityUtils());
+        $this->assertEquals($this->getEntityUtils(), $command->getEntityUtils());
+    }
+
 
     /**
      * @return Container
@@ -142,6 +154,8 @@ abstract class AbstractGeneratorCommandTest extends GenerateCommandTest
 
         $container->set('doctrine', $registry);
         $container->set('tdn_pilot.template.strategy.default', $this->getTemplateStrategy());
+        $container->set('tdn_pilot.symfony.service.utils.class', $this->getServiceFileUtils());
+
 
         return $container;
     }
@@ -157,6 +171,7 @@ abstract class AbstractGeneratorCommandTest extends GenerateCommandTest
             ->shouldReceive(
                 [
                     'isIdentifierNatural' => true,
+                    'getReflectionClass'  => new \ReflectionClass(new \stdClass())
                 ]
             )
             ->zeroOrMoreTimes()
@@ -178,6 +193,16 @@ abstract class AbstractGeneratorCommandTest extends GenerateCommandTest
                     'fieldName'  => 'description',
                     'type'       => 'string',
                     'columnName' => 'description'
+                ],
+                'name' => [
+                    'fieldName'  => 'name',
+                    'type'       => 'string',
+                    'columnName' => 'name'
+                ],
+                'title' => [
+                    'fieldName'  => 'title',
+                    'type'       => 'string',
+                    'columnName' => 'title'
                 ]
             ];
         }
@@ -248,19 +273,6 @@ abstract class AbstractGeneratorCommandTest extends GenerateCommandTest
     }
 
     /**
-     * @return string[]
-     */
-    protected function getSkeletonDirs()
-    {
-        $bundleClass    = new \ReflectionClass(new TdnPilotBundle());
-        $skeletonDirs   = [];
-        $skeletonDirs[] = dirname($bundleClass->getFileName()) . '/Resources/skeleton';
-        $skeletonDirs[] = dirname($bundleClass->getFileName()) . '/Resources';
-
-        return $skeletonDirs;
-    }
-
-    /**
      * @return string
      */
     protected function getOutDir()
@@ -312,7 +324,7 @@ abstract class AbstractGeneratorCommandTest extends GenerateCommandTest
      */
     protected function getEntityUtils()
     {
-        $entityUtils = Mockery::mock('\Tdn\PilotBundle\Services\Utils\EntityUtils');
+        $entityUtils = Mockery::mock('\Tdn\PilotBundle\Services\Utils\Doctrine\EntityUtils');
         $entityUtils
             ->shouldDeferMissing()
             ->shouldReceive(
@@ -324,6 +336,17 @@ abstract class AbstractGeneratorCommandTest extends GenerateCommandTest
         ;
 
         return $entityUtils;
+    }
+
+    /**
+     * @return ServiceFileUtils
+     */
+    protected function getServiceFileUtils()
+    {
+        $serviceFileUtils = Mockery::mock('\Tdn\PilotBundle\Services\Utils\Symfony\ServiceFileUtils');
+        $serviceFileUtils->shouldDeferMissing();
+
+        return $serviceFileUtils;
     }
 
     /**

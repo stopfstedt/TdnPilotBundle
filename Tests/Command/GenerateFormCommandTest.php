@@ -4,8 +4,9 @@ namespace Tdn\PilotBundle\Tests\Command;
 
 use Tdn\PilotBundle\Command\GenerateFormCommand;
 use Tdn\PilotBundle\Manipulator\FormManipulator;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
+use Tdn\PilotBundle\Model\File;
 use \Mockery;
+use Tdn\PilotBundle\Tests\Fixtures\FormData;
 
 /**
  * Class GenerateFormCommandTest
@@ -24,7 +25,7 @@ class GenerateFormCommandTest extends AbstractGeneratorCommandTest
     /**
      * @return array
      */
-    protected function getOptions()
+    public function getOptions()
     {
         return [
             'command'            => $this->getCommand()->getName(),
@@ -40,7 +41,7 @@ class GenerateFormCommandTest extends AbstractGeneratorCommandTest
     protected function getManipulator()
     {
         $manipulator = Mockery::mock(
-            new FormManipulator($this->getTemplateStrategy(), $this->getBundle(), $this->getMetadata())
+            new FormManipulator()
         );
 
         $manipulator
@@ -59,7 +60,7 @@ class GenerateFormCommandTest extends AbstractGeneratorCommandTest
     }
 
     /**
-     * @return GeneratedFileInterface[]
+     * @return File[]
      */
     protected function getGeneratedFiles()
     {
@@ -67,36 +68,32 @@ class GenerateFormCommandTest extends AbstractGeneratorCommandTest
         $exceptionFileMock = $this->getExceptionFileMock();
 
         return [
-            $formTypeFileMock->getFullPath() => $formTypeFileMock,
-            $exceptionFileMock->getFullPath() => $exceptionFileMock
+            $formTypeFileMock->getRealPath() => $formTypeFileMock,
+            $exceptionFileMock->getRealPath() => $exceptionFileMock
         ];
     }
 
     /**
-     * @return GeneratedFileInterface
+     * @return File
      */
     protected function getFormTypeMock()
     {
-        $typeContent = @file_get_contents(
-            dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
-            'data' . DIRECTORY_SEPARATOR .
-            'form.type.out'
-        );
-
-        $formTypeFileMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
+        $formTypeFileMock = Mockery::mock('\Tdn\PilotBundle\Model\File');
         $formTypeFileMock
             ->shouldDeferMissing()
             ->shouldReceive(
                 [
-                    'getFilename'  => 'FooType',
-                    'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR . 'Form' . DIRECTORY_SEPARATOR . 'Type',
+                    'getFilteredContents' => FormData::FOO_FORM_TYPE,
+                    'getBaseName'  => 'FooType',
                     'getExtension' => 'php',
-                    'getContents'  => $typeContent,
-                    'getFullPath'  => $this->getOutDir() .
+                    'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR . 'Form' .
+                        DIRECTORY_SEPARATOR . 'Type',
+                    'getRealPath'  => $this->getOutDir() .
                         DIRECTORY_SEPARATOR . 'Form' . DIRECTORY_SEPARATOR . 'Type' .
                         DIRECTORY_SEPARATOR . 'FooType.php'
                 ]
             )
+            ->withAnyArgs()
             ->zeroOrMoreTimes()
         ;
 
@@ -104,29 +101,24 @@ class GenerateFormCommandTest extends AbstractGeneratorCommandTest
     }
 
     /**
-     * @return GeneratedFileInterface
+     * @return File
      */
     protected function getExceptionFileMock()
     {
-        $exceptionContent = @file_get_contents(
-            dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
-            'data' . DIRECTORY_SEPARATOR .
-            'form.exception.out'
-        );
-
-        $exceptionFileMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
+        $exceptionFileMock = Mockery::mock('\Tdn\PilotBundle\Model\File');
         $exceptionFileMock
             ->shouldDeferMissing()
             ->shouldReceive(
                 [
-                    'getFilename'  => 'InvalidFormException',
-                    'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR . 'Exception',
+                    'getFilteredContents'  => FormData::FORM_EXCEPTION,
+                    'getBaseName'  => 'InvalidFormException',
                     'getExtension' => 'php',
-                    'getContents'  => $exceptionContent,
-                    'getFullPath'  => $this->getOutDir() .
+                    'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR . 'Exception',
+                    'getRealPath'  => $this->getOutDir() .
                         DIRECTORY_SEPARATOR . 'Exception' . DIRECTORY_SEPARATOR . 'InvalidFormException.php'
                 ]
             )
+            ->withAnyArgs()
             ->zeroOrMoreTimes()
         ;
 

@@ -2,10 +2,7 @@
 
 namespace Tdn\PilotBundle\Command;
 
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Tdn\PilotBundle\Manipulator\HandlerManipulator;
-use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 
 /**
  * Class GenerateHandlerCommand
@@ -27,18 +24,11 @@ class GenerateHandlerCommand extends AbstractGeneratorCommand
     const DESCRIPTION = 'Generates an entity REST handler file for a controller.';
 
     /**
-     * @param TemplateStrategyInterface $templateStrategy
-     * @param BundleInterface           $bundle
-     * @param ClassMetadata             $metadata
-     *
      * @return HandlerManipulator
      */
-    protected function createManipulator(
-        TemplateStrategyInterface $templateStrategy,
-        BundleInterface $bundle,
-        ClassMetadata $metadata
-    ) {
-        return new HandlerManipulator($templateStrategy, $bundle, $metadata);
+    protected function createManipulator()
+    {
+        return new HandlerManipulator();
     }
 
     /**

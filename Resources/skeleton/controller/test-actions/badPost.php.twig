@@ -1,0 +1,21 @@
+
+{% block method_definition %}
+    public function testPostBad{{ entity }}()
+{% endblock method_definition %}
+    {
+{% block method_body %}
+        $invalid{{ entity }} = $this->container
+            ->get('{{ dataloader_service_ns }}.{{ entity|lower }}')
+            ->createInvalid()
+        ;
+
+        $this->createJsonRequest(
+            'POST',
+            $this->getUrl('post_{{ entity|lower|pluralize }}'),
+            json_encode(['{{ entity|lowerfirst }}' => $invalid{{ entity }}])
+        );
+
+        $response = $this->client->getResponse();
+        $this->assertEquals($response->getStatusCode(), Codes::HTTP_BAD_REQUEST);
+{% endblock method_body %}
+    }

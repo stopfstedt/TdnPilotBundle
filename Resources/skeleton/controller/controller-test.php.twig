@@ -1,11 +1,10 @@
 <?php
 
-namespace {{ namespace }}\Test\Controller;
+namespace {{ namespace }}\Tests\Controller;
 
-{% block use_statements %}
-{% endblock use_statements %}
-
-use Symfony\Framework\WebBundle\WebTestCase;
+use FOS\RestBundle\Util\Codes;
+{% block use_statements -%}
+{%- endblock use_statements %}
 
 /**
 {% block phpdoc_class_header %}
@@ -14,22 +13,23 @@ use Symfony\Framework\WebBundle\WebTestCase;
 {% endblock phpdoc_class_header %}
  */
 {% block class_definition %}
-class {{ entity }}ControllerTest extends WebTestCase
+class {{ entity }}ControllerTest extends AbstractControllerTest
 {% endblock class_definition %}
 {
-    {% block class_body %}{%- include 'controller/actions/getById.php.twig' %}
+    {%- block class_body %}
+    {%-  include 'controller/test-actions/extras.php.twig' %}
+
+    {%- include 'controller/test-actions/getById.php.twig' %}
 
     {%- include 'controller/test-actions/getAll.php.twig' %}
 
     {%- include 'controller/test-actions/post.php.twig' %}
 
-    {%- include 'controller/test-actions/put.php.twig' %}
+    {%- include 'controller/test-actions/badPost.php.twig' %}
 
-    {%- include 'controller/test-actions/patch.php.twig' %}
+    {%- include 'controller/test-actions/put.php.twig' %}
 
     {%- include 'controller/test-actions/delete.php.twig' %}
 
-    {%- include 'controller/test-actions/getOr404.php.twig' %}
-
-    {%- include 'controller/test-actions/extra.php.twig' %}{% endblock class_body %}
+    {%- include 'controller/test-actions/404.php.twig' %}{% endblock class_body %}
 }

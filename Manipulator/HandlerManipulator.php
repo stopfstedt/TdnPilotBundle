@@ -2,10 +2,12 @@
 
 namespace Tdn\PilotBundle\Manipulator;
 
-use Symfony\Component\Finder\SplFileInfo;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 use Tdn\PhpTypes\Type\String;
-use Tdn\PilotBundle\Model\GeneratedFile;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
+use Tdn\PilotBundle\Model\File;
+use Tdn\PilotBundle\Model\Format;
+use Tdn\PilotBundle\Model\ServiceDefinition;
 
 /**
  * Class HandlerManipulator
@@ -20,52 +22,25 @@ class HandlerManipulator extends AbstractServiceManipulator
      */
     public function prepare()
     {
-        $path = sprintf(
-            '%s' . DIRECTORY_SEPARATOR . 'Handler',
-            ($this->getTargetDirectory()) ?: $this->getBundle()->getPath()
+        $handler = new File(
+            sprintf(
+                '%s' . DIRECTORY_SEPARATOR . 'Handler' . DIRECTORY_SEPARATOR . '%sHandler.php',
+                ($this->getTargetDirectory()) ?: $this->getBundle()->getPath(),
+                $this->getEntity()
+            )
         );
 
-        $handler = new GeneratedFile();
-        $handler
-            ->setFilename($this->getEntity() . 'Handler')
-            ->setExtension('php')
-            ->setPath($path)
-            ->setContents($this->getHandlerFileContent())
-        ;
+        $handler->setFilteredContents($this->getHandlerFileContent());
 
-        $this->addGeneratedFile($handler);
-        $this->addHandlerServiceFile();
+        $this->addFile($handler);
         $this->addManagerDependency();
         $this->addFormTypeDependency();
-        $this->setUpdatingDiConfFile(true);
+
+        if ($this->getFormat() !== Format::ANNOTATION) {
+            $this->addHandlerServiceFile();
+        }
 
         return $this;
-    }
-
-    /**
-     * @return void
-     */
-    protected function addHandlerServiceFile()
-    {
-        $serviceFile = new GeneratedFile();
-        $serviceFile
-            ->setFilename('handlers')
-            ->setExtension('xml')
-            ->setPath(sprintf(
-                '%s' . DIRECTORY_SEPARATOR . 'Resources' .
-                DIRECTORY_SEPARATOR . 'config',
-                ($this->getTargetDirectory()) ?: $this->getBundle()->getPath()
-            ))
-            ->setContents($this->getServiceFileContents($serviceFile)) //Kinda bad...fix later (Needs to be called last)
-            ->setServiceFile(true)
-        ;
-
-        $this->addMessage(sprintf(
-            'Make sure to load "%s" in the %s file to enable the new services.',
-            $serviceFile->getFilename() . '.' . $serviceFile->getExtension(),
-            $this->getDefaultExtensionFile()
-        ));
-        $this->addGeneratedFile($serviceFile);
     }
 
     /**
@@ -74,17 +49,48 @@ class HandlerManipulator extends AbstractServiceManipulator
     protected function getHandlerFileContent()
     {
         return $this->getTemplateStrategy()->render('handler/handler.php.twig', [
-            'entity' => $this->getEntity(),
-            'namespace' => $this->getBundle()->getNamespace(),
+            'entity'            => $this->getEntity(),
+            'entity_identifier' => $this->getEntityIdentifier(),
+            'format'            => $this->getFormat(),
+            'namespace'         => $this->getBundle()->getNamespace(),
         ]);
     }
 
     /**
-     * @param GeneratedFileInterface $handlerFile
+     * @return void
+     */
+    protected function addHandlerServiceFile()
+    {
+        $serviceFile = new File(
+            sprintf(
+                '%s' . DIRECTORY_SEPARATOR . 'Resources' .
+                DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'handlers.%s',
+                ($this->getTargetDirectory()) ?: $this->getBundle()->getPath(),
+                $this->getFormat()
+            )
+        );
+
+        $serviceFile
+            ->setFilteredContents($this->getServiceFileContents($serviceFile))
+            ->setServiceFile(true)
+        ;
+
+        $this->addMessage(sprintf(
+            'Make sure to load "%s" in your extension file to enable the new services.',
+            $serviceFile->getBasename()
+        ));
+
+        $this->addFile($serviceFile);
+    }
+
+    /**
+     * Declares service and returns what the contents would be based on the format selected
+     *
+     * @param File $file
      *
      * @return string
      */
-    public function getServiceFileContents(GeneratedFileInterface $handlerFile)
+    public function getServiceFileContents(File $file)
     {
         $serviceClass = sprintf(
             '%s\\Handler\\%sHandler',
@@ -104,25 +110,30 @@ class HandlerManipulator extends AbstractServiceManipulator
             strtolower($this->getEntity())
         );
 
-        $this->setXmlServiceFile($handlerFile);
-        $newXml = $this->getXmlServiceFile();
-        $this->getDiUtils()->setDiXmlTags($newXml, $serviceClass, $paramKey, $serviceId);
-        $service = $this->getDiUtils()->getDiXmlServiceTag($serviceId, $newXml);
-        $this->getDiUtils()->addEmArgTo($service);
-        $this->getDiUtils()->addClassArgTo(
-            $service,
-            $this->getBundle()->getNamespace(),
-            $this->getEntityNamespace(),
-            $this->getEntity()
-        );
+        $definition = new Definition('%' . $paramKey . '%');
+        $definition
+            ->addArgument(new Reference('doctrine'))
+            ->addArgument(
+                sprintf(
+                    '%s\\Entity\\%s%s',
+                    $this->getBundle()->getNamespace(),
+                    $this->getEntityNamespace(),
+                    $this->getEntity()
+                )
+            )
+            ->addArgument(new Reference('form.factory'))
+        ;
 
-        $formFactoryArgTag = $service->addChild('argument');
-        $formFactoryArgTag->addAttribute('type', 'service');
-        $formFactoryArgTag->addAttribute('id', 'form.factory');
-
-        return $this->formatOutput(($newXml->asXML()) ?: '');
+        return $this->getServiceFileUtils()
+            ->addParameter($paramKey, $serviceClass)
+            ->addServiceDefinition(new servicedefinition($serviceId, $definition))
+            ->dump($file)
+        ;
     }
 
+    /**
+     * @return void
+     */
     protected function addManagerDependency()
     {
         $managerFile = sprintf(
@@ -133,9 +144,12 @@ class HandlerManipulator extends AbstractServiceManipulator
             $this->getEntity()
         );
 
-        $this->addFileDependency(new SplFileInfo($managerFile, null, null));
+        $this->addFileDependency(new File($managerFile));
     }
 
+    /**
+     * @return void
+     */
     protected function addFormTypeDependency()
     {
         $formType = sprintf(
@@ -144,6 +158,6 @@ class HandlerManipulator extends AbstractServiceManipulator
             $this->getEntity()
         );
 
-        $this->addFileDependency(new SplFileInfo($formType, null, null));
+        $this->addFileDependency(new File($formType));
     }
 }

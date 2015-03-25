@@ -1,0 +1,28 @@
+
+{% block extras %}
+    /**
+     * @return array|string
+     */
+    protected function getFixtures()
+    {
+        return [
+{% for fixture in fixtures %}
+            '{{ fixture }}'{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        ];
+    }
+
+    /**
+     * @return array|string
+     */
+    protected function getPrivateFields()
+    {
+        return [
+{% for private_field in private_fields %}
+            '{{ private_field }}'{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        ];
+    }
+{% endblock extras %}

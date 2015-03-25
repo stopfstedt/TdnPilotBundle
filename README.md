@@ -62,9 +62,9 @@ Road Map
 - [ ] Generate simple PHPUnit tests for entities including symfony constraints.
 - [ ] Create a more RESTFUL interface for relationships e.g. `PUT /notes/1/label/2` 
   to create a relationship of one-to-many between notes and labels.
-- [ ] Add hypermedia support
+- [ ] Add hypermedia documentation (How to mix with other bundles)
 - [ ] Add option to implement symfony ACL and use @Secure and @PreAuthorize in controllers.
-- [ ] Generate a working configuration between popular FOS UserBundle, RestBundle, and WSSE Authorization tokens.
+- [ ] Generate a working configuration between popular FOS UserBundle, RestBundle, and HWIOAuthBundle.
 - [ ] Generate Entity Interfaces
 - [ ] Generate Behat functional api tests
 - [ ] Generate initial serializer annotations

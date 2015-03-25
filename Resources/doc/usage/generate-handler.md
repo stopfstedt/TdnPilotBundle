@@ -149,7 +149,7 @@ class FooHandler extends FooManager
         $form->submit($parameters, 'PATCH' !== $method);
 
         if ($form->isValid()) {
-            $foo = $form->getData();
+            $foo = $form->getContentsInFormat();
             $this->updateFoo($foo, true);
 
             return $foo;

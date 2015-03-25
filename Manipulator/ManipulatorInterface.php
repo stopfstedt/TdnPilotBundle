@@ -2,12 +2,11 @@
 
 namespace Tdn\PilotBundle\Manipulator;
 
-use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
+use Tdn\PilotBundle\Model\File;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 
 /**
@@ -16,6 +15,16 @@ use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
  */
 interface ManipulatorInterface
 {
+    /**
+     * @return static
+     */
+    public function reset();
+
+    /**
+     * @return array
+     */
+    public static function getSupportedFormats();
+
     /**
      * @param TemplateStrategyInterface $templateStrategy
      */
@@ -37,16 +46,6 @@ interface ManipulatorInterface
     public function getBundle();
 
     /**
-     * @return string
-     */
-    public function getEntity();
-
-    /**
-     * @return string
-     */
-    public function getEntityNamespace();
-
-    /**
      * @param ClassMetadata $metadata
      */
     public function setMetadata(ClassMetadata $metadata);
@@ -57,19 +56,29 @@ interface ManipulatorInterface
     public function getMetadata();
 
     /**
-     * @param Collection $generatedFiles
+     * @return string
      */
-    public function setGeneratedFiles(Collection $generatedFiles);
+    public function getEntity();
 
     /**
-     * @param GeneratedFileInterface $generatedFile
+     * @return string
      */
-    public function addGeneratedFile(GeneratedFileInterface $generatedFile);
+    public function getEntityNamespace();
 
     /**
-     * @return ArrayCollection|GeneratedFileInterface[]
+     * @param Collection $files
      */
-    public function getGeneratedFiles();
+    public function setFiles(Collection $files);
+
+    /**
+     * @param File $file
+     */
+    public function addFile(File $file);
+
+    /**
+     * @return ArrayCollection|File[]
+     */
+    public function getFiles();
 
     /**
      * @param Collection $fileDependencies
@@ -77,12 +86,12 @@ interface ManipulatorInterface
     public function setFileDependencies(Collection $fileDependencies);
 
     /**
-     * @param SplFileInfo $fileDependency
+     * @param File $fileDependency
      */
-    public function addFileDependency(SplFileInfo $fileDependency);
+    public function addFileDependency(File $fileDependency);
 
     /**
-     * @return ArrayCollection|SplFileInfo[]
+     * @return ArrayCollection|File[]
      */
     public function getFileDependencies();
 
@@ -112,9 +121,9 @@ interface ManipulatorInterface
     public function getTargetDirectory();
 
     /**
-     * @param bool $overWrite
+     * @param bool $overwrite
      */
-    public function setOverwrite($overWrite);
+    public function setOverwrite($overwrite);
 
     /**
      * @return bool
@@ -122,18 +131,28 @@ interface ManipulatorInterface
     public function shouldOverwrite();
 
     /**
+     * @param string $format
+     */
+    public function setFormat($format);
+
+    /**
+     * @return string
+     */
+    public function getFormat();
+
+    /**
+     * @throws \RunTimeException
      * @return bool
      */
     public function isValid();
 
     /**
-     * @return ArrayCollection|GeneratedFileInterface[]
-     */
-    public function generate();
-
-    /**
-     * Sets up appropriate file contents.
      * @return $this
      */
     public function prepare();
+
+    /**
+     * @return ArrayCollection|File[]
+     */
+    public function generate();
 }

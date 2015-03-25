@@ -18,11 +18,16 @@
             ${{ entity|lowerfirst }},
             array('method' => $method)
         );
+
         $form->submit($parameters, 'PATCH' !== $method);
 
         if ($form->isValid()) {
             ${{ entity|lowerfirst }} = $form->getData();
-            $this->update{{ entity }}(${{ entity|lowerfirst }}, true);
+            $this->update{{ entity }}(
+                ${{ entity|lowerfirst }},
+                true,
+                ('PUT' === $method || 'PATCH' === $method)
+            );
 
             return ${{ entity|lowerfirst }};
         }

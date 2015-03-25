@@ -9,6 +9,7 @@
     <file>Services</file>
     <file>Tests</file>
     <file>TdnPilotBundle.php</file>
+    <exclude-pattern>Tests/Fixtures/*</exclude-pattern>
     <arg name="extensions" value="php" />
     <arg value="sp" />
     <rule ref="PSR2" />

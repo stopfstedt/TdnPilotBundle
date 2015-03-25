@@ -4,11 +4,10 @@ namespace Tdn\PilotBundle\Tests\Manipulator;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use Symfony\Component\Finder\SplFileInfo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Tdn\PilotBundle\Manipulator\ManipulatorInterface;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
+use Tdn\PilotBundle\Model\File;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 use Tdn\PilotBundle\Template\Strategy\TwigStrategy;
 use Tdn\PilotBundle\TdnPilotBundle;
@@ -51,12 +50,12 @@ abstract class AbstractManipulatorTest extends \PHPUnit_Framework_TestCase
     abstract protected function getManipulator();
 
     /**
-     * @return ArrayCollection|SplFileInfo[]
+     * @return ArrayCollection|File[]
      */
     abstract protected function getFileDependencies();
 
     /**
-     * @return ArrayCollection|GeneratedFileInterface[]
+     * @return ArrayCollection|File[]
      */
     abstract protected function getGeneratedFiles();
 
@@ -117,7 +116,7 @@ abstract class AbstractManipulatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, $manipulator->shouldOverwrite());
     }
 
-    public function testGeneratedFiles($type = null)
+    public function testGeneratedFiles()
     {
         $manipulator = $this->getManipulator();
         $manipulator->setTargetDirectory($this->getOutDir()); //Ensure test directory
@@ -125,9 +124,11 @@ abstract class AbstractManipulatorTest extends \PHPUnit_Framework_TestCase
         $manipulator->setFileDependencies(new ArrayCollection()); //Dependencies will have to be ignored.
         $this->assertEquals(true, $manipulator->isValid()); //And now should be valid...
         $generatedFiles = $manipulator->generate();
+        $expectedFiles = $this->getGeneratedFiles();
 
         foreach ($generatedFiles as $generatedFile) {
-            $expectedContents = $this->getGeneratedFiles($type)[$generatedFile->getFullPath()]->getContents();
+            //Not get filtered contents
+            $expectedContents = $expectedFiles[$generatedFile->getRealPath()]->getFilteredContents();
             $this->assertEquals(
                 $expectedContents,
                 $generatedFile->getContents(),

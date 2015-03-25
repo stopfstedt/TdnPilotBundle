@@ -1,14 +1,16 @@
 <?php
 
 {% block namespace_block %}
-namespace {{ namespace }}\Entity\Manager{{ entity_namespace ? '\\' ~ entity_namespace : '' }};
+namespace {{ namespace }}\Entity\Manager;
 {% endblock %}
 
 {% block use_statements %}
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use {{ namespace }}\Entity\{{ entity }}Interface;
+use Doctrine\ORM\Id\AssignedGenerator;
+use {{ namespace }}\Entity{{ entity_namespace ? '\\' ~ entity_namespace : '' }}\{{ entity }}Interface;
 {% endblock use_statements %}
 
 /**
@@ -38,12 +40,12 @@ class {{ entity }}Manager implements {{ entity }}ManagerInterface
     protected $class;
 
     /**
-     * @param EntityManager $em
+     * @param Registry $em
      * @param string $class
      */
-    public function __construct(EntityManager $em, $class)
+    public function __construct(Registry $em, $class)
     {
-        $this->em         = $em;
+        $this->em         = $em->getManagerForClass($class);
         $this->class      = $class;
         $this->repository = $em->getRepository($class);
     }
@@ -81,12 +83,20 @@ class {{ entity }}Manager implements {{ entity }}ManagerInterface
     /**
      * @param {{ entity }}Interface ${{ entity|lowerfirst }}
      * @param bool $andFlush
+     * @param bool $forceId
      */
     public function update{{ entity }}(
         {{ entity }}Interface ${{ entity|lowerfirst }},
-        $andFlush = true
+        $andFlush = true,
+        $forceId = false
     ) {
         $this->em->persist(${{ entity|lowerfirst }});
+
+        if ($forceId) {
+            $metadata = $this->em->getClassMetaData(get_class(${{ entity|lowerfirst }}));
+            $metadata->setIdGenerator(new AssignedGenerator());
+        }
+
         if ($andFlush) {
             $this->em->flush();
         }

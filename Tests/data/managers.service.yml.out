@@ -1,7 +1,0 @@
-parameters:
-    foobar.foo.manager.class: Foo\BarBundle\Entity\Manager\FooManager
-
-services:
-    foobar.foo.manager:
-        class: %foobar.foo.manager.class%
-        arguments: ['@doctrine.orm.entity_manager', Foo\BarBundle\Entity\Foo]

@@ -2,12 +2,8 @@
 
 namespace Tdn\PilotBundle\Manipulator;
 
-use Doctrine\ORM\Mapping\ClassMetadata;
-use Symfony\Component\Finder\SplFileInfo;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Tdn\PhpTypes\Type\String;
-use Tdn\PilotBundle\Model\GeneratedFile;
-use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
+use Tdn\PilotBundle\Model\File;
 
 /**
  * Class FormManipulator
@@ -34,18 +30,16 @@ class FormManipulator extends AbstractManipulator
      */
     protected function addFormType()
     {
-        $formType = new GeneratedFile();
-        $formType
-            ->setFilename($this->getEntity() . 'Type')
-            ->setExtension('php')
-            ->setPath(sprintf(
-                '%s' . DIRECTORY_SEPARATOR . 'Form' . DIRECTORY_SEPARATOR . 'Type',
-                ($this->getTargetDirectory()) ?: $this->getBundle()->getPath()
-            )) //<TargetDir>|<Bundle>/Form/Type
-            ->setContents($this->generateFormTypeContent($formType->getFilename()))
-        ;
+        $formType = new File(
+            sprintf(
+                '%s' . DIRECTORY_SEPARATOR . 'Form' . DIRECTORY_SEPARATOR . 'Type' . DIRECTORY_SEPARATOR . '%sType.php',
+                ($this->getTargetDirectory()) ?: $this->getBundle()->getPath(),
+                $this->getEntity()
+            )
+        );
 
-        $this->addGeneratedFile($formType);
+        $formType->setFilteredContents($this->generateFormTypeContent($formType->getBasename('.php')));
+        $this->addFile($formType);
     }
 
     /**
@@ -53,20 +47,17 @@ class FormManipulator extends AbstractManipulator
      */
     protected function addFormException()
     {
-        $formTypeException = new GeneratedFile();
-        $formTypeException
-            ->setFilename('InvalidFormException')
-            ->setExtension('php')
-            ->setPath(sprintf(
-                '%s' . DIRECTORY_SEPARATOR . 'Exception',
+        $formTypeException = new File(
+            sprintf(
+                '%s' . DIRECTORY_SEPARATOR . 'Exception' . DIRECTORY_SEPARATOR . 'InvalidFormException.php',
                 ($this->getTargetDirectory()) ?: $this->getBundle()->getPath()
-            )) //<TargetDir>|<Bundle>/Exception
-        ;
+            )
+        );
 
         //File created only once.
-        if (!is_file($formTypeException->getFullPath()) || $this->shouldOverwrite()) {
-            $formTypeException->setContents($this->generateFormTypeExceptionContent());
-            $this->addGeneratedFile($formTypeException);
+        if (!is_file($formTypeException->getRealPath()) || $this->shouldOverwrite()) {
+            $formTypeException->setFilteredContents($this->getFormTypeExceptionContent());
+            $this->addFile($formTypeException);
         }
     }
 
@@ -84,6 +75,7 @@ class FormManipulator extends AbstractManipulator
                 'namespace'             => $this->getBundle()->getNamespace(),
                 'entity_namespace'      => $this->getEntityNamespace(),
                 'entity_class'          => $this->getEntity(),
+                'format'                 => $this->getFormat(),
                 'bundle'                => $this->getBundle()->getName(),
                 'entity_identifier'     => $this->getEntityIdentifier(),
                 'form_class'            => String::create($fileName)->underscored()->toLowerCase(),
@@ -94,7 +86,7 @@ class FormManipulator extends AbstractManipulator
     /**
      * @return string
      */
-    protected function generateFormTypeExceptionContent()
+    protected function getFormTypeExceptionContent()
     {
         return $this->getTemplateStrategy()->render(
             'form/form_exception.php.twig',
@@ -114,25 +106,6 @@ class FormManipulator extends AbstractManipulator
             $this->getEntity()
         );
 
-        $this->addFileDependency(new SplFileInfo($managerFile, null, null));
-    }
-
-    /**
-     * Find entity identifier.
-     *
-     * Figures out what an entity's identifier is from it's metadata
-     * And returns the name of the identifier.
-     *
-     * @throws \RuntimeException
-     *
-     * @return mixed
-     */
-    protected function getEntityIdentifier()
-    {
-        if (count($this->getMetadata()->getIdentifierFieldNames()) !== 1) {
-            throw new \RuntimeException('Only one identifier allowed at this time.');
-        }
-
-        return $this->getMetadata()->getIdentifierFieldNames()[0];
+        $this->addFileDependency(new File($managerFile));
     }
 }

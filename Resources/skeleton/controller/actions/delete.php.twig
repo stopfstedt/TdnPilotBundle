@@ -26,7 +26,7 @@
      *
 {% endif %}
 {% endblock documentation %}
-     * @View(statusCode=204)
+     * @Rest\View(statusCode=204)
      *
      * @param $id
      * @internal {{ entity }}Interface ${{ entity|lowerfirst }}
@@ -45,7 +45,8 @@
         ${{ entity|lowerfirst }} = $this->getOr404($id);
 
         try {
-            $this->get{{ entity }}Handler()->delete{{ entity }}(${{ entity|lowerfirst }});
+            $this->get{{ entity }}Handler()
+                ->delete{{ entity }}(${{ entity|lowerfirst }});
 
             return new Response('', Codes::HTTP_NO_CONTENT);
         } catch (\Exception $exception) {
@@ -54,4 +55,3 @@
 {% endblock method_body %}
 {% block method_return '' %}
     }
-{% block form '' %}

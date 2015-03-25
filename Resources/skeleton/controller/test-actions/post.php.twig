@@ -1,0 +1,26 @@
+
+{% block method_definition %}
+    public function testPost{{ entity }}()
+{% endblock method_definition %}
+    {
+{% block method_body %}
+        $data = $this->container->get('{{ dataloader_service_ns }}.{{ entity|lower }}')
+            ->create();
+        $this->createJsonRequest(
+            'POST',
+            $this->getUrl('post_{{ entity|lower|pluralize }}'),
+            json_encode(['{{ entity|lowerfirst }}' => $data])
+        );
+
+        $response = $this->client->getResponse();
+        $headers  = [];
+
+        $this->assertEquals(Codes::HTTP_CREATED, $response->getStatusCode());
+        $this->assertTrue(
+            $response->headers->contains(
+                'Location'
+            ),
+            print_r($response->headers, true)
+        );
+{% endblock method_body %}
+    }

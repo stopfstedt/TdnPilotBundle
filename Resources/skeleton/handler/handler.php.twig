@@ -4,7 +4,7 @@ namespace {{ namespace }}\Handler;
 
 {% block use_statements %}
 use Symfony\Component\Form\FormFactoryInterface;
-use Doctrine\ORM\EntityManager;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use {{ namespace }}\Exception\InvalidFormException;
 use {{ namespace }}\Form\Type\{{ entity }}Type;
 use {{ namespace }}\Entity\Manager\{{ entity }}Manager;

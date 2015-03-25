@@ -2,9 +2,13 @@
 
 namespace Tdn\PilotBundle\Manipulator;
 
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 use Tdn\PhpTypes\Type\String;
-use Tdn\PilotBundle\Model\GeneratedFile;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
+use Tdn\PilotBundle\Model\File;
+use Tdn\PilotBundle\Model\FileInterface;
+use Tdn\PilotBundle\Model\Format;
+use Tdn\PilotBundle\Model\ServiceDefinition;
 
 /**
  * Class ManagerManipulator
@@ -21,7 +25,7 @@ class ManagerManipulator extends AbstractServiceManipulator
     {
         $entityReflection = $this->getMetadata()->getReflectionClass();
 
-        $constructorMethod = ($entityReflection) ?
+        $entityConstructor = ($entityReflection) ?
             ($entityReflection->hasMethod('__construct')) ? $entityReflection->getMethod('__construct') : null : null;
 
         $path = sprintf(
@@ -29,47 +33,55 @@ class ManagerManipulator extends AbstractServiceManipulator
             ($this->getTargetDirectory()) ?: $this->getBundle()->getPath()
         );
 
-        $this->addManagerFile($path, $constructorMethod);
-        $this->addManagerInterfaceFile($path, $constructorMethod);
-        $this->addManagerServiceFile();
-        $this->setUpdatingDiConfFile(true);
+        $this->addManagerFile($path, $entityConstructor);
+        $this->addManagerInterfaceFile($path, $entityConstructor);
+
+        if ($this->getFormat() !== Format::ANNOTATION) {
+            $this->addManagerServiceFile();
+        }
 
         return $this;
     }
 
     /**
      * @param string $path
-     * @param \ReflectionMethod|null $constructorMethod
+     * @param \ReflectionMethod|null $entityConstructor
      */
-    protected function addManagerFile($path, $constructorMethod = null)
+    protected function addManagerFile($path, $entityConstructor = null)
     {
-        $manager = new GeneratedFile();
-        $manager
-            ->setFilename($this->getEntity() . 'Manager')
-            ->setExtension('php')
-            ->setPath($path)
-            ->setContents($this->getManagerContent($constructorMethod))
-        ;
+        $manager = new File(
+            sprintf(
+                '%s' . DIRECTORY_SEPARATOR . '%sManager.php',
+                $path,
+                $this->getEntity()
+            )
+        );
 
-        $this->addGeneratedFile($manager);
+        $manager->setFilteredContents($this->getManagerContent($entityConstructor));
+
+        $this->addFile($manager);
     }
 
     /**
      * @param string $path
-     * @param \ReflectionMethod|null $constructorMethod
+     * @param \ReflectionMethod|null $entityConstructor
      */
-    protected function addManagerInterfaceFile($path, $constructorMethod = null)
+    protected function addManagerInterfaceFile($path, $entityConstructor = null)
     {
-        $managerInterface = new GeneratedFile();
+        $managerInterface = new File(
+            sprintf(
+                '%s' . DIRECTORY_SEPARATOR . '%sManagerInterface.php',
+                $path,
+                $this->getEntity()
+            )
+        );
+
         $managerInterface
-            ->setFilename($this->getEntity() . 'ManagerInterface')
-            ->setExtension('php')
-            ->setPath($path)
-            ->setContents($this->getManagerInterfaceContent($constructorMethod))
+            ->setFilteredContents($this->getManagerInterfaceContent($entityConstructor))
             ->setAuxFile(true)
         ;
 
-        $this->addGeneratedFile($managerInterface);
+        $this->addFile($managerInterface);
     }
 
     /**
@@ -77,26 +89,26 @@ class ManagerManipulator extends AbstractServiceManipulator
      */
     protected function addManagerServiceFile()
     {
-        $serviceFile = new GeneratedFile();
-        $serviceFile
-            ->setFilename('managers')
-            ->setExtension('xml')
-            ->setPath(sprintf(
+        $serviceFile = new File(
+            sprintf(
                 '%s' . DIRECTORY_SEPARATOR . 'Resources' .
-                DIRECTORY_SEPARATOR . 'config',
-                ($this->getTargetDirectory()) ?: $this->getBundle()->getPath()
-            ))
-            ->setContents($this->getServiceFileContents($serviceFile)) //Kinda bad...fix later (Needs to be called last)
+                DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'managers.%s',
+                ($this->getTargetDirectory()) ?: $this->getBundle()->getPath(),
+                $this->getFormat()
+            )
+        );
+
+        $serviceFile
+            ->setFilteredContents($this->getServiceFileContents($serviceFile))
             ->setServiceFile(true)
         ;
 
         $this->addMessage(sprintf(
-            'Make sure to load "%s" in the %s file to enable the new services.',
-            $serviceFile->getFilename() . '.' . $serviceFile->getExtension(),
-            $this->getDefaultExtensionFile()
+            'Make sure to load "%s" in your extension file to enable the new services.',
+            $serviceFile->getBasename()
         ));
 
-        $this->addGeneratedFile($serviceFile);
+        $this->addFile($serviceFile);
     }
 
     /**
@@ -185,6 +197,7 @@ class ManagerManipulator extends AbstractServiceManipulator
                 'entity'                  => $this->getEntity(),
                 'entity_namespace'        => $this->getEntityNamespace(),
                 'namespace'               => $this->getBundle()->getNamespace(),
+                'format'                  => $this->getFormat(),
                 'entity_construct_params' => $this->getParams($constructorMethod),
                 'construct_params'        => $this->getConstructParams($constructorMethod)
             ]
@@ -209,11 +222,11 @@ class ManagerManipulator extends AbstractServiceManipulator
     }
 
     /**
-     * @param GeneratedFileInterface $managerFile
+     * @param File $file
      *
      * @return string
      */
-    protected function getServiceFileContents(GeneratedFileInterface $managerFile)
+    protected function getServiceFileContents(File $file)
     {
         $serviceClass = sprintf(
             '%s\\Entity\\Manager\\%sManager',
@@ -233,18 +246,23 @@ class ManagerManipulator extends AbstractServiceManipulator
             strtolower($this->getEntity())
         );
 
-        $this->setXmlServiceFile($managerFile);
-        $newXml = $this->getXmlServiceFile();
-        $this->getDiUtils()->setDiXmlTags($newXml, $serviceClass, $paramKey, $serviceId);
-        $service = $this->getDiUtils()->getDiXmlServiceTag($serviceId, $newXml);
-        $this->getDiUtils()->addEmArgTo($service);
-        $this->getDiUtils()->addClassArgTo(
-            $service,
-            $this->getBundle()->getNamespace(),
-            $this->getEntityNamespace(),
-            $this->getEntity()
-        );
+        $definition = new Definition('%' . $paramKey . '%');
+        $definition
+            ->addArgument(new Reference('doctrine'))
+            ->addArgument(
+                sprintf(
+                    '%s\\Entity\\%s%s',
+                    $this->getBundle()->getNamespace(),
+                    $this->getEntityNamespace(),
+                    $this->getEntity()
+                )
+            )
+        ;
 
-        return $this->formatOutput(($newXml->asXML()) ?: '');
+        return $this->getServiceFileUtils()
+            ->addParameter($paramKey, $serviceClass)
+            ->addServiceDefinition(new servicedefinition($serviceId, $definition))
+            ->dump($file)
+        ;
     }
 }
