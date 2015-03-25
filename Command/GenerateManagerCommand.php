@@ -2,10 +2,7 @@
 
 namespace Tdn\PilotBundle\Command;
 
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Tdn\PilotBundle\Manipulator\ManagerManipulator;
-use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 
 /**
  * Class GenerateManagerCommand
@@ -28,18 +25,11 @@ class GenerateManagerCommand extends AbstractGeneratorCommand
     const DESCRIPTION = 'Generates an entity manager (Repository + DAO patterns) for a given entity.';
 
     /**
-     * @param TemplateStrategyInterface $templateStrategy
-     * @param BundleInterface           $bundle
-     * @param ClassMetadata             $metadata
-     *
      * @return ManagerManipulator
      */
-    protected function createManipulator(
-        TemplateStrategyInterface $templateStrategy,
-        BundleInterface $bundle,
-        ClassMetadata $metadata
-    ) {
-        return new ManagerManipulator($templateStrategy, $bundle, $metadata);
+    protected function createManipulator()
+    {
+        return new ManagerManipulator();
     }
 
     /**

@@ -63,30 +63,11 @@ abstract class AbstractManipulator implements ManipulatorInterface
      */
     private $targetDirectory;
 
-    /**
-     * @param TemplateStrategyInterface $templateStrategy
-     * @param BundleInterface           $bundle
-     * @param ClassMetadata             $metadata
-     */
-    public function __construct(
-        TemplateStrategyInterface $templateStrategy,
-        BundleInterface $bundle,
-        ClassMetadata $metadata
-    ) {
+    public function __construct() {
         $this->generatedFiles   = new ArrayCollection();
         $this->fileDependencies = new ArrayCollection();
         $this->messages         = new ArrayCollection();
-        $this->setTemplateStrategy($templateStrategy);
-        $this->setBundle($bundle);
-        $this->setMetadata($metadata);
         $this->setOverwrite(false);
-
-        if (count($this->getMetadata()->identifier) > 1) {
-            throw new \RuntimeException(sprintf(
-                'The %s does not support entity classes with multiple primary keys.',
-                __CLASS__
-            ));
-        }
     }
 
     public function setTemplateStrategy(TemplateStrategyInterface $templateStrategy)
@@ -139,6 +120,13 @@ abstract class AbstractManipulator implements ManipulatorInterface
      */
     public function setMetadata(ClassMetadata $metadata)
     {
+        if (count($metadata->identifier) > 1) {
+            throw new \RuntimeException(sprintf(
+                'The %s does not support entity classes with multiple primary keys.',
+                __CLASS__
+            ));
+        }
+
         $this->metadata = $metadata;
     }
 

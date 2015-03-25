@@ -157,6 +157,7 @@ abstract class AbstractGeneratorCommandTest extends GenerateCommandTest
             ->shouldReceive(
                 [
                     'isIdentifierNatural' => true,
+                    'getReflectionClass'  => new \ReflectionClass(new \stdClass())
                 ]
             )
             ->zeroOrMoreTimes()
@@ -178,6 +179,16 @@ abstract class AbstractGeneratorCommandTest extends GenerateCommandTest
                     'fieldName'  => 'description',
                     'type'       => 'string',
                     'columnName' => 'description'
+                ],
+                'name' => [
+                    'fieldName'  => 'name',
+                    'type'       => 'string',
+                    'columnName' => 'name'
+                ],
+                'title' => [
+                    'fieldName'  => 'title',
+                    'type'       => 'string',
+                    'columnName' => 'title'
                 ]
             ];
         }

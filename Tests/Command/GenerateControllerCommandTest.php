@@ -4,6 +4,7 @@ namespace Tdn\PilotBundle\Tests\Command;
 
 use Tdn\PilotBundle\Command\GenerateControllerCommand;
 use Tdn\PilotBundle\Manipulator\ControllerManipulator;
+use Tdn\PilotBundle\Manipulator\ManipulatorInterface;
 use Tdn\PilotBundle\Model\GeneratedFileInterface;
 use \Mockery;
 
@@ -13,17 +14,17 @@ use \Mockery;
  */
 class GenerateControllerCommandTest extends AbstractGeneratorCommandTest
 {
-    /**
-     * @return void
-     */
-    public function testRoutePrefix()
-    {
-        /** @var GenerateControllerCommand $command */
-        $command = $this->getFullCommand();
-        $command->setEntity('Foo');
-        $this->assertEquals(strtolower($command->getEntity()), $command->getRoutePrefix());
-        $this->assertEquals('test', $command->getRoutePrefix('test'));
-    }
+//    /**
+//     * @return void
+//     */
+//    public function testRoutePrefix()
+//    {
+//        /** @var GenerateControllerCommand $command */
+//        $command = $this->getFullCommand();
+//        $command->setEntity('Foo');
+//        $this->assertEquals(strtolower($command->getEntity()), $command->getRoutePrefix());
+//        $this->assertEquals('test', $command->getRoutePrefix('test'));
+//    }
 
     /**
      * @return GenerateControllerCommand
@@ -54,7 +55,7 @@ class GenerateControllerCommandTest extends AbstractGeneratorCommandTest
     protected function getManipulator()
     {
         $manipulator = Mockery::mock(
-            new ControllerManipulator($this->getTemplateStrategy(), $this->getBundle(), $this->getMetadata())
+            new ControllerManipulator()
         );
 
         $manipulator
@@ -63,15 +64,20 @@ class GenerateControllerCommandTest extends AbstractGeneratorCommandTest
                 [
                     'prepare'  => $manipulator,
                     'isValid'  => true,
-                    'generate' => $this->getGeneratedFiles()
+                    'generate' => $this->getGeneratedFiles(),
                 ]
             )
             ->zeroOrMoreTimes()
         ;
 
+        /** @var ManipulatorInterface $manipulator */
+        $manipulator->setMetadata($this->getMetadata());
+        $manipulator->setTemplateStrategy($this->getTemplateStrategy());
+        $manipulator->setBundle($this->getBundle());
+        $manipulator->setTargetDirectory($this->getOutDir());
+
         return $manipulator;
     }
-
 
     /**
      * @return GeneratedFileInterface[]

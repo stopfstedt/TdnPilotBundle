@@ -1,0 +1,3 @@
+services:
+    tdn_pilot.utils.di:
+        arguments: ["@tuck_converter.config_format_converter"]

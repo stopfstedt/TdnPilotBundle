@@ -96,6 +96,7 @@ class ManagerManipulator extends AbstractServiceManipulator
             $this->getDefaultExtensionFile()
         ));
 
+        $this->setServiceFile($serviceFile);
         $this->addGeneratedFile($serviceFile);
     }
 

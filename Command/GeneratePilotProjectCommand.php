@@ -4,12 +4,9 @@ namespace Tdn\PilotBundle\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Common\Collections\ArrayCollection;
 use Tdn\PilotBundle\Manipulator\ManipulatorInterface;
 use Tdn\PilotBundle\Manipulator\ManagerManipulator;
-use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 
 /**
  * Class GeneratePilotProjectCommand
@@ -45,19 +42,12 @@ class GeneratePilotProjectCommand extends AbstractGeneratorCommand
     /**
      * Creates a new manipulator instance
      *
-     * @param TemplateStrategyInterface $templateStrategy
-     * @param BundleInterface           $bundle
-     * @param ClassMetadata             $metadata
-     *
      * @throws \RuntimeException Not needed in this sub type.
      *
      * @return void
      */
-    protected function createManipulator(
-        TemplateStrategyInterface $templateStrategy,
-        BundleInterface $bundle,
-        ClassMetadata $metadata
-    ) {
+    protected function createManipulator()
+    {
         throw new \RuntimeException('Not implemented in ' . get_called_class());
     }
 
@@ -70,19 +60,12 @@ class GeneratePilotProjectCommand extends AbstractGeneratorCommand
     }
 
     /**
-     * @param TemplateStrategyInterface $templateStrategy
-     * @param BundleInterface $bundle
-     * @param ClassMetadata $metadata
-     *
      * @return ArrayCollection|ManipulatorInterface[]
      */
-    protected static function getSupportedManipulators(
-        TemplateStrategyInterface $templateStrategy,
-        BundleInterface $bundle,
-        ClassMetadata $metadata
-    ) {
+    protected static function getSupportedManipulators()
+    {
         return new ArrayCollection([
-            new ManagerManipulator($templateStrategy, $bundle, $metadata),
+            new ManagerManipulator(),
         ]);
     }
 }

@@ -37,19 +37,13 @@ class RoutingManipulator extends AbstractManipulator
     private $isInFile;
 
     /**
-     * @param TemplateStrategyInterface $templateStrategy
-     * @param BundleInterface $bundle
-     * @param ClassMetadata $metadata
      */
-    public function __construct(
-        TemplateStrategyInterface $templateStrategy,
-        BundleInterface $bundle,
-        ClassMetadata $metadata
-    ) {
+    public function __construct()
+    {
         $this->setRemove(false);
         $this->isInFile = false;
 
-        return parent::__construct($templateStrategy, $bundle, $metadata);
+        parent::__construct();
     }
 
     /**

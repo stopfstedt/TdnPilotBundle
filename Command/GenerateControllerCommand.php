@@ -3,10 +3,7 @@
 namespace Tdn\PilotBundle\Command;
 
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Tdn\PilotBundle\Manipulator\ControllerManipulator;
-use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 
 /**
  * Class GenerateControllerCommand
@@ -77,18 +74,11 @@ class GenerateControllerCommand extends AbstractGeneratorCommand
     }
 
     /**
-     * @param TemplateStrategyInterface $templateStrategy
-     * @param BundleInterface           $bundle
-     * @param ClassMetadata             $metadata
-     *
      * @return ControllerManipulator
      */
-    protected function createManipulator(
-        TemplateStrategyInterface $templateStrategy,
-        BundleInterface $bundle,
-        ClassMetadata $metadata
-    ) {
-        $manipulator = new ControllerManipulator($templateStrategy, $bundle, $metadata);
+    protected function createManipulator()
+    {
+        $manipulator = new ControllerManipulator();
         $manipulator->setResource(($this->getInput()->getOption('resource') ? true : false));
         $manipulator->setSwagger(($this->getInput()->getOption('with-swagger') ? true : false));
         $manipulator->setRoutePrefix($this->getRoutePrefix($this->getInput()->getOption('route-prefix')));

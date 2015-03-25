@@ -4,10 +4,7 @@ namespace Tdn\PilotBundle\Command;
 
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Tdn\PilotBundle\Manipulator\RoutingManipulator;
-use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 
 /**
  * Class GenerateRoutingCommand
@@ -62,18 +59,11 @@ class GenerateRoutingCommand extends AbstractGeneratorCommand
     }
 
     /**
-     * @param TemplateStrategyInterface $templateStrategy
-     * @param BundleInterface           $bundle
-     * @param ClassMetadata             $metadata
-     *
      * @return RoutingManipulator
      */
-    protected function createManipulator(
-        TemplateStrategyInterface $templateStrategy,
-        BundleInterface $bundle,
-        ClassMetadata $metadata
-    ) {
-        $manipulator = new RoutingManipulator($templateStrategy, $bundle, $metadata);
+    protected function createManipulator()
+    {
+        $manipulator = new RoutingManipulator();
         $manipulator->setRoutingFile($this->getInput()->getArgument('routing-file'));
         $manipulator->setRoutePrefix($this->getInput()->getOption('route-prefix'));
         $manipulator->setRemove(($this->getInput()->getOption('remove') ? true : false));

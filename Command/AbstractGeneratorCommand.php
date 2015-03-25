@@ -8,12 +8,14 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Sensio\Bundle\GeneratorBundle\Command\Helper\QuestionHelper;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Sensio\Bundle\GeneratorBundle\Command\Validators;
 use Tdn\PilotBundle\Manipulator\ManipulatorInterface;
+use Tdn\PilotBundle\Manipulator\ServiceManipulatorInterface;
 use Tdn\PilotBundle\Model\GeneratedFileInterface;
 use Tdn\PilotBundle\Services\Utils\EntityUtils;
 use Tdn\PilotBundle\Services\Utils\TemplateStrategyUtils;
@@ -66,17 +68,9 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
     abstract protected function getFiles();
 
     /**
-     * @param TemplateStrategyInterface $templateStrategy
-     * @param BundleInterface           $bundle
-     * @param ClassMetadata             $metadata
-     *
      * @return ManipulatorInterface
      */
-    abstract protected function createManipulator(
-        TemplateStrategyInterface $templateStrategy,
-        BundleInterface $bundle,
-        ClassMetadata $metadata
-    );
+    abstract protected function createManipulator();
 
     /**
      * @param ManipulatorInterface $manipulator
@@ -106,14 +100,17 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
         if ($this->manipulator) {
             return $this->manipulator;
         } else {
-            $manipulator = $this->createManipulator(
-                $templateStrategy,
-                $bundle,
-                $metadata
-            );
+            $manipulator = $this->createManipulator();
 
+            $manipulator->setMetadata($metadata);
+            $manipulator->setTemplateStrategy($templateStrategy);
+            $manipulator->setBundle($bundle);
             $manipulator->setOverwrite(($this->getInput()->getOption('overwrite') ? true : false));
             $manipulator->setTargetDirectory($this->getInput()->getOption('target-directory'));
+
+            if ($manipulator instanceof ServiceManipulatorInterface) {
+                $manipulator->setDiUtils($this->getContainer()->get('tdn_pilot.utils.di'));
+            }
 
             return $manipulator;
         }
@@ -233,14 +230,16 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
         }
 
         $doctrine = $this->getManagerRegistry();
+        $templateStrategy = $this->getTemplateStrategy();
 
         foreach ($entities as $entity) {
             $entity = Validators::validateEntityName($entity);
             list($bundle, $entity) = $this->getEntityUtils()->parseShortcutNotation($entity);
             $this->setEntity($doctrine->getAliasNamespace($bundle) . '\\' . $entity);
-            $bundle = $this->getContainer()->get('kernel')->getBundle($bundle);
-            $templateStrategy = $this->getTemplateStrategy();
-            $templateStrategy->setSkeletonDirs($this->getTemplateStrategyUtils()->getDefaultSkeletonDirs($bundle));
+            $bundle = $this->getKernel()->getBundle($bundle);
+            $templateStrategy->setSkeletonDirs(
+                $this->getTemplateStrategyUtils()->getDefaultSkeletonDirs($bundle)
+            );
 
             try {
                 $manipulator = $this->getManipulator(
@@ -276,6 +275,14 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
         }
 
         return 0;
+    }
+
+    /**
+     * @return KernelInterface
+     */
+    protected function getKernel()
+    {
+        return $this->getContainer()->get('kernel');
     }
 
     /**

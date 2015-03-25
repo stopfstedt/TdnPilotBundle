@@ -4,10 +4,8 @@ namespace Tdn\PilotBundle\Manipulator;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Symfony\Component\Finder\SplFileInfo;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Tdn\PhpTypes\Type\String;
 use Tdn\PilotBundle\Model\GeneratedFile;
-use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 
 /**
  * Class ControllerManipulator
@@ -35,21 +33,13 @@ class ControllerManipulator extends AbstractManipulator
      */
     private $generateTests;
 
-    /**
-     * @param TemplateStrategyInterface $templateStrategy
-     * @param BundleInterface $bundle
-     * @param ClassMetadata   $metadata
-     */
-    public function __construct(
-        TemplateStrategyInterface $templateStrategy,
-        BundleInterface $bundle,
-        ClassMetadata $metadata
-    ) {
+    public function __construct()
+    {
         $this->setResource(false);
         $this->setSwagger(false);
         $this->setGenerateTests(false);
 
-        parent::__construct($templateStrategy, $bundle, $metadata);
+        parent::__construct();
     }
 
     /**
