@@ -86,7 +86,7 @@ class ManagerManipulator extends AbstractServiceManipulator
                 DIRECTORY_SEPARATOR . 'config',
                 ($this->getTargetDirectory()) ?: $this->getBundle()->getPath()
             ))
-            ->setContents($this->getServiceFileContents($serviceFile)) //Kinda bad...fix later (Needs to be called last)
+            ->setContents($this->getServiceFileContents($serviceFile->getFullPath()))
             ->setServiceFile(true)
         ;
 
@@ -209,9 +209,11 @@ class ManagerManipulator extends AbstractServiceManipulator
     }
 
     /**
+     * @param string $pathToFile
+     *
      * @return string
      */
-    protected function getServiceFileContents()
+    protected function getServiceFileContents($pathToFile)
     {
         $serviceClass = sprintf(
             '%s\\Entity\\Manager\\%sManager',
@@ -244,10 +246,15 @@ class ManagerManipulator extends AbstractServiceManipulator
             ]
         ];
 
-        $diUtils = $this->getServiceUtils();
-        $diUtils->addParameter($paramKey, $serviceClass);
-        $diUtils->addService($serviceId, $service);
+        $serviceUtils = $this->getServiceUtils();
 
-        return $diUtils->getContentsInFormat($this->getFormat());
+        if (file_exists($pathToFile)) {
+            $serviceUtils->load($pathToFile);
+        }
+
+        $serviceUtils->addParameter($paramKey, $serviceClass);
+        $serviceUtils->addService($serviceId, $service);
+
+        return $serviceUtils->getContentsInFormat($this->getFormat());
     }
 }

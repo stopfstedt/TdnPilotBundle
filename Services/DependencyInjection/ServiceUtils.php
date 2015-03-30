@@ -205,7 +205,7 @@ class ServiceUtils
     }
 
     /**
-     * @param $file
+     * @param string $file
      * @return bool
      */
     public function load($file)

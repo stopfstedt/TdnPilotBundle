@@ -18,59 +18,59 @@ class ServiceUtilsTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ServiceUtils
      */
-    protected $diUtils;
+    protected $serviceUtils;
 
     protected function setUp()
     {
-        $this->diUtils = new ServiceUtils($this->getFormatConverter());
+        $this->serviceUtils = new ServiceUtils($this->getFormatConverter());
     }
 
     public function testParameters()
     {
         list ($key, $value) = $this->getParameter();
-        $this->diUtils->addParameter($key, $value);
-        $this->diUtils->getParameters()->contains($key);
-        $this->assertEquals($value, $this->diUtils->getParameters()->get($key));
-        $this->diUtils->getParameters()->remove($key);
-        $this->assertEquals(0, $this->diUtils->getParameters()->count());
+        $this->serviceUtils->addParameter($key, $value);
+        $this->serviceUtils->getParameters()->contains($key);
+        $this->assertEquals($value, $this->serviceUtils->getParameters()->get($key));
+        $this->serviceUtils->getParameters()->remove($key);
+        $this->assertEquals(0, $this->serviceUtils->getParameters()->count());
     }
 
     public function testServices()
     {
         list($id, $service) = $this->getService('KEY');
-        $this->diUtils->addService($id, $service);
-        $this->assertEquals($service, $this->diUtils->getServices()->get($id));
-        $this->diUtils->getServices()->remove($id);
-        $this->assertEquals(0, $this->diUtils->getServices()->count());
+        $this->serviceUtils->addService($id, $service);
+        $this->assertEquals($service, $this->serviceUtils->getServices()->get($id));
+        $this->serviceUtils->getServices()->remove($id);
+        $this->assertEquals(0, $this->serviceUtils->getServices()->count());
     }
 
     public function testYaml()
     {
         list ($key, $value) = $this->getParameter();
         list($id, $service) = $this->getService($key);
-        $this->diUtils->addParameter($key, $value);
-        $this->diUtils->addService($id, $service);
+        $this->serviceUtils->addParameter($key, $value);
+        $this->serviceUtils->addService($id, $service);
 
-        $this->assertEquals(ServiceUtilsData::YAML, $this->diUtils->getYaml());
+        $this->assertEquals(ServiceUtilsData::YAML, $this->serviceUtils->getYaml());
     }
 
     public function testXml()
     {
         list ($key, $value) = $this->getParameter();
         list($id, $service) = $this->getService($key);
-        $this->diUtils->addParameter($key, $value);
-        $this->diUtils->addService($id, $service);
+        $this->serviceUtils->addParameter($key, $value);
+        $this->serviceUtils->addService($id, $service);
 
-        $this->assertEquals(ServiceUtilsData::XML, $this->diUtils->getXml());
+        $this->assertEquals(ServiceUtilsData::XML, $this->serviceUtils->getXml());
     }
 
     protected function saveTest($file)
     {
         list ($key, $value) = $this->getParameter();
         list($id, $service) = $this->getService($key);
-        $this->diUtils->addParameter($key, $value);
-        $this->diUtils->addService($id, $service);
-        $this->diUtils->save($file);
+        $this->serviceUtils->addParameter($key, $value);
+        $this->serviceUtils->addService($id, $service);
+        $this->serviceUtils->save($file);
 
         $this->assertEquals(ServiceUtilsData::YAML, file_get_contents($file));
     }

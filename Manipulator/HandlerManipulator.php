@@ -67,7 +67,7 @@ class HandlerManipulator extends AbstractServiceManipulator
                 DIRECTORY_SEPARATOR . 'config',
                 ($this->getTargetDirectory()) ?: $this->getBundle()->getPath()
             ))
-            ->setContents($this->getServiceFileContents())
+            ->setContents($this->getServiceFileContents($serviceFile->getFullPath()))
             ->setServiceFile(true)
         ;
 
@@ -80,9 +80,11 @@ class HandlerManipulator extends AbstractServiceManipulator
     }
 
     /**
+     * @param string $pathToFile
+     *
      * @return string
      */
-    public function getServiceFileContents()
+    public function getServiceFileContents($pathToFile)
     {
         $serviceClass = sprintf(
             '%s\\Handler\\%sHandler',
