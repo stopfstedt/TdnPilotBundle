@@ -1,7 +1,0 @@
-parameters:
-    tdn_pilot.utils.di.class: Tdn\PilotBundle\Services\Utils\DiUtils
-
-services:
-    tdn_pilot.utils.di:
-        class: %tdn_pilot.utils.di.class%
-        arguments: ["@tuck_converter.config_format_converter"]

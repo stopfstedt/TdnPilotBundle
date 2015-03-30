@@ -1,10 +1,10 @@
 <?php
 
-namespace Tdn\PilotBundle\Services\Utils\Parser;
+namespace Tdn\PilotBundle\Services\DependencyInjection\Parser;
 
 /**
  * Interface ParserInterface
- * @package Tdn\PilotBundle\Services\Utils\Parser
+ * @package Tdn\PilotBundle\Services\DependencyInjection\Parser
  */
 interface ParserInterface
 {

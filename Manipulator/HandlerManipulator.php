@@ -116,7 +116,7 @@ class HandlerManipulator extends AbstractServiceManipulator
             ]
         ];
 
-        $diUtils = $this->getDiUtils();
+        $diUtils = $this->getServiceUtils();
         $diUtils->addParameter($paramKey, $serviceClass);
         $diUtils->addService($serviceId, $service);
 

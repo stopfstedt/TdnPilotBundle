@@ -17,7 +17,7 @@ use Tdn\PilotBundle\Template\Strategy\TwigStrategy;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 use Tdn\PilotBundle\Manipulator\ManipulatorInterface;
 use Tdn\PilotBundle\Model\GeneratedFile;
-use Tdn\PilotBundle\Services\Utils\EntityUtils;
+use Tdn\PilotBundle\Services\Doctrine\EntityUtils;
 use \Mockery as Mockery;
 
 /**
@@ -309,7 +309,7 @@ abstract class AbstractGeneratorCommandTest extends GenerateCommandTest
      */
     protected function getEntityUtils()
     {
-        $entityUtils = Mockery::mock('\Tdn\PilotBundle\Services\Utils\EntityUtils');
+        $entityUtils = Mockery::mock('\Tdn\PilotBundle\Services\Doctrine\EntityUtils');
         $entityUtils
             ->shouldDeferMissing()
             ->shouldReceive(

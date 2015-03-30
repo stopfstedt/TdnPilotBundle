@@ -1,6 +1,6 @@
 <?php
 
-namespace Tdn\PilotBundle\Services\Utils;
+namespace Tdn\PilotBundle\Services\DependencyInjection;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -8,11 +8,15 @@ use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Yaml\Dumper as YamlDumper;
 use Tdn\PilotBundle\Model\GeneratedFileInterface;
 use Tuck\ConverterBundle\ConfigFormatConverter;
-use Tdn\PilotBundle\Services\Utils\Parser\ParserInterface;
-use Tdn\PilotBundle\Services\Utils\Parser\YamlParser;
-use Tdn\PilotBundle\Services\Utils\Parser\XmlParser;
+use Tdn\PilotBundle\Services\DependencyInjection\Parser\ParserInterface;
+use Tdn\PilotBundle\Services\DependencyInjection\Parser\YamlParser;
+use Tdn\PilotBundle\Services\DependencyInjection\Parser\XmlParser;
 
-class DiUtils
+/**
+ * Class ServiceUtils
+ * @package Tdn\PilotBundle\Services\DependencyInjection
+ */
+class ServiceUtils
 {
     /**
      * @var ArrayCollection
@@ -292,7 +296,7 @@ class DiUtils
     {
         if (isset($definitions['imports'])) {
             foreach ($definitions['imports'] as $import) {
-                //@todo: define import methods
+                $this->addImport($import);
             }
         }
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tdn\PilotBundle\Services\Utils\Parser;
+namespace Tdn\PilotBundle\Services\DependencyInjection\Parser;
 
 use Symfony\Component\Yaml\Parser as BaseYamlParser;
 
@@ -11,7 +11,7 @@ use Symfony\Component\Yaml\Parser as BaseYamlParser;
  * say it returns an array, but it is not noted in the doc block or through an interface.
  *
  * Class YamlParser
- * @package Tdn\PilotBundle\Services\Utils\Parser
+ * @package Tdn\PilotBundle\Services\DependencyInjection\Parser
  */
 class YamlParser extends BaseYamlParser implements ParserInterface
 {

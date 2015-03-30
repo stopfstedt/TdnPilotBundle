@@ -2,7 +2,7 @@
 
 namespace Tdn\PilotBundle\Manipulator;
 
-use Tdn\PilotBundle\Services\Utils\DiUtils;
+use Tdn\PilotBundle\Services\DependencyInjection\ServiceUtils;
 
 /**
  * Abstract Class AbstractServiceManipulator
@@ -11,9 +11,9 @@ use Tdn\PilotBundle\Services\Utils\DiUtils;
 abstract class AbstractServiceManipulator extends AbstractManipulator implements ServiceManipulatorInterface
 {
     /**
-     * @var DiUtils
+     * @var ServiceUtils
      */
-    private $diUtils;
+    private $serviceUtils;
 
     /**
      * @var string
@@ -26,19 +26,19 @@ abstract class AbstractServiceManipulator extends AbstractManipulator implements
     private $updatingDiFile;
 
     /**
-     * @param DiUtils $diUtils
+     * @param ServiceUtils $serviceUtils
      */
-    public function setDiUtils(DiUtils $diUtils)
+    public function setServiceUtils(ServiceUtils $serviceUtils)
     {
-        $this->diUtils = $diUtils;
+        $this->serviceUtils = $serviceUtils;
     }
 
     /**
-     * @return DiUtils
+     * @return ServiceUtils
      */
-    public function getDiUtils()
+    public function getServiceUtils()
     {
-        return $this->diUtils;
+        return $this->serviceUtils;
     }
 
     /**

@@ -138,7 +138,7 @@ interface ManipulatorInterface
     public function prepare();
 
     /**
-     * Resets the internal state to a "new" instance.
+     * Returns a new instance with all values blank.
      *
      * @return static
      */

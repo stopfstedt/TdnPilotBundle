@@ -2,7 +2,7 @@
 
 namespace Tdn\PilotBundle\Manipulator;
 
-use Tdn\PilotBundle\Services\Utils\DiUtils;
+use Tdn\PilotBundle\Services\DependencyInjection\ServiceUtils;
 
 /**
  * Interface ServiceManipulatorInterface
@@ -11,14 +11,14 @@ use Tdn\PilotBundle\Services\Utils\DiUtils;
 interface ServiceManipulatorInterface extends ManipulatorInterface
 {
     /**
-     * @param DiUtils $diUtils
+     * @param ServiceUtils $diUtils
      */
-    public function setDiUtils(DiUtils $diUtils);
+    public function setServiceUtils(ServiceUtils $diUtils);
 
     /**
-     * @return DiUtils
+     * @return ServiceUtils
      */
-    public function getDiUtils();
+    public function getServiceUtils();
 
     /**
      * @param string $format

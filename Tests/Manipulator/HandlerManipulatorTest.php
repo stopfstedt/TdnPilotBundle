@@ -27,7 +27,7 @@ class HandlerManipulatorTest extends AbstractServiceManipulatorTest
         $manipulator->setMetadata($this->getMetadata());
         $manipulator->setOverwrite(false);
         $manipulator->setTargetDirectory($this->getOutDir());
-        $manipulator->setDiUtils($this->getDiUtils());
+        $manipulator->setServiceUtils($this->getServiceUtils());
         $manipulator->setFormat('xml');
 
         return $manipulator->prepare();

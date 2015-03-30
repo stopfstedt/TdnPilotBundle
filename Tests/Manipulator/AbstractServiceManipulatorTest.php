@@ -8,7 +8,7 @@ use Tuck\ConverterBundle\File\SysTempFileFactory;
 use Tuck\ConverterBundle\Loader\StandardLoaderFactory;
 use Tdn\PilotBundle\Manipulator\AbstractServiceManipulator;
 use Tdn\PilotBundle\Manipulator\ServiceManipulatorInterface;
-use Tdn\PilotBundle\Services\Utils\DiUtils;
+use Tdn\PilotBundle\Services\DependencyInjection\ServiceUtils;
 use \Mockery;
 
 /**
@@ -42,9 +42,9 @@ abstract class AbstractServiceManipulatorTest extends AbstractManipulatorTest
     {
         /** @var ServiceManipulatorInterface $manipulator */
         $manipulator = $this->getServiceManipulator()->reset();
-        $this->assertNull($manipulator->getDiUtils());
-        $manipulator->setDiUtils($this->getDiUtils());
-        $this->assertEquals($this->getDiUtils(), $manipulator->getDiUtils());
+        $this->assertNull($manipulator->getServiceUtils());
+        $manipulator->setServiceUtils($this->getServiceUtils());
+        $this->assertEquals($this->getServiceUtils(), $manipulator->getServiceUtils());
     }
 
     public function testUpdatingDiConfFile()
@@ -65,11 +65,11 @@ abstract class AbstractServiceManipulatorTest extends AbstractManipulatorTest
     }
 
     /**
-     * @return DiUtils
+     * @return ServiceUtils
      */
-    protected function getDiUtils()
+    protected function getServiceUtils()
     {
-        return new DiUtils(new ConfigFormatConverter(
+        return new ServiceUtils(new ConfigFormatConverter(
             new StandardLoaderFactory(),
             new StandardDumperFactory(),
             new SysTempFileFactory()

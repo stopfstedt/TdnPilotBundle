@@ -1,10 +1,14 @@
 <?php
 
-namespace Tdn\PilotBundle\Services\Utils\Parser;
+namespace Tdn\PilotBundle\Services\DependencyInjection\Parser;
 
-use Tdn\PilotBundle\Services\Utils\Parser\YamlParser;
+use Tdn\PilotBundle\Services\DependencyInjection\Parser\YamlParser;
 use Tuck\ConverterBundle\ConfigFormatConverter;
 
+/**
+ * Class XmlParser
+ * @package Tdn\PilotBundle\Services\DependencyInjection\Parser
+ */
 class XmlParser implements ParserInterface
 {
     /**

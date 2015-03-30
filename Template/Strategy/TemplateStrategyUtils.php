@@ -1,6 +1,6 @@
 <?php
 
-namespace Tdn\PilotBundle\Services\Utils;
+namespace Tdn\PilotBundle\Template\Strategy;
 
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
@@ -8,7 +8,7 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
  * TemplateStrategy utilities
  *
  * Class TemplateStrategyUtils
- * @package Tdn\PilotBundle\Services\Utils
+ * @package Tdn\PilotBundle\Template\Strategy
  */
 class TemplateStrategyUtils
 {

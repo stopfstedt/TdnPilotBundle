@@ -70,6 +70,14 @@ abstract class AbstractManipulator implements ManipulatorInterface
         $this->setOverwrite(false);
     }
 
+    /**
+     * @return static
+     */
+    public function reset()
+    {
+        return new static();
+    }
+
     public function setTemplateStrategy(TemplateStrategyInterface $templateStrategy)
     {
         $this->templateStrategy = $templateStrategy;
@@ -304,14 +312,6 @@ abstract class AbstractManipulator implements ManipulatorInterface
         }
 
         return new ArrayCollection();
-    }
-
-    /**
-     * @return static
-     */
-    public function reset()
-    {
-        return new static();
     }
 
     /**

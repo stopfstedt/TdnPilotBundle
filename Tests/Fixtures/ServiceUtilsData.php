@@ -5,10 +5,10 @@ namespace Tdn\PilotBundle\Tests\Fixtures;
 /**
  * Static data fixture for services.yml/services.xml tests.
  *
- * Class DiUtilsData
+ * Class ServiceUtilsData
  * @package Tdn\PilotBundle\Tests\Fixtures
  */
-class DiUtilsData
+class ServiceUtilsData
 {
     const YAML = <<<'YAML'
 parameters:
