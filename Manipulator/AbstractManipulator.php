@@ -307,6 +307,14 @@ abstract class AbstractManipulator implements ManipulatorInterface
     }
 
     /**
+     * @return static
+     */
+    public function reset()
+    {
+        return new static();
+    }
+
+    /**
      * Ensures that dependency files exist
      *
      * Certain objects we're generating declare their dependencies

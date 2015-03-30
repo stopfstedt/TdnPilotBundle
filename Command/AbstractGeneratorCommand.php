@@ -110,6 +110,8 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
 
             if ($manipulator instanceof ServiceManipulatorInterface) {
                 $manipulator->setDiUtils($this->getContainer()->get('tdn_pilot.utils.di'));
+                //Maybe add an abstract service generator command that adds this option
+                $manipulator->setFormat($this->getInput()->getOption('format'));
             }
 
             return $manipulator;

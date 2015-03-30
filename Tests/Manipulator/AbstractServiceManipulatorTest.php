@@ -2,10 +2,13 @@
 
 namespace Tdn\PilotBundle\Tests\Manipulator;
 
+use Tuck\ConverterBundle\ConfigFormatConverter;
+use Tuck\ConverterBundle\Dumper\StandardDumperFactory;
+use Tuck\ConverterBundle\File\SysTempFileFactory;
+use Tuck\ConverterBundle\Loader\StandardLoaderFactory;
 use Tdn\PilotBundle\Manipulator\AbstractServiceManipulator;
 use Tdn\PilotBundle\Manipulator\ServiceManipulatorInterface;
-use Tdn\PilotBundle\Services\Utils\DiXmlUtils;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
+use Tdn\PilotBundle\Services\Utils\DiUtils;
 use \Mockery;
 
 /**
@@ -14,7 +17,9 @@ use \Mockery;
  */
 abstract class AbstractServiceManipulatorTest extends AbstractManipulatorTest
 {
-    /**
+   /**
+     * @param string $format
+     *
      * @return ServiceManipulatorInterface
      */
     protected function getServiceManipulator()
@@ -33,43 +38,21 @@ abstract class AbstractServiceManipulatorTest extends AbstractManipulatorTest
         return $manipulator;
     }
 
+    public function testDiUtils()
+    {
+        /** @var ServiceManipulatorInterface $manipulator */
+        $manipulator = $this->getServiceManipulator()->reset();
+        $this->assertNull($manipulator->getDiUtils());
+        $manipulator->setDiUtils($this->getDiUtils());
+        $this->assertEquals($this->getDiUtils(), $manipulator->getDiUtils());
+    }
+
     public function testUpdatingDiConfFile()
     {
         $manipulator = $this->getServiceManipulator();
         $this->assertTrue($manipulator->isUpdatingDiConfFile());
         $manipulator->setUpdatingDiConfFile(false);
         $this->assertFalse($manipulator->isUpdatingDiConfFile());
-    }
-
-    public function testDiUtils()
-    {
-        $serviceManipulator = $this->getServiceManipulator();
-        $diManipulator = new DiXmlUtils();
-        $serviceManipulator->setDiUtils($diManipulator);
-        $this->assertEquals($diManipulator, $serviceManipulator->getDiUtils());
-    }
-
-    /**
-     * @param string $fileName
-     *
-     * @return GeneratedFileInterface
-     */
-    public function getXmlServiceFileMock($fileName)
-    {
-        $content = @file_get_contents(
-            dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
-            'data' . DIRECTORY_SEPARATOR .
-            $fileName
-        );
-
-        $xmlFile = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFileInterface');
-        $xmlFile
-            ->shouldReceive('getContents')
-            ->andReturn($content)
-            ->zeroOrMoreTimes()
-        ;
-
-        return $xmlFile;
     }
 
     protected function getDefaultDiFile()
@@ -79,5 +62,17 @@ abstract class AbstractServiceManipulatorTest extends AbstractManipulatorTest
             $this->getBundle()->getPath(),
             str_replace('Bundle', 'Extension', $this->getBundle()->getName())
         );
+    }
+
+    /**
+     * @return DiUtils
+     */
+    protected function getDiUtils()
+    {
+        return new DiUtils(new ConfigFormatConverter(
+            new StandardLoaderFactory(),
+            new StandardDumperFactory(),
+            new SysTempFileFactory()
+        ));
     }
 }

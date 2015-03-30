@@ -7,6 +7,7 @@ use Symfony\Component\Finder\SplFileInfo;
 use Tdn\PilotBundle\Manipulator\RoutingManipulator;
 use Tdn\PilotBundle\Model\GeneratedFileInterface;
 use \Mockery;
+use Tdn\PilotBundle\Tests\Fixtures\RoutingData;
 
 /**
  * Class RoutingManipulatorTest
@@ -43,12 +44,11 @@ class RoutingManipulatorTest extends AbstractManipulatorTest
      */
     protected function getManipulator()
     {
-        $manipulator = new RoutingManipulator(
-            $this->getTemplateStrategy(),
-            $this->getBundle(),
-            $this->getMetadata()
-        );
+        $manipulator = new RoutingManipulator();
 
+        $manipulator->setTemplateStrategy($this->getTemplateStrategy());
+        $manipulator->setBundle($this->getBundle());
+        $manipulator->setMetadata($this->getMetadata());
         $manipulator->setRoutePrefix('v1');
         $manipulator->setRoutingFile('routing.yml');
         $manipulator->setOverwrite(false);
@@ -90,12 +90,6 @@ class RoutingManipulatorTest extends AbstractManipulatorTest
      */
     protected function getRoutingFileMock()
     {
-        $routingFileContents = @file_get_contents(
-            dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
-            'data' . DIRECTORY_SEPARATOR .
-            'routing.out'
-        );
-
         $routingFileMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
         $routingFileMock
             ->shouldDeferMissing()
@@ -105,7 +99,7 @@ class RoutingManipulatorTest extends AbstractManipulatorTest
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Resources' . DIRECTORY_SEPARATOR . 'config',
                     'getExtension' => 'yml',
-                    'getContents'  => $routingFileContents,
+                    'getContents'  => RoutingData::ROUTING_FILE,
                     'getFullPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Resources' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'routing.yml',
                     'hasForceNew'  => true

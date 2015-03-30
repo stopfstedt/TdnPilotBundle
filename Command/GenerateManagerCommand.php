@@ -2,6 +2,7 @@
 
 namespace Tdn\PilotBundle\Command;
 
+use Symfony\Component\Console\Input\InputOption;
 use Tdn\PilotBundle\Manipulator\ManagerManipulator;
 
 /**
@@ -23,6 +24,22 @@ class GenerateManagerCommand extends AbstractGeneratorCommand
      * @var string
      */
     const DESCRIPTION = 'Generates an entity manager (Repository + DAO patterns) for a given entity.';
+
+    /**
+     * @return InputOption[]
+     */
+    protected function getInputArgs()
+    {
+        return [
+            new InputOption(
+                'format',
+                'f',
+                InputOption::VALUE_OPTIONAL,
+                'The service file format (yaml, xml)',
+                'yaml'
+            )
+        ];
+    }
 
     /**
      * @return ManagerManipulator

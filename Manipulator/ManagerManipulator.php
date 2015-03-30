@@ -80,7 +80,7 @@ class ManagerManipulator extends AbstractServiceManipulator
         $serviceFile = new GeneratedFile();
         $serviceFile
             ->setFilename('managers')
-            ->setExtension('xml')
+            ->setExtension($this->getFormat())
             ->setPath(sprintf(
                 '%s' . DIRECTORY_SEPARATOR . 'Resources' .
                 DIRECTORY_SEPARATOR . 'config',
@@ -96,7 +96,6 @@ class ManagerManipulator extends AbstractServiceManipulator
             $this->getDefaultExtensionFile()
         ));
 
-        $this->setServiceFile($serviceFile);
         $this->addGeneratedFile($serviceFile);
     }
 
@@ -210,11 +209,9 @@ class ManagerManipulator extends AbstractServiceManipulator
     }
 
     /**
-     * @param GeneratedFileInterface $managerFile
-     *
      * @return string
      */
-    protected function getServiceFileContents(GeneratedFileInterface $managerFile)
+    protected function getServiceFileContents()
     {
         $serviceClass = sprintf(
             '%s\\Entity\\Manager\\%sManager',
@@ -234,18 +231,23 @@ class ManagerManipulator extends AbstractServiceManipulator
             strtolower($this->getEntity())
         );
 
-        $this->setXmlServiceFile($managerFile);
-        $newXml = $this->getXmlServiceFile();
-        $this->getDiUtils()->setDiXmlTags($newXml, $serviceClass, $paramKey, $serviceId);
-        $service = $this->getDiUtils()->getDiXmlServiceTag($serviceId, $newXml);
-        $this->getDiUtils()->addEmArgTo($service);
-        $this->getDiUtils()->addClassArgTo(
-            $service,
-            $this->getBundle()->getNamespace(),
-            $this->getEntityNamespace(),
-            $this->getEntity()
-        );
+        $service = [
+            'class' => '%' . $paramKey . '%',
+            'arguments' => [
+                '@doctrine',
+                sprintf(
+                    '%s\\Entity\\%s%s',
+                    $this->getBundle()->getNamespace(),
+                    $this->getEntityNamespace(),
+                    $this->getEntity()
+                )
+            ]
+        ];
 
-        return $this->formatOutput(($newXml->asXML()) ?: '');
+        $diUtils = $this->getDiUtils();
+        $diUtils->addParameter($paramKey, $serviceClass);
+        $diUtils->addService($serviceId, $service);
+
+        return $diUtils->getContentsInFormat($this->getFormat());
     }
 }

@@ -6,6 +6,7 @@ use Tdn\PilotBundle\Command\GenerateRoutingCommand;
 use Tdn\PilotBundle\Manipulator\RoutingManipulator;
 use Tdn\PilotBundle\Model\GeneratedFile;
 use \Mockery;
+use Tdn\PilotBundle\Tests\Fixtures\RoutingData;
 
 /**
  * Class GenerateRoutingCommandTest
@@ -43,7 +44,7 @@ class GenerateRoutingCommandTest extends AbstractGeneratorCommandTest
     protected function getManipulator()
     {
         $manipulator = Mockery::mock(
-            new RoutingManipulator($this->getTemplateStrategy(), $this->getBundle(), $this->getMetadata())
+            new RoutingManipulator()
         );
 
         $manipulator
@@ -66,12 +67,6 @@ class GenerateRoutingCommandTest extends AbstractGeneratorCommandTest
      */
     protected function getGeneratedFiles()
     {
-        $content = @file_get_contents(
-            dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
-            'data' . DIRECTORY_SEPARATOR .
-            'routing.out'
-        );
-
         $routingFileMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
         $routingFileMock
             ->shouldDeferMissing()
@@ -82,7 +77,7 @@ class GenerateRoutingCommandTest extends AbstractGeneratorCommandTest
                         DIRECTORY_SEPARATOR . 'Resources' .
                         DIRECTORY_SEPARATOR . 'config',
                     'getExtension' => 'yml',
-                    'getContents'  => $content,
+                    'getContents'  => RoutingData::ROUTING_FILE,
                     'getFullPath'  => $this->getOutDir() .
                         DIRECTORY_SEPARATOR . 'Resources' .
                         DIRECTORY_SEPARATOR . 'config' .

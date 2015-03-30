@@ -2,6 +2,10 @@
 
 namespace Tdn\PilotBundle\Tests\Services;
 
+use Tuck\ConverterBundle\ConfigFormatConverter;
+use Tuck\ConverterBundle\Dumper\StandardDumperFactory;
+use Tuck\ConverterBundle\File\SysTempFileFactory;
+use Tuck\ConverterBundle\Loader\StandardLoaderFactory;
 use Tdn\PilotBundle\Services\Utils\DiUtils;
 use Tdn\PilotBundle\Tests\Fixtures\DiUtilsData;
 
@@ -18,7 +22,7 @@ class DiUtilsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->diUtils = new DiUtils();
+        $this->diUtils = new DiUtils($this->getFormatConverter());
     }
 
     public function testParameters()
@@ -71,13 +75,13 @@ class DiUtilsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(DiUtilsData::YAML, file_get_contents($file));
     }
 
-    protected function loadTest($file)
-    {
-        //Copy pre-made file over to tmp dir
-        $this->diUtils->load($file);
-        $this->assertEquals($this->getParameters(), $this->diUtils->getParameters());
-        $this->assertEquals($this->getServices(), $this->diUtils->getServices());
-    }
+//    protected function loadTest($file)
+//    {
+//        //Copy pre-made file over to tmp dir
+//        $this->diUtils->load($file);
+//        $this->assertEquals($this->getParameters(), $this->diUtils->getParameters());
+//        $this->assertEquals($this->getServices(), $this->diUtils->getServices());
+//    }
 
     /**
      * @param string $key
@@ -110,5 +114,17 @@ class DiUtilsTest extends \PHPUnit_Framework_TestCase
         $value = 'Foo\BarBundle\Entity\Manager\FooManager';
 
         return [$key, $value];
+    }
+
+    /**
+     * @return ConfigFormatConverter
+     */
+    protected function getFormatConverter()
+    {
+        return new ConfigFormatConverter(
+            new StandardLoaderFactory(),
+            new StandardDumperFactory(),
+            new SysTempFileFactory()
+        );
     }
 }

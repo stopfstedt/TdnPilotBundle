@@ -43,6 +43,17 @@ class HandlerManipulator extends AbstractServiceManipulator
     }
 
     /**
+     * @return string
+     */
+    protected function getHandlerFileContent()
+    {
+        return $this->getTemplateStrategy()->render('handler/handler.php.twig', [
+            'entity' => $this->getEntity(),
+            'namespace' => $this->getBundle()->getNamespace(),
+        ]);
+    }
+
+    /**
      * @return void
      */
     protected function addHandlerServiceFile()
@@ -50,13 +61,13 @@ class HandlerManipulator extends AbstractServiceManipulator
         $serviceFile = new GeneratedFile();
         $serviceFile
             ->setFilename('handlers')
-            ->setExtension('xml')
+            ->setExtension($this->getFormat())
             ->setPath(sprintf(
                 '%s' . DIRECTORY_SEPARATOR . 'Resources' .
                 DIRECTORY_SEPARATOR . 'config',
                 ($this->getTargetDirectory()) ?: $this->getBundle()->getPath()
             ))
-            ->setContents($this->getServiceFileContents($serviceFile)) //Kinda bad...fix later (Needs to be called last)
+            ->setContents($this->getServiceFileContents())
             ->setServiceFile(true)
         ;
 
@@ -71,20 +82,7 @@ class HandlerManipulator extends AbstractServiceManipulator
     /**
      * @return string
      */
-    protected function getHandlerFileContent()
-    {
-        return $this->getTemplateStrategy()->render('handler/handler.php.twig', [
-            'entity' => $this->getEntity(),
-            'namespace' => $this->getBundle()->getNamespace(),
-        ]);
-    }
-
-    /**
-     * @param GeneratedFileInterface $handlerFile
-     *
-     * @return string
-     */
-    public function getServiceFileContents(GeneratedFileInterface $handlerFile)
+    public function getServiceFileContents()
     {
         $serviceClass = sprintf(
             '%s\\Handler\\%sHandler',
@@ -104,23 +102,25 @@ class HandlerManipulator extends AbstractServiceManipulator
             strtolower($this->getEntity())
         );
 
-        $this->setXmlServiceFile($handlerFile);
-        $newXml = $this->getXmlServiceFile();
-        $this->getDiUtils()->setDiXmlTags($newXml, $serviceClass, $paramKey, $serviceId);
-        $service = $this->getDiUtils()->getDiXmlServiceTag($serviceId, $newXml);
-        $this->getDiUtils()->addEmArgTo($service);
-        $this->getDiUtils()->addClassArgTo(
-            $service,
-            $this->getBundle()->getNamespace(),
-            $this->getEntityNamespace(),
-            $this->getEntity()
-        );
+        $service = [
+            'class' => '%' . $paramKey . '%',
+            'arguments' => [
+                '@doctrine',
+                sprintf(
+                    '%s\\Entity\\%s%s',
+                    $this->getBundle()->getNamespace(),
+                    $this->getEntityNamespace(),
+                    $this->getEntity()
+                ),
+                '@form.factory'
+            ]
+        ];
 
-        $formFactoryArgTag = $service->addChild('argument');
-        $formFactoryArgTag->addAttribute('type', 'service');
-        $formFactoryArgTag->addAttribute('id', 'form.factory');
+        $diUtils = $this->getDiUtils();
+        $diUtils->addParameter($paramKey, $serviceClass);
+        $diUtils->addService($serviceId, $service);
 
-        return $this->formatOutput(($newXml->asXML()) ?: '');
+        return $diUtils->getContentsInFormat($this->getFormat());
     }
 
     protected function addManagerDependency()

@@ -7,6 +7,7 @@ use Symfony\Component\Finder\SplFileInfo;
 use Tdn\PilotBundle\Manipulator\ControllerManipulator;
 use Tdn\PilotBundle\Model\GeneratedFileInterface;
 use \Mockery;
+use Tdn\PilotBundle\Tests\Fixtures\ControllerData;
 
 /**
  * Class ControllerManipulatorTest
@@ -58,11 +59,11 @@ class ControllerManipulatorTest extends AbstractManipulatorTest
      */
     protected function getManipulator()
     {
-        $manipulator = new ControllerManipulator(
-            $this->getTemplateStrategy(),
-            $this->getBundle(),
-            $this->getMetadata()
-        );
+        $manipulator = new ControllerManipulator();
+
+        $manipulator->setTemplateStrategy($this->getTemplateStrategy());
+        $manipulator->setBundle($this->getBundle());
+        $manipulator->setMetadata($this->getMetadata());
         $manipulator->setSwagger(true);
         $manipulator->setResource(true);
         $manipulator->setOverwrite(false);
@@ -108,12 +109,6 @@ class ControllerManipulatorTest extends AbstractManipulatorTest
      */
     protected function getControllerFileMock($type = null)
     {
-        $content = @file_get_contents(
-            dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
-            'data' . DIRECTORY_SEPARATOR .
-            (($type) ?: 'basic') . '.controller.out'
-        );
-
         $controllerFileMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
         $controllerFileMock
             ->shouldDeferMissing()
@@ -122,7 +117,7 @@ class ControllerManipulatorTest extends AbstractManipulatorTest
                     'getFilename'  => 'FooController',
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR . 'Controller',
                     'getExtension' => 'php',
-                    'getContents'  => $content,
+                    'getContents'  => ControllerData::BASIC_FOO_CONTROLLER,
                     'getFullPath'  => $this->getOutDir() .
                         DIRECTORY_SEPARATOR . 'Controller' .
                         DIRECTORY_SEPARATOR . 'FooController.php'

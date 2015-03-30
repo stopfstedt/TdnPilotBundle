@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Yaml\Dumper as YamlDumper;
+use Tdn\PilotBundle\Model\GeneratedFileInterface;
 use Tuck\ConverterBundle\ConfigFormatConverter;
 use Tdn\PilotBundle\Services\Utils\Parser\ParserInterface;
 use Tdn\PilotBundle\Services\Utils\Parser\YamlParser;
@@ -159,17 +160,35 @@ class DiUtils
     }
 
     /**
+     * @param string $format
+     *
+     * @return string
+     */
+    public function getContentsInFormat($format)
+    {
+        switch (strtolower($format)) {
+            case 'yaml':
+            case 'yml':
+                return $this->getYaml();
+            case 'xml':
+                return $this->getXml();
+            default:
+                throw new \InvalidArgumentException('Invalid format passed: ' . $format);
+        }
+    }
+
+    /**
      * Saves to a file.
      *
      * The function extrapolates the format of the file (xml, yaml) based on the extension.
      *
-     * @param string $file the file to save to.
+     * @param GeneratedFileInterface $file the file to save to.
      *
      * @return bool
      */
-    public function save($file)
+    public function save(GeneratedFileInterface $file)
     {
-        if (false === file_put_contents($file, $this->getData($this->getFormat($file)))) {
+        if (false === file_put_contents($file->getFullPath(), $this->getContentsInFormat($this->getFormat($file->getExtension())))) {
             throw new \RuntimeException(
                 sprintf(
                     'Failed updating the %s file.',
@@ -237,23 +256,6 @@ class DiUtils
                 //As noted in http://stackoverflow.com/a/6943363/1583093 trying to create a one to one is not
                 //ideal.
                 return new XmlParser($this->formatConverter, new YamlParser());
-            default:
-                throw new \InvalidArgumentException('Invalid format passed: ' . $format);
-        }
-    }
-
-    /**
-     * @param $format
-     * @return string
-     */
-    protected function getData($format)
-    {
-        switch (strtolower($format)) {
-            case 'yaml':
-            case 'yml':
-                return $this->getYaml();
-            case 'xml':
-                return $this->getXml();
             default:
                 throw new \InvalidArgumentException('Invalid format passed: ' . $format);
         }

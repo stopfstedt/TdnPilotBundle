@@ -7,6 +7,7 @@ use Symfony\Component\Finder\SplFileInfo;
 use Tdn\PilotBundle\Manipulator\HandlerManipulator;
 use Tdn\PilotBundle\Model\GeneratedFileInterface;
 use \Mockery;
+use Tdn\PilotBundle\Tests\Fixtures\HandlerData;
 
 /**
  * Class HandlerManipulatorTest
@@ -19,14 +20,15 @@ class HandlerManipulatorTest extends AbstractServiceManipulatorTest
      */
     protected function getManipulator()
     {
-        $manipulator = new HandlerManipulator(
-            $this->getTemplateStrategy(),
-            $this->getBundle(),
-            $this->getMetadata()
-        );
+        $manipulator = new HandlerManipulator();
 
+        $manipulator->setTemplateStrategy($this->getTemplateStrategy());
+        $manipulator->setBundle($this->getBundle());
+        $manipulator->setMetadata($this->getMetadata());
         $manipulator->setOverwrite(false);
         $manipulator->setTargetDirectory($this->getOutDir());
+        $manipulator->setDiUtils($this->getDiUtils());
+        $manipulator->setFormat('xml');
 
         return $manipulator->prepare();
     }
@@ -88,12 +90,6 @@ class HandlerManipulatorTest extends AbstractServiceManipulatorTest
      */
     protected function getHandlerFileMock()
     {
-        $content = @file_get_contents(
-            dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
-            'data' . DIRECTORY_SEPARATOR .
-            'handler.out'
-        );
-
         $handlerFileMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
         $handlerFileMock
             ->shouldDeferMissing()
@@ -102,7 +98,7 @@ class HandlerManipulatorTest extends AbstractServiceManipulatorTest
                     'getFilename'  => 'FooHandler',
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR . 'Handler',
                     'getExtension' => 'php',
-                    'getContents'  => $content,
+                    'getContents'  => HandlerData::FOO_HANDLER,
                     'getFullPath'  => $this->getOutDir() .
                         DIRECTORY_SEPARATOR . 'Handler' . DIRECTORY_SEPARATOR . 'FooHandler.php'
                 ]
@@ -118,13 +114,6 @@ class HandlerManipulatorTest extends AbstractServiceManipulatorTest
      */
     protected function getHandlerServiceMock()
     {
-
-        $handlrServContent = @file_get_contents(
-            dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
-            'data' . DIRECTORY_SEPARATOR .
-            'handlers.service.xml.out'
-        );
-
         $handlrServMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
         $handlrServMock
             ->shouldDeferMissing()
@@ -134,7 +123,7 @@ class HandlerManipulatorTest extends AbstractServiceManipulatorTest
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Resources' . DIRECTORY_SEPARATOR . 'config',
                     'getExtension' => 'xml',
-                    'getContents'  => $handlrServContent,
+                    'getContents'  => HandlerData::FOO_HANDLER_SERVICE_XML,
                     'getFullPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Resources' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'handlers.xml'
                 ]

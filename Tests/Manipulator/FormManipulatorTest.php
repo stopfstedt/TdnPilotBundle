@@ -7,6 +7,7 @@ use Symfony\Component\Finder\SplFileInfo;
 use Tdn\PilotBundle\Manipulator\FormManipulator;
 use Tdn\PilotBundle\Model\GeneratedFileInterface;
 use \Mockery;
+use Tdn\PilotBundle\Tests\Fixtures\FormData;
 
 /**
  * Class FormManipulatorTest
@@ -19,12 +20,11 @@ class FormManipulatorTest extends AbstractManipulatorTest
      */
     protected function getManipulator()
     {
-        $manipulator = new FormManipulator(
-            $this->getTemplateStrategy(),
-            $this->getBundle(),
-            $this->getMetadata()
-        );
+        $manipulator = new FormManipulator();
 
+        $manipulator->setTemplateStrategy($this->getTemplateStrategy());
+        $manipulator->setBundle($this->getBundle());
+        $manipulator->setMetadata($this->getMetadata());
         $manipulator->setOverwrite(false);
         $manipulator->setTargetDirectory($this->getOutDir());
 
@@ -68,12 +68,6 @@ class FormManipulatorTest extends AbstractManipulatorTest
      */
     protected function getFormTypeMock()
     {
-        $typeContent = @file_get_contents(
-            dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
-            'data' . DIRECTORY_SEPARATOR .
-            'form.type.out'
-        );
-
         $formTypeFileMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
         $formTypeFileMock
             ->shouldDeferMissing()
@@ -82,7 +76,7 @@ class FormManipulatorTest extends AbstractManipulatorTest
                     'getFilename'  => 'FooType',
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR . 'Form' . DIRECTORY_SEPARATOR . 'Type',
                     'getExtension' => 'php',
-                    'getContents'  => $typeContent,
+                    'getContents'  => FormData::FOO_FORM_TYPE,
                     'getFullPath'  => $this->getOutDir() .
                         DIRECTORY_SEPARATOR . 'Form' . DIRECTORY_SEPARATOR . 'Type' .
                         DIRECTORY_SEPARATOR . 'FooType.php'
@@ -99,12 +93,6 @@ class FormManipulatorTest extends AbstractManipulatorTest
      */
     protected function getExceptionFileMock()
     {
-        $exceptionContent = @file_get_contents(
-            dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
-            'data' . DIRECTORY_SEPARATOR .
-            'form.exception.out'
-        );
-
         $exceptionFileMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
         $exceptionFileMock
             ->shouldDeferMissing()
@@ -113,7 +101,7 @@ class FormManipulatorTest extends AbstractManipulatorTest
                     'getFilename'  => 'InvalidFormException',
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR . 'Exception',
                     'getExtension' => 'php',
-                    'getContents'  => $exceptionContent,
+                    'getContents'  => FormData::FORM_EXCEPTION,
                     'getFullPath'  => $this->getOutDir() .
                         DIRECTORY_SEPARATOR . 'Exception' . DIRECTORY_SEPARATOR . 'InvalidFormException.php'
                 ]

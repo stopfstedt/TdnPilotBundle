@@ -1,5 +1,0 @@
-api_foo_v1:
-    resource: "@FooBarBundle/Controller/FooController.php"
-    type:     rest
-    prefix:   /v1
-    defaults: {_format:json}

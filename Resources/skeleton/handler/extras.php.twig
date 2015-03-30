@@ -21,7 +21,7 @@
         $form->submit($parameters, 'PATCH' !== $method);
 
         if ($form->isValid()) {
-            ${{ entity|lowerfirst }} = $form->getData();
+            ${{ entity|lowerfirst }} = $form->getContentsInFormat();
             $this->update{{ entity }}(${{ entity|lowerfirst }}, true);
 
             return ${{ entity|lowerfirst }};

@@ -7,6 +7,7 @@ use Symfony\Component\Finder\SplFileInfo;
 use Tdn\PilotBundle\Manipulator\ManagerManipulator;
 use Tdn\PilotBundle\Model\GeneratedFileInterface;
 use \Mockery;
+use Tdn\PilotBundle\Tests\Fixtures\ManagerData;
 
 /**
  * Class ManagerManipulatorTest
@@ -19,14 +20,15 @@ class ManagerManipulatorTest extends AbstractServiceManipulatorTest
      */
     protected function getManipulator()
     {
-        $manipulator = new ManagerManipulator(
-            $this->getTemplateStrategy(),
-            $this->getBundle(),
-            $this->getMetadata()
-        );
+        $manipulator = new ManagerManipulator();
 
+        $manipulator->setTemplateStrategy($this->getTemplateStrategy());
+        $manipulator->setBundle($this->getBundle());
+        $manipulator->setMetadata($this->getMetadata());
         $manipulator->setOverwrite(false);
         $manipulator->setTargetDirectory($this->getOutDir());
+        $manipulator->setDiUtils($this->getDiUtils());
+        $manipulator->setFormat('xml');
 
         return $manipulator->prepare();
     }
@@ -71,12 +73,6 @@ class ManagerManipulatorTest extends AbstractServiceManipulatorTest
      */
     protected function getManagerFileMock()
     {
-        $content = @file_get_contents(
-            dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
-            'data' . DIRECTORY_SEPARATOR .
-            'manager.out'
-        );
-
         $managerFileMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
         $managerFileMock
             ->shouldDeferMissing()
@@ -86,7 +82,7 @@ class ManagerManipulatorTest extends AbstractServiceManipulatorTest
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Entity' . DIRECTORY_SEPARATOR . 'Manager',
                     'getExtension' => 'php',
-                    'getContents'  => $content,
+                    'getContents'  => ManagerData::FOO_MANAGER,
                     'getFullPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Entity' . DIRECTORY_SEPARATOR . 'Manager' . DIRECTORY_SEPARATOR . 'FooManager.php'
                 ]
@@ -102,12 +98,6 @@ class ManagerManipulatorTest extends AbstractServiceManipulatorTest
      */
     protected function getMgrInterfaceFileMock()
     {
-        $interfaceContent = @file_get_contents(
-            dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
-            'data' . DIRECTORY_SEPARATOR .
-            'manager.interface.data'
-        );
-
         $mgrInterfaceFileMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
         $mgrInterfaceFileMock
             ->shouldDeferMissing()
@@ -117,7 +107,7 @@ class ManagerManipulatorTest extends AbstractServiceManipulatorTest
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Entity' . DIRECTORY_SEPARATOR . 'Manager',
                     'getExtension' => 'php',
-                    'getContents'  => $interfaceContent,
+                    'getContents'  => ManagerData::FOO_MANAGER_INTERFACE,
                     'getFullPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Entity' . DIRECTORY_SEPARATOR . 'Manager' . DIRECTORY_SEPARATOR . 'FooManagerInterface.php'
                 ]
@@ -133,12 +123,6 @@ class ManagerManipulatorTest extends AbstractServiceManipulatorTest
      */
     protected function getManagerServiceMock()
     {
-        $mgrServiceContent = @file_get_contents(
-            dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
-            'data' . DIRECTORY_SEPARATOR .
-            'managers.service.xml.out'
-        );
-
         $mgrServiceMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
         $mgrServiceMock
             ->shouldDeferMissing()
@@ -148,7 +132,7 @@ class ManagerManipulatorTest extends AbstractServiceManipulatorTest
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Resources' . DIRECTORY_SEPARATOR . 'config',
                     'getExtension' => 'xml',
-                    'getContents'  => $mgrServiceContent,
+                    'getContents'  => ManagerData::FOO_MANAGER_SERVICE_XML,
                     'getFullPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Resources' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'managers.xml'
                 ]

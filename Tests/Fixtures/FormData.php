@@ -1,5 +1,47 @@
 <?php
 
+namespace Tdn\PilotBundle\Tests\Fixtures;
+
+/**
+ * Static data fixture for form tests.
+ *
+ * Class FormData
+ * @package Tdn\PilotBundle\Tests\Fixtures
+ */
+class FormData
+{
+    const FORM_EXCEPTION = <<<'FORM_EXCEPTION'
+<?php
+
+namespace Foo\BarBundle\Exception;
+
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+
+/**
+ * Class InvalidFormException
+ * @package Foo\BarBundle\Exception
+ */
+class InvalidFormException extends BadRequestHttpException
+{
+    protected $form;
+
+    public function __construct($message, $form = null)
+    {
+        parent::__construct($message);
+        $this->form = $form;
+    }
+
+    public function getForm()
+    {
+        return $this->form;
+    }
+}
+
+FORM_EXCEPTION;
+
+    const FOO_FORM_TYPE = <<<'FOO_FORM_TYPE'
+<?php
+
 namespace Foo\BarBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
@@ -42,4 +84,8 @@ class FooType extends AbstractType
     {
         return 'foo_type';
     }
+}
+
+FOO_FORM_TYPE;
+
 }

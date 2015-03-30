@@ -1,5 +1,18 @@
 <?php
 
+namespace Tdn\PilotBundle\Tests\Fixtures;
+
+/**
+ * Static data fixture for controller tests.
+ *
+ * Class ControllerData
+ * @package Tdn\PilotBundle\Tests\Fixtures
+ */
+class ControllerData
+{
+    const BASIC_FOO_CONTROLLER = <<<'BASIC_CONTROLLER'
+<?php
+
 namespace Foo\BarBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations\QueryParam;
@@ -18,9 +31,9 @@ use Foo\BarBundle\Handler\FooHandler;
 use Foo\BarBundle\Entity\FooInterface;
 
 /**
- * Foo controller.
- * @package Foo\BarBundle\Controller;
- * @RouteResource("Foo")
+ * Class FooController
+ * @package Foo\BarBundle\Controller
+ * @RouteResource("Foos")
  */
 class FooController extends FOSRestController
 {
@@ -28,6 +41,7 @@ class FooController extends FOSRestController
      * Get a Foo
      *
      * @ApiDoc(
+     *   section = "Foo",
      *   description = "Get a Foo.",
      *   resource = true,
      *   requirements={
@@ -47,12 +61,11 @@ class FooController extends FOSRestController
      *
      * @View(serializerEnableMaxDepthChecks=true)
      *
-     * @param Request $request
      * @param $id
      *
      * @return Response
      */
-    public function getAction(Request $request, $id)
+    public function getAction($id)
     {
         $answer['foo'] = $this->getOr404($id);
 
@@ -63,20 +76,15 @@ class FooController extends FOSRestController
      * Get all Foo.
      *
      * @ApiDoc(
-     *   resource = true,
+     *   section = "Foo",
      *   description = "Get all Foo.",
+     *   resource = true,
      *   output="Foo\BarBundle\Entity\Foo",
      *   statusCodes = {
      *     200 = "List of all Foo",
      *     204 = "No content. Nothing to list."
      *   }
      * )
-     *
-     * @View(serializerEnableMaxDepthChecks=true)
-     *
-     * @param ParamFetcherInterface $paramFetcher
-     *
-     * @return Response
      *
      * @QueryParam(
      *   name="offset",
@@ -102,6 +110,12 @@ class FooController extends FOSRestController
      *   array=true,
      *   description="Filter by fields. Must be an array ie. &filters[id]=3"
      * )
+     *
+     * @View(serializerEnableMaxDepthChecks=true)
+     *
+     * @param ParamFetcherInterface $paramFetcher
+     *
+     * @return Response
      */
     public function cgetAction(ParamFetcherInterface $paramFetcher)
     {
@@ -124,6 +138,7 @@ class FooController extends FOSRestController
                 $limit,
                 $offset
             );
+
         //If there are no matches return an empty array
         $answer['foos'] =
             $result ? $result : new ArrayCollection([]);
@@ -135,8 +150,9 @@ class FooController extends FOSRestController
      * Create a Foo.
      *
      * @ApiDoc(
-     *   resource = true,
+     *   section = "Foo",
      *   description = "Create a Foo.",
+     *   resource = true,
      *   input="Foo\BarBundle\Form\Type\FooType",
      *   output="Foo\BarBundle\Entity\Foo",
      *   statusCodes={
@@ -155,7 +171,8 @@ class FooController extends FOSRestController
     public function postAction(Request $request)
     {
         try {
-            $new  =  $this->getFooHandler()->post($this->getPostData($request));
+            $new  =  $this->getFooHandler()
+                ->post($this->getPostData($request));
             $answer['foo'] = $new;
 
             return $answer;
@@ -168,8 +185,9 @@ class FooController extends FOSRestController
      * Update a Foo.
      *
      * @ApiDoc(
-     *   resource = true,
+     *   section = "Foo",
      *   description = "Update a Foo entity.",
+     *   resource = true,
      *   input="Foo\BarBundle\Form\Type\FooType",
      *   output="Foo\BarBundle\Entity\Foo",
      *   statusCodes={
@@ -217,8 +235,9 @@ class FooController extends FOSRestController
      * Partial Update to a Foo.
      *
      * @ApiDoc(
-     *   resource = true,
+     *   section = "Foo",
      *   description = "Partial Update to a Foo.",
+     *   resource = true,
      *   input="Foo\BarBundle\Form\Type\FooType",
      *   output="Foo\BarBundle\Entity\Foo",
      *   requirements={
@@ -235,7 +254,6 @@ class FooController extends FOSRestController
      *     404 = "Not Found."
      *   }
      * )
-     *
      *
      * @View(serializerEnableMaxDepthChecks=true)
      *
@@ -259,6 +277,7 @@ class FooController extends FOSRestController
      * Delete a Foo.
      *
      * @ApiDoc(
+     *   section = "Foo",
      *   description = "Delete a Foo entity.",
      *   resource = true,
      *   requirements={
@@ -278,18 +297,17 @@ class FooController extends FOSRestController
      *
      * @View(statusCode=204)
      *
-     * @param Request $request
      * @param $id
      * @internal FooInterface $foo
      *
      * @return Response
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction($id)
     {
         $foo = $this->getOr404($id);
+
         try {
-            $this->getFooHandler()
-                ->deleteFoo($foo);
+            $this->getFooHandler()->deleteFoo($foo);
 
             return new Response('', Codes::HTTP_NO_CONTENT);
         } catch (\Exception $exception) {
@@ -332,4 +350,8 @@ class FooController extends FOSRestController
     {
         return $this->container->get('foobar.foo.handler');
     }
+}
+
+BASIC_CONTROLLER;
+
 }

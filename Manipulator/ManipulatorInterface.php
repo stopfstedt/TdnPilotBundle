@@ -136,4 +136,11 @@ interface ManipulatorInterface
      * @return $this
      */
     public function prepare();
+
+    /**
+     * Resets the internal state to a "new" instance.
+     *
+     * @return static
+     */
+    public function reset();
 }

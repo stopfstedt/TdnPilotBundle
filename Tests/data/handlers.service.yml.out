@@ -1,7 +1,0 @@
-parameters:
-    foobar.foo.handler.class: Foo\BarBundle\Handler\FooHandler
-
-services:
-    foobar.foo.handler:
-        class: %foobar.foo.handler.class%
-        arguments: ['@doctrine.orm.entity_manager', Foo\BarBundle\Entity\Foo, '@form.factory']

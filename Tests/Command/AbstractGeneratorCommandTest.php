@@ -18,7 +18,6 @@ use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 use Tdn\PilotBundle\Manipulator\ManipulatorInterface;
 use Tdn\PilotBundle\Model\GeneratedFile;
 use Tdn\PilotBundle\Services\Utils\EntityUtils;
-use Tdn\PilotBundle\TdnPilotBundle;
 use \Mockery as Mockery;
 
 /**
@@ -256,19 +255,6 @@ abstract class AbstractGeneratorCommandTest extends GenerateCommandTest
         }
 
         return $this->bundle;
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getSkeletonDirs()
-    {
-        $bundleClass    = new \ReflectionClass(new TdnPilotBundle());
-        $skeletonDirs   = [];
-        $skeletonDirs[] = dirname($bundleClass->getFileName()) . '/Resources/skeleton';
-        $skeletonDirs[] = dirname($bundleClass->getFileName()) . '/Resources';
-
-        return $skeletonDirs;
     }
 
     /**

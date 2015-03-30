@@ -1,5 +1,46 @@
 <?php
 
+namespace Tdn\PilotBundle\Tests\Fixtures;
+
+/**
+ * Static data fixture for handler tests.
+ *
+ * Class HandlerData
+ * @package Tdn\PilotBundle\Tests\Fixtures
+ */
+class HandlerData
+{
+    const FOO_HANDLER_SERVICE_XML = <<<'FOO_HANDLER_XML'
+<?xml version="1.0" encoding="utf-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+  <parameters>
+    <parameter key="foobar.foo.handler.class">Foo\BarBundle\Handler\FooHandler</parameter>
+  </parameters>
+  <services>
+    <service id="foobar.foo.handler" class="%foobar.foo.handler.class%">
+      <argument type="service" id="doctrine"/>
+      <argument>Foo\BarBundle\Entity\Foo</argument>
+      <argument type="service" id="form.factory"/>
+    </service>
+  </services>
+</container>
+
+FOO_HANDLER_XML;
+
+    const FOO_HANDLER_SERVICE_YAML = <<<'FOO_HANDLER_YAML'
+parameters:
+    foobar.foo.handler.class: Foo\BarBundle\Handler\FooHandler
+
+services:
+    foobar.foo.handler:
+        class: %foobar.foo.handler.class%
+        arguments: ['@doctrine', Foo\BarBundle\Entity\Foo, '@form.factory']
+
+FOO_HANDLER_YAML;
+
+    const FOO_HANDLER = <<<'FOO_HANDLER'
+<?php
+
 namespace Foo\BarBundle\Handler;
 
 use Symfony\Component\Form\FormFactoryInterface;
@@ -98,7 +139,7 @@ class FooHandler extends FooManager
         $form->submit($parameters, 'PATCH' !== $method);
 
         if ($form->isValid()) {
-            $foo = $form->getData();
+            $foo = $form->getContentsInFormat();
             $this->updateFoo($foo, true);
 
             return $foo;
@@ -106,4 +147,8 @@ class FooHandler extends FooManager
 
         throw new InvalidFormException('Invalid submitted data', $form);
     }
+}
+
+FOO_HANDLER;
+
 }

@@ -16,6 +16,11 @@ abstract class AbstractServiceManipulator extends AbstractManipulator implements
     private $diUtils;
 
     /**
+     * @var string
+     */
+    private $format;
+
+    /**
      * @var bool
      */
     private $updatingDiFile;
@@ -34,6 +39,22 @@ abstract class AbstractServiceManipulator extends AbstractManipulator implements
     public function getDiUtils()
     {
         return $this->diUtils;
+    }
+
+    /**
+     * @param string $format
+     */
+    public function setFormat($format)
+    {
+        $this->format = $format;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormat()
+    {
+        return $this->format;
     }
 
     /**

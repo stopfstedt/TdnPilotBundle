@@ -2,6 +2,7 @@
 
 namespace Tdn\PilotBundle\Command;
 
+use Symfony\Component\Console\Input\InputOption;
 use Tdn\PilotBundle\Manipulator\HandlerManipulator;
 
 /**
@@ -22,6 +23,22 @@ class GenerateHandlerCommand extends AbstractGeneratorCommand
      * @var string
      */
     const DESCRIPTION = 'Generates an entity REST handler file for a controller.';
+
+    /**
+     * @return InputOption[]
+     */
+    protected function getInputArgs()
+    {
+        return [
+            new InputOption(
+                'format',
+                'f',
+                InputOption::VALUE_OPTIONAL,
+                'The service file format (yaml, xml)',
+                'yaml'
+            )
+        ];
+    }
 
     /**
      * @return HandlerManipulator
