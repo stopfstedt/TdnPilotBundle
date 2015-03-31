@@ -8,7 +8,7 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Common\Collections\ArrayCollection;
 use Tdn\PhpTypes\Type\String;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
+use Tdn\PilotBundle\Model\FileInterface;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 
 /**
@@ -39,7 +39,7 @@ abstract class AbstractManipulator implements ManipulatorInterface
     private $metadata;
 
     /**
-     * @var ArrayCollection|GeneratedFileInterface[]
+     * @var ArrayCollection|FileInterface[]
      */
     private $generatedFiles;
 
@@ -159,15 +159,15 @@ abstract class AbstractManipulator implements ManipulatorInterface
     }
 
     /**
-     * @param GeneratedFileInterface $generatedFile
+     * @param FileInterface $generatedFile
      */
-    public function addGeneratedFile(GeneratedFileInterface $generatedFile)
+    public function addGeneratedFile(FileInterface $generatedFile)
     {
         $this->generatedFiles->set($generatedFile->getFullPath(), $generatedFile);
     }
 
     /**
-     * @return ArrayCollection|GeneratedFileInterface[]
+     * @return ArrayCollection|FileInterface[]
      */
     public function getGeneratedFiles()
     {
@@ -293,7 +293,7 @@ abstract class AbstractManipulator implements ManipulatorInterface
      * Generates all the files declared by the manipulator if the
      * system is in a valid state.
      *
-     * @return ArrayCollection|GeneratedFileInterface[]
+     * @return ArrayCollection|FileInterface[]
      */
     public function generate()
     {
@@ -341,10 +341,10 @@ abstract class AbstractManipulator implements ManipulatorInterface
      * Of if a conflict is present, that the class has been configured
      * to properly handle that conflict.
      *
-     * @param GeneratedFileInterface $generatedFile
+     * @param FileInterface $generatedFile
      * @return bool
      */
-    protected function isGeneratedFileValid(GeneratedFileInterface $generatedFile)
+    protected function isGeneratedFileValid(FileInterface $generatedFile)
     {
         if (file_exists($generatedFile->getFullPath()) &&
             (!$this->shouldOverwrite() && !$generatedFile->isAuxFile() && !$generatedFile->isServiceFile())

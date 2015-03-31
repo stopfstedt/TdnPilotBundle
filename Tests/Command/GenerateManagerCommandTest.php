@@ -4,7 +4,7 @@ namespace Tdn\PilotBundle\Tests\Command;
 
 use Tdn\PilotBundle\Command\GenerateManagerCommand;
 use Tdn\PilotBundle\Manipulator\ManagerManipulator;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
+use Tdn\PilotBundle\Model\FileInterface;
 use \Mockery;
 use Tdn\PilotBundle\Tests\Fixtures\ManagerData;
 
@@ -60,7 +60,7 @@ class GenerateManagerCommandTest extends AbstractGeneratorCommandTest
     }
 
     /**
-     * @return GeneratedFileInterface[]
+     * @return FileInterface[]
      */
     protected function getGeneratedFiles()
     {
@@ -76,7 +76,7 @@ class GenerateManagerCommandTest extends AbstractGeneratorCommandTest
     }
 
     /**
-     * @return GeneratedFileInterface
+     * @return FileInterface
      */
     protected function getManagerFileMock()
     {
@@ -101,7 +101,7 @@ class GenerateManagerCommandTest extends AbstractGeneratorCommandTest
     }
 
     /**
-     * @return GeneratedFileInterface
+     * @return FileInterface
      */
     protected function getMgrInterfaceFileMock()
     {
@@ -126,7 +126,7 @@ class GenerateManagerCommandTest extends AbstractGeneratorCommandTest
     }
 
     /**
-     * @return GeneratedFileInterface
+     * @return FileInterface
      */
     protected function getManagerServiceMock()
     {

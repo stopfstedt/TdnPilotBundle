@@ -4,7 +4,7 @@ namespace Tdn\PilotBundle\Tests\Command;
 
 use Tdn\PilotBundle\Command\GenerateRoutingCommand;
 use Tdn\PilotBundle\Manipulator\RoutingManipulator;
-use Tdn\PilotBundle\Model\GeneratedFile;
+use Tdn\PilotBundle\Model\File;
 use \Mockery;
 use Tdn\PilotBundle\Tests\Fixtures\RoutingData;
 
@@ -63,7 +63,7 @@ class GenerateRoutingCommandTest extends AbstractGeneratorCommandTest
     }
 
     /**
-     * @return Mockery\MockInterface|GeneratedFile[]
+     * @return Mockery\MockInterface|File[]
      */
     protected function getGeneratedFiles()
     {

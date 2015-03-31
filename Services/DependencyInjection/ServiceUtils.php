@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Yaml\Dumper as YamlDumper;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
+use Tdn\PilotBundle\Model\FileInterface;
 use Tuck\ConverterBundle\ConfigFormatConverter;
 use Tdn\PilotBundle\Services\DependencyInjection\Parser\ParserInterface;
 use Tdn\PilotBundle\Services\DependencyInjection\Parser\YamlParser;
@@ -186,11 +186,11 @@ class ServiceUtils
      *
      * The function extrapolates the format of the file (xml, yaml) based on the extension.
      *
-     * @param GeneratedFileInterface $file the file to save to.
+     * @param FileInterface $file the file to save to.
      *
      * @return bool
      */
-    public function save(GeneratedFileInterface $file)
+    public function save($file)
     {
         if (false === file_put_contents($file->getFullPath(), $this->getContentsInFormat($this->getFormat($file->getExtension())))) {
             throw new \RuntimeException(

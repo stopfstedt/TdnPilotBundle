@@ -4,7 +4,7 @@ namespace Tdn\PilotBundle\Template\Strategy;
 
 use Symfony\Component\Filesystem\Exception\IOException;
 use Tdn\PhpTypes\Type\String;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
+use Tdn\PilotBundle\Model\FileInterface;
 
 /**
  * Class TwigStrategy
@@ -66,11 +66,11 @@ class TwigStrategy implements TemplateStrategyInterface
     }
 
     /**
-     * @param GeneratedFileInterface $target
+     * @param FileInterface $target
      *
      * @throws IOException
      */
-    public function renderFile(GeneratedFileInterface $target)
+    public function renderFile(FileInterface $target)
     {
         if (!is_dir(dirname($target->getFullPath()))) {
             mkdir(dirname($target->getFullPath()), 0755, true);

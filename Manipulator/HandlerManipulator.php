@@ -4,8 +4,8 @@ namespace Tdn\PilotBundle\Manipulator;
 
 use Symfony\Component\Finder\SplFileInfo;
 use Tdn\PhpTypes\Type\String;
-use Tdn\PilotBundle\Model\GeneratedFile;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
+use Tdn\PilotBundle\Model\File;
+use Tdn\PilotBundle\Model\FileInterface;
 
 /**
  * Class HandlerManipulator
@@ -25,7 +25,7 @@ class HandlerManipulator extends AbstractServiceManipulator
             ($this->getTargetDirectory()) ?: $this->getBundle()->getPath()
         );
 
-        $handler = new GeneratedFile();
+        $handler = new File();
         $handler
             ->setFilename($this->getEntity() . 'Handler')
             ->setExtension('php')
@@ -58,7 +58,7 @@ class HandlerManipulator extends AbstractServiceManipulator
      */
     protected function addHandlerServiceFile()
     {
-        $serviceFile = new GeneratedFile();
+        $serviceFile = new File();
         $serviceFile
             ->setFilename('handlers')
             ->setExtension($this->getFormat())

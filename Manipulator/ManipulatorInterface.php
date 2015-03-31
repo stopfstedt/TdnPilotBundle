@@ -7,7 +7,7 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
+use Tdn\PilotBundle\Model\FileInterface;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 
 /**
@@ -62,12 +62,12 @@ interface ManipulatorInterface
     public function setGeneratedFiles(Collection $generatedFiles);
 
     /**
-     * @param GeneratedFileInterface $generatedFile
+     * @param FileInterface $generatedFile
      */
-    public function addGeneratedFile(GeneratedFileInterface $generatedFile);
+    public function addGeneratedFile(FileInterface $generatedFile);
 
     /**
-     * @return ArrayCollection|GeneratedFileInterface[]
+     * @return ArrayCollection|FileInterface[]
      */
     public function getGeneratedFiles();
 
@@ -127,7 +127,7 @@ interface ManipulatorInterface
     public function isValid();
 
     /**
-     * @return ArrayCollection|GeneratedFileInterface[]
+     * @return ArrayCollection|FileInterface[]
      */
     public function generate();
 

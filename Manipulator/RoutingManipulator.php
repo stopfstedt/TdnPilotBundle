@@ -6,7 +6,7 @@ use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Tdn\PilotBundle\Model\GeneratedFile;
+use Tdn\PilotBundle\Model\File;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 use Tdn\PhpTypes\Type\String;
 
@@ -101,7 +101,7 @@ class RoutingManipulator extends AbstractManipulator
     public function prepare()
     {
         list($file, $extension) = explode('.', $this->getRoutingFile());
-        $routing = new GeneratedFile();
+        $routing = new File();
         $routing
             ->setFilename($file)
             ->setExtension($extension)
@@ -121,10 +121,10 @@ class RoutingManipulator extends AbstractManipulator
     }
 
     /**
-     * @param  GeneratedFile $routingFile
+     * @param  File $routingFile
      * @return string
      */
-    protected function getRoutingContents(GeneratedFile $routingFile)
+    protected function getRoutingContents(File $routingFile)
     {
         $content = $routingFile->getContents() ?: '';
         $configurationText = $this->getConfigurationText();

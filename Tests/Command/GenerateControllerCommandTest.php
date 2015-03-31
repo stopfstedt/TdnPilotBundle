@@ -4,7 +4,7 @@ namespace Tdn\PilotBundle\Tests\Command;
 
 use Tdn\PilotBundle\Command\GenerateControllerCommand;
 use Tdn\PilotBundle\Manipulator\ControllerManipulator;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
+use Tdn\PilotBundle\Model\FileInterface;
 use \Mockery;
 use Tdn\PilotBundle\Tests\Fixtures\ControllerData;
 
@@ -74,7 +74,7 @@ class GenerateControllerCommandTest extends AbstractGeneratorCommandTest
     }
 
     /**
-     * @return GeneratedFileInterface[]
+     * @return FileInterface[]
      */
     protected function getGeneratedFiles()
     {
@@ -86,7 +86,7 @@ class GenerateControllerCommandTest extends AbstractGeneratorCommandTest
     }
 
     /**
-     * @return GeneratedFileInterface
+     * @return FileInterface
      */
     protected function getControllerFileMock()
     {

@@ -3,7 +3,7 @@
 namespace Tdn\PilotBundle\Tests\Template\Engine;
 
 use Symfony\Component\Filesystem\Filesystem;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
+use Tdn\PilotBundle\Model\FileInterface;
 use Tdn\PilotBundle\Template\Strategy\TwigStrategy;
 use Tdn\PilotBundle\TdnPilotBundle;
 use \Mockery;
@@ -75,7 +75,7 @@ class TwigStrategyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return GeneratedFileInterface
+     * @return FileInterface
      */
     protected function getFileMock()
     {

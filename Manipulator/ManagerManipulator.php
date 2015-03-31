@@ -3,8 +3,8 @@
 namespace Tdn\PilotBundle\Manipulator;
 
 use Tdn\PhpTypes\Type\String;
-use Tdn\PilotBundle\Model\GeneratedFile;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
+use Tdn\PilotBundle\Model\File;
+use Tdn\PilotBundle\Model\FileInterface;
 
 /**
  * Class ManagerManipulator
@@ -43,7 +43,7 @@ class ManagerManipulator extends AbstractServiceManipulator
      */
     protected function addManagerFile($path, $constructorMethod = null)
     {
-        $manager = new GeneratedFile();
+        $manager = new File();
         $manager
             ->setFilename($this->getEntity() . 'Manager')
             ->setExtension('php')
@@ -60,7 +60,7 @@ class ManagerManipulator extends AbstractServiceManipulator
      */
     protected function addManagerInterfaceFile($path, $constructorMethod = null)
     {
-        $managerInterface = new GeneratedFile();
+        $managerInterface = new File();
         $managerInterface
             ->setFilename($this->getEntity() . 'ManagerInterface')
             ->setExtension('php')
@@ -77,7 +77,7 @@ class ManagerManipulator extends AbstractServiceManipulator
      */
     protected function addManagerServiceFile()
     {
-        $serviceFile = new GeneratedFile();
+        $serviceFile = new File();
         $serviceFile
             ->setFilename('managers')
             ->setExtension($this->getFormat())

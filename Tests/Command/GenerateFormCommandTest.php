@@ -4,7 +4,7 @@ namespace Tdn\PilotBundle\Tests\Command;
 
 use Tdn\PilotBundle\Command\GenerateFormCommand;
 use Tdn\PilotBundle\Manipulator\FormManipulator;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
+use Tdn\PilotBundle\Model\FileInterface;
 use \Mockery;
 use Tdn\PilotBundle\Tests\Fixtures\FormData;
 
@@ -60,7 +60,7 @@ class GenerateFormCommandTest extends AbstractGeneratorCommandTest
     }
 
     /**
-     * @return GeneratedFileInterface[]
+     * @return FileInterface[]
      */
     protected function getGeneratedFiles()
     {
@@ -74,7 +74,7 @@ class GenerateFormCommandTest extends AbstractGeneratorCommandTest
     }
 
     /**
-     * @return GeneratedFileInterface
+     * @return FileInterface
      */
     protected function getFormTypeMock()
     {
@@ -99,7 +99,7 @@ class GenerateFormCommandTest extends AbstractGeneratorCommandTest
     }
 
     /**
-     * @return GeneratedFileInterface
+     * @return FileInterface
      */
     protected function getExceptionFileMock()
     {

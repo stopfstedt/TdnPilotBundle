@@ -8,7 +8,7 @@ use Symfony\Component\Finder\SplFileInfo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Tdn\PilotBundle\Manipulator\ManipulatorInterface;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
+use Tdn\PilotBundle\Model\FileInterface;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 use Tdn\PilotBundle\Template\Strategy\TwigStrategy;
 use Tdn\PilotBundle\TdnPilotBundle;
@@ -56,7 +56,7 @@ abstract class AbstractManipulatorTest extends \PHPUnit_Framework_TestCase
     abstract protected function getFileDependencies();
 
     /**
-     * @return ArrayCollection|GeneratedFileInterface[]
+     * @return ArrayCollection|FileInterface[]
      */
     abstract protected function getGeneratedFiles();
 

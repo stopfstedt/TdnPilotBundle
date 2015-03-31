@@ -5,7 +5,7 @@ namespace Tdn\PilotBundle\Tests\Manipulator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Finder\SplFileInfo;
 use Tdn\PilotBundle\Manipulator\ControllerManipulator;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
+use Tdn\PilotBundle\Model\FileInterface;
 use \Mockery;
 use Tdn\PilotBundle\Tests\Fixtures\ControllerData;
 
@@ -91,7 +91,7 @@ class ControllerManipulatorTest extends AbstractManipulatorTest
     /**
      * @param  string|null              $type
      *
-     * @return GeneratedFileInterface[]
+     * @return FileInterface[]
      */
     protected function getGeneratedFiles($type = null)
     {
@@ -105,7 +105,7 @@ class ControllerManipulatorTest extends AbstractManipulatorTest
     /**
      * @param  string|null            $type
      *
-     * @return GeneratedFileInterface
+     * @return FileInterface
      */
     protected function getControllerFileMock($type = null)
     {

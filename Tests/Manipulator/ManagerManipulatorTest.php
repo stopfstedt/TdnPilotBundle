@@ -5,7 +5,7 @@ namespace Tdn\PilotBundle\Tests\Manipulator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Finder\SplFileInfo;
 use Tdn\PilotBundle\Manipulator\ManagerManipulator;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
+use Tdn\PilotBundle\Model\FileInterface;
 use \Mockery;
 use Tdn\PilotBundle\Tests\Fixtures\ManagerData;
 
@@ -53,7 +53,7 @@ class ManagerManipulatorTest extends AbstractServiceManipulatorTest
     }
 
     /**
-     * @return GeneratedFileInterface[]
+     * @return FileInterface[]
      */
     protected function getGeneratedFiles()
     {
@@ -69,7 +69,7 @@ class ManagerManipulatorTest extends AbstractServiceManipulatorTest
     }
 
     /**
-     * @return GeneratedFileInterface
+     * @return FileInterface
      */
     protected function getManagerFileMock()
     {
@@ -94,7 +94,7 @@ class ManagerManipulatorTest extends AbstractServiceManipulatorTest
     }
 
     /**
-     * @return GeneratedFileInterface
+     * @return FileInterface
      */
     protected function getMgrInterfaceFileMock()
     {
@@ -119,7 +119,7 @@ class ManagerManipulatorTest extends AbstractServiceManipulatorTest
     }
 
     /**
-     * @return GeneratedFileInterface
+     * @return FileInterface
      */
     protected function getManagerServiceMock()
     {

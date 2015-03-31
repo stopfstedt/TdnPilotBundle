@@ -2,7 +2,7 @@
 
 namespace Tdn\PilotBundle\Tests\Model;
 
-use Tdn\PilotBundle\Model\GeneratedFile;
+use Tdn\PilotBundle\Model\File;
 use \RuntimeException;
 
 /**
@@ -12,11 +12,11 @@ use \RuntimeException;
 class GeneratedFileTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @return GeneratedFile
+     * @return File
      */
     protected function getGeneratedFile()
     {
-        return new GeneratedFile();
+        return new File();
     }
 
     public function testPath()

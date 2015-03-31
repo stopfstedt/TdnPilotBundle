@@ -16,7 +16,7 @@ use Tdn\PilotBundle\Command\AbstractGeneratorCommand;
 use Tdn\PilotBundle\Template\Strategy\TwigStrategy;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 use Tdn\PilotBundle\Manipulator\ManipulatorInterface;
-use Tdn\PilotBundle\Model\GeneratedFile;
+use Tdn\PilotBundle\Model\File;
 use Tdn\PilotBundle\Services\Doctrine\EntityUtils;
 use \Mockery as Mockery;
 
@@ -68,7 +68,7 @@ abstract class AbstractGeneratorCommandTest extends GenerateCommandTest
     abstract protected function getOptions();
 
     /**
-     * @return GeneratedFile[]
+     * @return File[]
      */
     abstract protected function getGeneratedFiles();
 

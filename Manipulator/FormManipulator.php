@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Tdn\PhpTypes\Type\String;
-use Tdn\PilotBundle\Model\GeneratedFile;
+use Tdn\PilotBundle\Model\File;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 
 /**
@@ -34,7 +34,7 @@ class FormManipulator extends AbstractManipulator
      */
     protected function addFormType()
     {
-        $formType = new GeneratedFile();
+        $formType = new File();
         $formType
             ->setFilename($this->getEntity() . 'Type')
             ->setExtension('php')
@@ -53,7 +53,7 @@ class FormManipulator extends AbstractManipulator
      */
     protected function addFormException()
     {
-        $formTypeException = new GeneratedFile();
+        $formTypeException = new File();
         $formTypeException
             ->setFilename('InvalidFormException')
             ->setExtension('php')

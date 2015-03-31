@@ -5,7 +5,7 @@ namespace Tdn\PilotBundle\Tests\Manipulator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Finder\SplFileInfo;
 use Tdn\PilotBundle\Manipulator\RoutingManipulator;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
+use Tdn\PilotBundle\Model\FileInterface;
 use \Mockery;
 use Tdn\PilotBundle\Tests\Fixtures\RoutingData;
 
@@ -74,7 +74,7 @@ class RoutingManipulatorTest extends AbstractManipulatorTest
     }
 
     /**
-     * @return ArrayCollection|GeneratedFileInterface[]
+     * @return ArrayCollection|FileInterface[]
      */
     protected function getGeneratedFiles()
     {
@@ -86,7 +86,7 @@ class RoutingManipulatorTest extends AbstractManipulatorTest
     }
 
     /**
-     * @return GeneratedFileInterface
+     * @return FileInterface
      */
     protected function getRoutingFileMock()
     {

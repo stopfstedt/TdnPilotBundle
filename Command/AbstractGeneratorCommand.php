@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Sensio\Bundle\GeneratorBundle\Command\Validators;
 use Tdn\PilotBundle\Manipulator\ManipulatorInterface;
 use Tdn\PilotBundle\Manipulator\ServiceManipulatorInterface;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
+use Tdn\PilotBundle\Model\FileInterface;
 use Tdn\PilotBundle\Services\Doctrine\EntityUtils;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyUtils;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
@@ -322,9 +322,9 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
 
     /**
      * @param OutputInterface $output
-     * @param GeneratedFileInterface $file
+     * @param FileInterface $file
      */
-    protected function printFileGeneratedMessage(OutputInterface $output, GeneratedFileInterface $file)
+    protected function printFileGeneratedMessage(OutputInterface $output, FileInterface $file)
     {
         $output->writeln(sprintf(
             'The new <info>%s</info> file has been created under <info>%s</info>.',
@@ -367,7 +367,7 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
                     PHP_EOL . '<info>%s</info>' .
                     PHP_EOL . 'Do you confirm generation/manipulation of the files listed above (y/n)?',
                     $entity,
-                    implode(PHP_EOL, $generatedFiles->map(function (GeneratedFileInterface $generatedFile) {
+                    implode(PHP_EOL, $generatedFiles->map(function (FileInterface $generatedFile) {
                         return '- ' . $generatedFile->getFullPath();
                     })->toArray())
                 ),

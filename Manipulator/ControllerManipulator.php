@@ -5,7 +5,7 @@ namespace Tdn\PilotBundle\Manipulator;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Symfony\Component\Finder\SplFileInfo;
 use Tdn\PhpTypes\Type\String;
-use Tdn\PilotBundle\Model\GeneratedFile;
+use Tdn\PilotBundle\Model\File;
 
 /**
  * Class ControllerManipulator
@@ -137,7 +137,7 @@ class ControllerManipulator extends AbstractManipulator
      */
     protected function addController()
     {
-        $generatedController = new GeneratedFile();
+        $generatedController = new File();
         $generatedController
             ->setFilename($this->getEntity() . 'Controller')
             ->setExtension('php')
@@ -156,7 +156,7 @@ class ControllerManipulator extends AbstractManipulator
      */
     protected function addControllerTests()
     {
-        $controllerTest = new GeneratedFile();
+        $controllerTest = new File();
         $controllerTest
             ->setFilename($this->getEntity() . 'ControllerTest')
             ->setExtension('php')

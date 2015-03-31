@@ -5,7 +5,7 @@ namespace Tdn\PilotBundle\Tests\Manipulator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Finder\SplFileInfo;
 use Tdn\PilotBundle\Manipulator\HandlerManipulator;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
+use Tdn\PilotBundle\Model\FileInterface;
 use \Mockery;
 use Tdn\PilotBundle\Tests\Fixtures\HandlerData;
 
@@ -61,7 +61,7 @@ class HandlerManipulatorTest extends AbstractServiceManipulatorTest
     }
 
     /**
-     * @return GeneratedFileInterface[]
+     * @return FileInterface[]
      */
     protected function getGeneratedFiles()
     {
@@ -86,7 +86,7 @@ class HandlerManipulatorTest extends AbstractServiceManipulatorTest
     }
 
     /**
-     * @return GeneratedFileInterface
+     * @return FileInterface
      */
     protected function getHandlerFileMock()
     {
@@ -110,7 +110,7 @@ class HandlerManipulatorTest extends AbstractServiceManipulatorTest
     }
 
     /**
-     * @return GeneratedFileInterface
+     * @return FileInterface
      */
     protected function getHandlerServiceMock()
     {
