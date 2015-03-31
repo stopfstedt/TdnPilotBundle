@@ -2,12 +2,8 @@
 
 namespace Tdn\PilotBundle\Manipulator;
 
-use Doctrine\ORM\Mapping\ClassMetadata;
-use Symfony\Component\Finder\SplFileInfo;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Tdn\PhpTypes\Type\String;
 use Tdn\PilotBundle\Model\File;
-use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 
 /**
  * Class FormManipulator
@@ -34,18 +30,15 @@ class FormManipulator extends AbstractManipulator
      */
     protected function addFormType()
     {
-        $formType = new File();
-        $formType
-            ->setFilename($this->getEntity() . 'Type')
-            ->setExtension('php')
-            ->setPath(sprintf(
-                '%s' . DIRECTORY_SEPARATOR . 'Form' . DIRECTORY_SEPARATOR . 'Type',
-                ($this->getTargetDirectory()) ?: $this->getBundle()->getPath()
-            )) //<TargetDir>|<Bundle>/Form/Type
-            ->setContents($this->generateFormTypeContent($formType->getFilename()))
-        ;
+        $formType = new File(sprintf(
+                '%s' . DIRECTORY_SEPARATOR . 'Form' . DIRECTORY_SEPARATOR . 'Type' . DIRECTORY_SEPARATOR . '%sType.php',
+                ($this->getTargetDirectory()) ?: $this->getBundle()->getPath(),
+                $this->getEntity()
+            )
+        );
 
-        $this->addGeneratedFile($formType);
+        $formType->setContents($this->generateFormTypeContent($formType->getFilename()));
+        $this->addFile($formType);
     }
 
     /**
@@ -53,20 +46,17 @@ class FormManipulator extends AbstractManipulator
      */
     protected function addFormException()
     {
-        $formTypeException = new File();
-        $formTypeException
-            ->setFilename('InvalidFormException')
-            ->setExtension('php')
-            ->setPath(sprintf(
+        $formTypeException = new File(
+            sprintf(
                 '%s' . DIRECTORY_SEPARATOR . 'Exception',
                 ($this->getTargetDirectory()) ?: $this->getBundle()->getPath()
-            )) //<TargetDir>|<Bundle>/Exception
-        ;
+            ) . 'InvalidFormException.php'
+        );
 
         //File created only once.
-        if (!is_file($formTypeException->getFullPath()) || $this->shouldOverwrite()) {
+        if (!is_file($formTypeException->isReadable()) || $this->shouldOverwrite()) {
             $formTypeException->setContents($this->generateFormTypeExceptionContent());
-            $this->addGeneratedFile($formTypeException);
+            $this->addFile($formTypeException);
         }
     }
 
@@ -114,7 +104,7 @@ class FormManipulator extends AbstractManipulator
             $this->getEntity()
         );
 
-        $this->addFileDependency(new SplFileInfo($managerFile, null, null));
+        $this->addFileDependency(new File($managerFile));
     }
 
     /**

@@ -2,10 +2,8 @@
 
 namespace Tdn\PilotBundle\Manipulator;
 
-use Symfony\Component\Finder\SplFileInfo;
 use Tdn\PhpTypes\Type\String;
 use Tdn\PilotBundle\Model\File;
-use Tdn\PilotBundle\Model\FileInterface;
 
 /**
  * Class HandlerManipulator
@@ -20,20 +18,17 @@ class HandlerManipulator extends AbstractServiceManipulator
      */
     public function prepare()
     {
-        $path = sprintf(
-            '%s' . DIRECTORY_SEPARATOR . 'Handler',
-            ($this->getTargetDirectory()) ?: $this->getBundle()->getPath()
+        $handler = new File(
+            sprintf(
+                '%s' . DIRECTORY_SEPARATOR . 'Handler' . DIRECTORY_SEPARATOR . '%sHandler.php',
+                ($this->getTargetDirectory()) ?: $this->getBundle()->getPath(),
+                $this->getEntity()
+            )
         );
 
-        $handler = new File();
-        $handler
-            ->setFilename($this->getEntity() . 'Handler')
-            ->setExtension('php')
-            ->setPath($path)
-            ->setContents($this->getHandlerFileContent())
-        ;
+        $handler->setContents($this->getHandlerFileContent());
 
-        $this->addGeneratedFile($handler);
+        $this->addFile($handler);
         $this->addHandlerServiceFile();
         $this->addManagerDependency();
         $this->addFormTypeDependency();
@@ -58,16 +53,17 @@ class HandlerManipulator extends AbstractServiceManipulator
      */
     protected function addHandlerServiceFile()
     {
-        $serviceFile = new File();
-        $serviceFile
-            ->setFilename('handlers')
-            ->setExtension($this->getFormat())
-            ->setPath(sprintf(
+        $serviceFile = new File(
+            sprintf(
                 '%s' . DIRECTORY_SEPARATOR . 'Resources' .
-                DIRECTORY_SEPARATOR . 'config',
-                ($this->getTargetDirectory()) ?: $this->getBundle()->getPath()
-            ))
-            ->setContents($this->getServiceFileContents($serviceFile->getFullPath()))
+                DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'handlers.%s',
+                ($this->getTargetDirectory()) ?: $this->getBundle()->getPath(),
+                $this->getFormat()
+            )
+        );
+
+        $serviceFile
+            ->setContents($this->getServiceFileContents($serviceFile))
             ->setServiceFile(true)
         ;
 
@@ -76,15 +72,15 @@ class HandlerManipulator extends AbstractServiceManipulator
             $serviceFile->getFilename() . '.' . $serviceFile->getExtension(),
             $this->getDefaultExtensionFile()
         ));
-        $this->addGeneratedFile($serviceFile);
+        $this->addFile($serviceFile);
     }
 
     /**
-     * @param string $pathToFile
+     * Declares service and returns what the contents would be based on the format selected
      *
      * @return string
      */
-    public function getServiceFileContents($pathToFile)
+    public function getServiceFileContents()
     {
         $serviceClass = sprintf(
             '%s\\Handler\\%sHandler',
@@ -122,9 +118,12 @@ class HandlerManipulator extends AbstractServiceManipulator
         $diUtils->addParameter($paramKey, $serviceClass);
         $diUtils->addService($serviceId, $service);
 
-        return $diUtils->getContentsInFormat($this->getFormat());
+        return $diUtils->getFormattedContents($this->getFormat());
     }
 
+    /**
+     * @return void
+     */
     protected function addManagerDependency()
     {
         $managerFile = sprintf(
@@ -135,9 +134,12 @@ class HandlerManipulator extends AbstractServiceManipulator
             $this->getEntity()
         );
 
-        $this->addFileDependency(new SplFileInfo($managerFile, null, null));
+        $this->addFileDependency(new File($managerFile));
     }
 
+    /**
+     * @return void
+     */
     protected function addFormTypeDependency()
     {
         $formType = sprintf(
@@ -146,6 +148,6 @@ class HandlerManipulator extends AbstractServiceManipulator
             $this->getEntity()
         );
 
-        $this->addFileDependency(new SplFileInfo($formType, null, null));
+        $this->addFileDependency(new File($formType));
     }
 }

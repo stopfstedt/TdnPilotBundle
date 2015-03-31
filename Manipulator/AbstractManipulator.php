@@ -3,12 +3,11 @@
 namespace Tdn\PilotBundle\Manipulator;
 
 use Doctrine\Common\Collections\Collection;
-use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Common\Collections\ArrayCollection;
 use Tdn\PhpTypes\Type\String;
-use Tdn\PilotBundle\Model\FileInterface;
+use Tdn\PilotBundle\Model\File;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 
 /**
@@ -39,12 +38,12 @@ abstract class AbstractManipulator implements ManipulatorInterface
     private $metadata;
 
     /**
-     * @var ArrayCollection|FileInterface[]
+     * @var ArrayCollection|File[]
      */
-    private $generatedFiles;
+    private $files;
 
     /**
-     * @var ArrayCollection|SplFileInfo[]
+     * @var ArrayCollection|File[]
      */
     private $fileDependencies;
 
@@ -64,7 +63,7 @@ abstract class AbstractManipulator implements ManipulatorInterface
     private $targetDirectory;
 
     public function __construct() {
-        $this->generatedFiles   = new ArrayCollection();
+        $this->files            = new ArrayCollection();
         $this->fileDependencies = new ArrayCollection();
         $this->messages         = new ArrayCollection();
         $this->setOverwrite(false);
@@ -147,31 +146,31 @@ abstract class AbstractManipulator implements ManipulatorInterface
     }
 
     /**
-     * @param Collection $generatedFiles
+     * @param Collection $files
      */
-    public function setGeneratedFiles(Collection $generatedFiles)
+    public function setFiles(Collection $files)
     {
-        $this->generatedFiles = new ArrayCollection();
+        $this->files = new ArrayCollection();
 
-        foreach ($generatedFiles as $generatedFile) {
-            $this->addGeneratedFile($generatedFile);
+        foreach ($files as $generatedFile) {
+            $this->addFile($generatedFile);
         }
     }
 
     /**
-     * @param FileInterface $generatedFile
+     * @param File $file
      */
-    public function addGeneratedFile(FileInterface $generatedFile)
+    public function addFile(File $file)
     {
-        $this->generatedFiles->set($generatedFile->getFullPath(), $generatedFile);
+        $this->files->set($file->getRealPath(), $file);
     }
 
     /**
-     * @return ArrayCollection|FileInterface[]
+     * @return ArrayCollection|File[]
      */
-    public function getGeneratedFiles()
+    public function getFiles()
     {
-        return $this->generatedFiles;
+        return $this->files;
     }
 
     /**
@@ -187,15 +186,15 @@ abstract class AbstractManipulator implements ManipulatorInterface
     }
 
     /**
-     * @param SplFileInfo $fileDependency
+     * @param File $fileDependency
      */
-    public function addFileDependency(SplFileInfo $fileDependency)
+    public function addFileDependency(File $fileDependency)
     {
         $this->fileDependencies->add($fileDependency);
     }
 
     /**
-     * @return ArrayCollection|SplFileInfo[]
+     * @return ArrayCollection|File[]
      */
     public function getFileDependencies()
     {
@@ -280,8 +279,8 @@ abstract class AbstractManipulator implements ManipulatorInterface
             }
         }
 
-        foreach ($this->getGeneratedFiles() as $generatedFile) {
-            if ($this->isGeneratedFileValid($generatedFile)) {
+        foreach ($this->getFiles() as $generatedFile) {
+            if ($this->isFileValid($generatedFile)) {
                 continue;
             }
         }
@@ -293,22 +292,22 @@ abstract class AbstractManipulator implements ManipulatorInterface
      * Generates all the files declared by the manipulator if the
      * system is in a valid state.
      *
-     * @return ArrayCollection|FileInterface[]
+     * @return ArrayCollection|File[]
      */
     public function generate()
     {
         if ($this->isValid()) {
-            foreach ($this->getGeneratedFiles() as $generatedFile) {
+            foreach ($this->getFiles() as $generatedFile) {
                 if ((!$generatedFile->isAuxFile() || !$generatedFile->isServiceFile()) && $this->shouldOverwrite()
-                    && file_exists($generatedFile->getFullPath())
+                    && file_exists($generatedFile->getRealPath())
                 ) {
-                    unlink($generatedFile->getFullPath());
+                    unlink($generatedFile->getRealPath());
                 }
 
                 $this->getTemplateStrategy()->renderFile($generatedFile);
             }
 
-            return $this->getGeneratedFiles();
+            return $this->getFiles();
         }
 
         return new ArrayCollection();
@@ -320,10 +319,10 @@ abstract class AbstractManipulator implements ManipulatorInterface
      * Certain objects we're generating declare their dependencies
      * on other objects. This ensures those dependencies exist.
      *
-     * @param SplFileInfo $fileDependency
+     * @param File $fileDependency
      * @return bool
      */
-    protected function isDependencyValid(SplFileInfo $fileDependency)
+    protected function isDependencyValid(File $fileDependency)
     {
         if (!$fileDependency->isFile() || !$fileDependency->isReadable()) {
             throw new \RuntimeException(sprintf(
@@ -341,18 +340,18 @@ abstract class AbstractManipulator implements ManipulatorInterface
      * Of if a conflict is present, that the class has been configured
      * to properly handle that conflict.
      *
-     * @param FileInterface $generatedFile
+     * @param File $generatedFile
      * @return bool
      */
-    protected function isGeneratedFileValid(FileInterface $generatedFile)
+    protected function isFileValid(File $generatedFile)
     {
-        if (file_exists($generatedFile->getFullPath()) &&
+        if (file_exists($generatedFile->getRealPath()) &&
             (!$this->shouldOverwrite() && !$generatedFile->isAuxFile() && !$generatedFile->isServiceFile())
         ) {
             throw new \RuntimeException(sprintf(
                 'Unable to generate the %s form class as it already exists under the file: %s',
-                $generatedFile->getFilename(),
-                $generatedFile->getFullPath()
+                $generatedFile->getBasename($generatedFile->getExtension()),
+                $generatedFile->getRealPath()
             ));
         }
 

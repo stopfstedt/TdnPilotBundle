@@ -43,15 +43,17 @@ class ManagerManipulator extends AbstractServiceManipulator
      */
     protected function addManagerFile($path, $constructorMethod = null)
     {
-        $manager = new File();
-        $manager
-            ->setFilename($this->getEntity() . 'Manager')
-            ->setExtension('php')
-            ->setPath($path)
-            ->setContents($this->getManagerContent($constructorMethod))
-        ;
+        $manager = new File(
+            sprintf(
+                '%s' . DIRECTORY_SEPARATOR . '%sManager.php',
+                $path,
+                $this->getEntity()
+            )
+        );
 
-        $this->addGeneratedFile($manager);
+        $manager->setContents($this->getManagerContent($constructorMethod));
+
+        $this->addFile($manager);
     }
 
     /**
@@ -60,16 +62,20 @@ class ManagerManipulator extends AbstractServiceManipulator
      */
     protected function addManagerInterfaceFile($path, $constructorMethod = null)
     {
-        $managerInterface = new File();
+        $managerInterface = new File(
+            sprintf(
+                '%s' . DIRECTORY_SEPARATOR . '%sManagerInterface.php',
+                $path,
+                $this->getEntity()
+            )
+        );
+
         $managerInterface
-            ->setFilename($this->getEntity() . 'ManagerInterface')
-            ->setExtension('php')
-            ->setPath($path)
             ->setContents($this->getManagerInterfaceContent($constructorMethod))
             ->setAuxFile(true)
         ;
 
-        $this->addGeneratedFile($managerInterface);
+        $this->addFile($managerInterface);
     }
 
     /**
@@ -77,15 +83,16 @@ class ManagerManipulator extends AbstractServiceManipulator
      */
     protected function addManagerServiceFile()
     {
-        $serviceFile = new File();
-        $serviceFile
-            ->setFilename('managers')
-            ->setExtension($this->getFormat())
-            ->setPath(sprintf(
+        $serviceFile = new File(
+            sprintf(
                 '%s' . DIRECTORY_SEPARATOR . 'Resources' .
-                DIRECTORY_SEPARATOR . 'config',
-                ($this->getTargetDirectory()) ?: $this->getBundle()->getPath()
-            ))
+                DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'managers.%s',
+                ($this->getTargetDirectory()) ?: $this->getBundle()->getPath(),
+                $this->getFormat()
+            )
+        );
+
+        $serviceFile
             ->setContents($this->getServiceFileContents($serviceFile->getFullPath()))
             ->setServiceFile(true)
         ;
@@ -255,6 +262,6 @@ class ManagerManipulator extends AbstractServiceManipulator
         $serviceUtils->addParameter($paramKey, $serviceClass);
         $serviceUtils->addService($serviceId, $service);
 
-        return $serviceUtils->getContentsInFormat($this->getFormat());
+        return $serviceUtils->getFormattedContents($this->getFormat());
     }
 }

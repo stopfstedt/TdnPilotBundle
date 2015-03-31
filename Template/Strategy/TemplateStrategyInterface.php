@@ -2,7 +2,7 @@
 
 namespace Tdn\PilotBundle\Template\Strategy;
 
-use Tdn\PilotBundle\Model\FileInterface;
+use Tdn\PilotBundle\Model\File;
 
 /**
  * Interface TemplateStrategyInterface
@@ -29,7 +29,7 @@ interface TemplateStrategyInterface
     public function render($template, $parameters);
 
     /**
-     * @param FileInterface $target
+     * @param File $target
      */
-    public function renderFile(FileInterface $target);
+    public function renderFile(File $target);
 }

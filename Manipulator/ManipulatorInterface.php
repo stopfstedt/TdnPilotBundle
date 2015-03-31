@@ -2,12 +2,11 @@
 
 namespace Tdn\PilotBundle\Manipulator;
 
-use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Tdn\PilotBundle\Model\FileInterface;
+use Tdn\PilotBundle\Model\File;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 
 /**
@@ -59,17 +58,17 @@ interface ManipulatorInterface
     /**
      * @param Collection $generatedFiles
      */
-    public function setGeneratedFiles(Collection $generatedFiles);
+    public function setFiles(Collection $generatedFiles);
 
     /**
-     * @param FileInterface $generatedFile
+     * @param File $generatedFile
      */
-    public function addGeneratedFile(FileInterface $generatedFile);
+    public function addFile(File $generatedFile);
 
     /**
-     * @return ArrayCollection|FileInterface[]
+     * @return ArrayCollection|File[]
      */
-    public function getGeneratedFiles();
+    public function getFiles();
 
     /**
      * @param Collection $fileDependencies
@@ -77,12 +76,12 @@ interface ManipulatorInterface
     public function setFileDependencies(Collection $fileDependencies);
 
     /**
-     * @param SplFileInfo $fileDependency
+     * @param File $fileDependency
      */
-    public function addFileDependency(SplFileInfo $fileDependency);
+    public function addFileDependency(File $fileDependency);
 
     /**
-     * @return ArrayCollection|SplFileInfo[]
+     * @return ArrayCollection|File[]
      */
     public function getFileDependencies();
 
@@ -127,7 +126,7 @@ interface ManipulatorInterface
     public function isValid();
 
     /**
-     * @return ArrayCollection|FileInterface[]
+     * @return ArrayCollection|File[]
      */
     public function generate();
 

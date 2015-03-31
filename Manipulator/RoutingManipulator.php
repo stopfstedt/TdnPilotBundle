@@ -3,11 +3,7 @@
 namespace Tdn\PilotBundle\Manipulator;
 
 use Symfony\Component\Filesystem\Exception\IOException;
-use Symfony\Component\Finder\SplFileInfo;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Tdn\PilotBundle\Model\File;
-use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 use Tdn\PhpTypes\Type\String;
 
 /**
@@ -100,21 +96,21 @@ class RoutingManipulator extends AbstractManipulator
      */
     public function prepare()
     {
-        list($file, $extension) = explode('.', $this->getRoutingFile());
-        $routing = new File();
-        $routing
-            ->setFilename($file)
-            ->setExtension($extension)
-            ->setPath(sprintf(
+        $routing = new File(
+            sprintf(
                 '%s' . DIRECTORY_SEPARATOR . 'Resources' .
-                DIRECTORY_SEPARATOR . 'config',
-                ($this->getTargetDirectory()) ?: $this->getBundle()->getPath()
-            ))
+                DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . '%s',
+                ($this->getTargetDirectory()) ?: $this->getBundle()->getPath(),
+                $this->getRoutingFile()
+            )
+        );
+
+        $routing
             ->setContents($this->getRoutingContents($routing))
             ->setAuxFile(true) //Needed because this might exist but we still want to add routes to it.
         ;
 
-        $this->addGeneratedFile($routing);
+        $this->addFile($routing);
         $this->addControllerDependency();
 
         return $this;
@@ -239,7 +235,7 @@ class RoutingManipulator extends AbstractManipulator
             $this->getEntity()
         );
 
-        $this->addFileDependency(new SplFileInfo($controllerFile, null, null));
+        $this->addFileDependency(new File($controllerFile));
     }
 
     /**

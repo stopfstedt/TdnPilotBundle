@@ -3,7 +3,6 @@
 namespace Tdn\PilotBundle\Manipulator;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Symfony\Component\Finder\SplFileInfo;
 use Tdn\PhpTypes\Type\String;
 use Tdn\PilotBundle\Model\File;
 
@@ -137,18 +136,17 @@ class ControllerManipulator extends AbstractManipulator
      */
     protected function addController()
     {
-        $generatedController = new File();
-        $generatedController
-            ->setFilename($this->getEntity() . 'Controller')
-            ->setExtension('php')
-            ->setPath(sprintf(
-                '%s' . DIRECTORY_SEPARATOR . 'Controller',
-                ($this->getTargetDirectory()) ?: $this->getBundle()->getPath()
-            )) //<TargetDir>|<BundlePath>/Controller
-            ->setContents($this->generateControllerFileContent())
-        ;
+        $generatedController = new File(
+            sprintf(
+                '%s' . DIRECTORY_SEPARATOR . 'Controller' . DIRECTORY_SEPARATOR . '%sController.php',
+                ($this->getTargetDirectory()) ?: $this->getBundle()->getPath(),
+                $this->getEntity()
+            )
+        );
 
-        $this->addGeneratedFile($generatedController);
+        $generatedController->setContents($this->generateControllerFileContent());
+
+        $this->addFile($generatedController);
     }
 
     /**
@@ -156,20 +154,22 @@ class ControllerManipulator extends AbstractManipulator
      */
     protected function addControllerTests()
     {
-        $controllerTest = new File();
-        $controllerTest
-            ->setFilename($this->getEntity() . 'ControllerTest')
-            ->setExtension('php')
-            ->setPath(sprintf(
-                '%s' . DIRECTORY_SEPARATOR . '%s' . DIRECTORY_SEPARATOR . 'Controller',
+        $controllerTest = new File(
+            sprintf(
+                '%s' . DIRECTORY_SEPARATOR . '%s' . DIRECTORY_SEPARATOR . 'Controller' .
+                DIRECTORY_SEPARATOR . '%sControllerTest.php',
                 ($this->getTargetDirectory()) ?: $this->getBundle()->getPath(),
-                'Tests'
-            )) //<TargetDir>|<BundlePath>/Tests/Controller
+                'Tests',
+                $this->getEntity()
+            )
+        );
+
+        $controllerTest
             ->setContents($this->generateControllerTestContent())
             ->setAuxFile(true)
         ;
 
-        $this->addGeneratedFile($controllerTest);
+        $this->addFile($controllerTest);
     }
 
     /**
@@ -283,7 +283,7 @@ class ControllerManipulator extends AbstractManipulator
             $this->getEntity()
         );
 
-        $this->addFileDependency(new SplFileInfo($handlerFile, null, null));
+        $this->addFileDependency(new File($handlerFile));
     }
 
     /**

@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Sensio\Bundle\GeneratorBundle\Command\Validators;
 use Tdn\PilotBundle\Manipulator\ManipulatorInterface;
 use Tdn\PilotBundle\Manipulator\ServiceManipulatorInterface;
-use Tdn\PilotBundle\Model\FileInterface;
+use Tdn\PilotBundle\Model\File;
 use Tdn\PilotBundle\Services\Doctrine\EntityUtils;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyUtils;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
@@ -250,7 +250,7 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
                     $this->getEntityUtils()->getMetadata($doctrine, $this->getEntity())
                 )->prepare();
 
-                if ($this->shouldContinue($input, $output, $manipulator->getGeneratedFiles(), $entity)) {
+                if ($this->shouldContinue($input, $output, $manipulator->getFiles(), $entity)) {
                     $output->write(PHP_EOL);
                     foreach ($manipulator->generate() as $file) {
                         $this->printFileGeneratedMessage($output, $file);
@@ -322,14 +322,14 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
 
     /**
      * @param OutputInterface $output
-     * @param FileInterface $file
+     * @param File $file
      */
-    protected function printFileGeneratedMessage(OutputInterface $output, FileInterface $file)
+    protected function printFileGeneratedMessage(OutputInterface $output, File $file)
     {
         $output->writeln(sprintf(
             'The new <info>%s</info> file has been created under <info>%s</info>.',
             $file->getFilename() . '.' . $file->getExtension(),
-            $file->getFullPath()
+            $file->getRealPath()
         ));
 
         if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
@@ -367,8 +367,8 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
                     PHP_EOL . '<info>%s</info>' .
                     PHP_EOL . 'Do you confirm generation/manipulation of the files listed above (y/n)?',
                     $entity,
-                    implode(PHP_EOL, $generatedFiles->map(function (FileInterface $generatedFile) {
-                        return '- ' . $generatedFile->getFullPath();
+                    implode(PHP_EOL, $generatedFiles->map(function (File $generatedFile) {
+                        return '- ' . $generatedFile->getRealPath();
                     })->toArray())
                 ),
                 false

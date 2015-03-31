@@ -5,8 +5,8 @@ namespace Tdn\PilotBundle\Services\DependencyInjection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Yaml\Dumper as YamlDumper;
-use Tdn\PilotBundle\Model\FileInterface;
 use Tuck\ConverterBundle\ConfigFormatConverter;
 use Tdn\PilotBundle\Services\DependencyInjection\Parser\ParserInterface;
 use Tdn\PilotBundle\Services\DependencyInjection\Parser\YamlParser;
@@ -39,6 +39,11 @@ class ServiceUtils
     protected $formatConverter;
 
     /**
+     * @var SplFileInfo
+     */
+    protected $file;
+
+    /**
      * @return array
      */
     public static function getSupportedExtensions()
@@ -50,16 +55,21 @@ class ServiceUtils
         ];
     }
 
-    public function __construct(ConfigFormatConverter $formatConverter)
+    public function __construct(ConfigFormatConverter $formatConverter, SplFileInfo $file = null)
     {
-        $this->parameters = new ArrayCollection();
-        $this->services   = new ArrayCollection();
-        $this->imports    = new ArrayCollection();
-        $this->formatConverter = $formatConverter;
+        $this->setFormatConverter($formatConverter);
+        $this->parameters      = new ArrayCollection();
+        $this->services        = new ArrayCollection();
+        $this->imports         = new ArrayCollection();
+        if ($file) {
+            $this->setFile($file);
+        }
     }
 
     /**
      * @param Collection $parameters
+     *
+     * @return $this
      */
     public function setParameters(Collection $parameters)
     {
@@ -68,15 +78,21 @@ class ServiceUtils
         foreach ($parameters as $key => $value) {
             $this->addParameter($key, $value);
         }
+
+        return $this;
     }
 
     /**
      * @param $key
      * @param $value
+     *
+     * @return $this
      */
     public function addParameter($key, $value)
     {
         $this->parameters->set($key, $value);
+
+        return $this;
     }
 
     /**
@@ -89,6 +105,8 @@ class ServiceUtils
 
     /**
      * @param Collection $services
+     *
+     * @return $this
      */
     public function setServices(Collection $services)
     {
@@ -97,15 +115,21 @@ class ServiceUtils
         foreach ($services as $id => $service) {
             $this->addService($id, $service);
         }
+
+        return $this;
     }
 
     /**
      * @param $id
      * @param array $service
+     *
+     * @return $this
      */
     public function addService($id, array $service)
     {
         $this->services->set($id, $service);
+
+        return $this;
     }
 
     /**
@@ -118,6 +142,8 @@ class ServiceUtils
 
     /**
      * @param Collection $imports
+     *
+     * @return $this
      */
     public function setImports(Collection $imports)
     {
@@ -126,14 +152,26 @@ class ServiceUtils
         foreach ($imports as $import) {
             $this->addImport($import);
         }
+
+        return $this;
     }
 
     /**
-     * @param $import
+     * @param array $import
+     *
+     * @return $this
      */
-    public function addImport($import)
+    public function addImport(array $import)
     {
+        if (!array_key_exists('resource', $import)) {
+            throw new \InvalidArgumentException(
+                'Invalid import. Import array expects key named "resource" with a value of <string>.'
+            );
+        }
+
         $this->imports->add($import);
+
+        return $this;
     }
 
     /**
@@ -142,6 +180,47 @@ class ServiceUtils
     public function getImports()
     {
         return $this->imports;
+    }
+
+    /**
+     * @param ConfigFormatConverter $formatConverter
+     *
+     * @return $this
+     */
+    public function setFormatConverter(ConfigFormatConverter $formatConverter)
+    {
+        $this->formatConverter = $formatConverter;
+
+        return $this;
+    }
+
+    /**
+     * @return ConfigFormatConverter
+     */
+    public function getFormatConverter()
+    {
+        return $this->formatConverter;
+    }
+
+    /**
+     * @param SplFileInfo $file
+     *
+     * @return $this
+     */
+    public function setFile(SplFileInfo $file)
+    {
+        $this->file = $file;
+        $this->load();
+
+        return $this;
+    }
+
+    /**
+     * @return SplFileInfo
+     */
+    public function getFile()
+    {
+        return $this->file;
     }
 
     /**
@@ -168,7 +247,7 @@ class ServiceUtils
      *
      * @return string
      */
-    public function getContentsInFormat($format)
+    public function getFormattedContents($format)
     {
         switch (strtolower($format)) {
             case 'yaml':
@@ -182,37 +261,13 @@ class ServiceUtils
     }
 
     /**
-     * Saves to a file.
-     *
-     * The function extrapolates the format of the file (xml, yaml) based on the extension.
-     *
-     * @param FileInterface $file the file to save to.
-     *
      * @return bool
      */
-    public function save($file)
-    {
-        if (false === file_put_contents($file->getFullPath(), $this->getContentsInFormat($this->getFormat($file->getExtension())))) {
-            throw new \RuntimeException(
-                sprintf(
-                    'Failed updating the %s file.',
-                    $file
-                )
-            );
-        }
-
-        return true;
-    }
-
-    /**
-     * @param string $file
-     * @return bool
-     */
-    public function load($file)
+    protected function load()
     {
         try {
-            $parser = $this->getParser($this->getFormat($file));
-            $definitions = $parser->getDefinitions(file_get_contents($file));
+            $parser = $this->getParser($this->getFormat($this->getFile()));
+            $definitions = $parser->getDefinitions($this->getFile()->getContents());
             $this->extractParameters($definitions);
             $this->extractServices($definitions);
             $this->extractImports($definitions);
@@ -222,16 +277,20 @@ class ServiceUtils
             throw new IOException(
                 sprintf(
                     'Could not parse and extract definitions from file %s.',
-                    $file
+                    $this->getFile()
                 )
             );
         }
     }
 
-    protected function getFormat($file)
+    /**
+     * @param SplFileInfo $file
+     * @throws \InvalidArgumentException when file is not a supported format.
+     *
+     * @return string
+     */
+    protected function getFormat(SplFileInfo $file)
     {
-        $file = new \SplFileInfo($file);
-
         if (!in_array(strtolower($file->getExtension()), self::getSupportedExtensions())) {
             throw new \InvalidArgumentException(
                 sprintf(
@@ -242,7 +301,7 @@ class ServiceUtils
             );
         }
 
-        return null;
+        return strtolower($file->getExtension());
     }
 
     /**

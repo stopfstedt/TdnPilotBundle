@@ -9,7 +9,7 @@ use Symfony\Component\Finder\SplFileInfo;
  * Class File
  * @package Tdn\PilotBundle\Model
  */
-class File extends SplFileInfo implements FileInterface
+class File extends SplFileInfo
 {
     /**
      * @var string

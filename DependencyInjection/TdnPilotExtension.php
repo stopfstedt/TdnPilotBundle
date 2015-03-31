@@ -25,13 +25,27 @@ class TdnPilotExtension extends Extension
         $loader->load('template-strategies.yml');
         $loader->load('service-utils.yml');
 
+        $this->verifyDependencies($container);
+        $this->setDefaultTemplateStrategy($config, $container);
+    }
+
+    protected function setDefaultTemplateStrategy(array $config, ContainerBuilder $container)
+    {
         if (isset($config['template'])) {
             $container->setAlias(
                 'tdn_pilot.template.strategy.default',
                 'tdn_pilot.template.strategy.' . $config['template']['strategy']
             );
         }
+    }
 
+    protected function verifyDependencies(ContainerBuilder $container)
+    {
+        if (!$container->has('tuck_converter.config_format_converter')) {
+            throw new \RuntimeException(
+                'Please make sure that rosstuck/TuckConverterBundle is installed and configured'
+            );
+        }
     }
 
     public function getAlias()
