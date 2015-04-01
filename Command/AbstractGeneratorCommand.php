@@ -58,11 +58,6 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
     private $manipulator;
 
     /**
-     * @var InputInterface
-     */
-    private $input;
-
-    /**
      * @return string[]
      */
     abstract protected function getFiles();
@@ -225,7 +220,11 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->isInputValid($input);
+        if(!$this->isInputValid($input)) {
+            $output->writeln('<error>Please use either entity OR entities-location. One is required.</error>');
+
+            return 1;
+        }
 
         $entities = $this->getEntityUtils()->getEntityDirAsCollection($input->getOption('entities-location'));
         if (null !== $entity = $input->getOption('entity')) {
@@ -396,14 +395,6 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
         }
 
         return true;
-    }
-
-    /**
-     * @return InputInterface
-     */
-    protected function getInput()
-    {
-        return $this->input;
     }
 
     /**

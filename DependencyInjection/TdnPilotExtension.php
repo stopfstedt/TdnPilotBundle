@@ -23,7 +23,7 @@ class TdnPilotExtension extends Extension
         //tdn_pilot.template.strategy.twig_template_strategy
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('template-strategies.yml');
-        $loader->load('service-utils.yml');
+        $loader->load('entity-utils.yml');
 
         $this->verifyDependencies($container);
         $this->setDefaultTemplateStrategy($config, $container);
