@@ -5,6 +5,7 @@ namespace Tdn\PilotBundle\Manipulator;
 use Tdn\PhpTypes\Type\String;
 use Tdn\PilotBundle\Model\File;
 use Tdn\PilotBundle\Model\FileInterface;
+use Tdn\PilotBundle\Model\Format;
 
 /**
  * Class ManagerManipulator
@@ -21,7 +22,7 @@ class ManagerManipulator extends AbstractServiceManipulator
     {
         $entityReflection = $this->getMetadata()->getReflectionClass();
 
-        $constructorMethod = ($entityReflection) ?
+        $entityConstructor = ($entityReflection) ?
             ($entityReflection->hasMethod('__construct')) ? $entityReflection->getMethod('__construct') : null : null;
 
         $path = sprintf(
@@ -29,19 +30,22 @@ class ManagerManipulator extends AbstractServiceManipulator
             ($this->getTargetDirectory()) ?: $this->getBundle()->getPath()
         );
 
-        $this->addManagerFile($path, $constructorMethod);
-        $this->addManagerInterfaceFile($path, $constructorMethod);
-        $this->addManagerServiceFile();
-        $this->setUpdatingDiConfFile(true);
+        $this->addManagerFile($path, $entityConstructor);
+        $this->addManagerInterfaceFile($path, $entityConstructor);
+
+        if ($this->getFormat() !== Format::ANNOTATION) {
+            $this->addManagerServiceFile();
+            $this->setUpdatingDiConfFile(true);
+        }
 
         return $this;
     }
 
     /**
      * @param string $path
-     * @param \ReflectionMethod|null $constructorMethod
+     * @param \ReflectionMethod|null $entityConstructor
      */
-    protected function addManagerFile($path, $constructorMethod = null)
+    protected function addManagerFile($path, $entityConstructor = null)
     {
         $manager = new File(
             sprintf(
@@ -51,16 +55,16 @@ class ManagerManipulator extends AbstractServiceManipulator
             )
         );
 
-        $manager->setContents($this->getManagerContent($constructorMethod));
+        $manager->setContents($this->getManagerContent($entityConstructor));
 
         $this->addFile($manager);
     }
 
     /**
      * @param string $path
-     * @param \ReflectionMethod|null $constructorMethod
+     * @param \ReflectionMethod|null $entityConstructor
      */
-    protected function addManagerInterfaceFile($path, $constructorMethod = null)
+    protected function addManagerInterfaceFile($path, $entityConstructor = null)
     {
         $managerInterface = new File(
             sprintf(
@@ -71,7 +75,7 @@ class ManagerManipulator extends AbstractServiceManipulator
         );
 
         $managerInterface
-            ->setContents($this->getManagerInterfaceContent($constructorMethod))
+            ->setContents($this->getManagerInterfaceContent($entityConstructor))
             ->setAuxFile(true)
         ;
 
@@ -93,17 +97,16 @@ class ManagerManipulator extends AbstractServiceManipulator
         );
 
         $serviceFile
-            ->setContents($this->getServiceFileContents($serviceFile->getFullPath()))
+            ->setContents($this->getServiceFileContents($serviceFile))
             ->setServiceFile(true)
         ;
 
         $this->addMessage(sprintf(
-            'Make sure to load "%s" in the %s file to enable the new services.',
-            $serviceFile->getFilename() . '.' . $serviceFile->getExtension(),
-            $this->getDefaultExtensionFile()
+            'Make sure to load "%s" in your extension file to enable the new services.',
+            $serviceFile->getBasename()
         ));
 
-        $this->addGeneratedFile($serviceFile);
+        $this->addFile($serviceFile);
     }
 
     /**
@@ -216,11 +219,11 @@ class ManagerManipulator extends AbstractServiceManipulator
     }
 
     /**
-     * @param string $pathToFile
+     * @param File $file
      *
      * @return string
      */
-    protected function getServiceFileContents($pathToFile)
+    protected function getServiceFileContents(File $file)
     {
         $serviceClass = sprintf(
             '%s\\Entity\\Manager\\%sManager',
@@ -255,13 +258,11 @@ class ManagerManipulator extends AbstractServiceManipulator
 
         $serviceUtils = $this->getServiceUtils();
 
-        if (file_exists($pathToFile)) {
-            $serviceUtils->load($pathToFile);
-        }
-
-        $serviceUtils->addParameter($paramKey, $serviceClass);
-        $serviceUtils->addService($serviceId, $service);
-
-        return $serviceUtils->getFormattedContents($this->getFormat());
+        return $serviceUtils
+            ->setFile($file)
+            ->addParameter($paramKey, $serviceClass)
+            ->addService($serviceId, $service)
+            ->getFormattedContents($this->getFormat())
+        ;
     }
 }

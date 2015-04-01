@@ -16,11 +16,6 @@ abstract class AbstractServiceManipulator extends AbstractManipulator implements
     private $serviceUtils;
 
     /**
-     * @var string
-     */
-    private $format;
-
-    /**
      * @var bool
      */
     private $updatingDiFile;
@@ -42,22 +37,6 @@ abstract class AbstractServiceManipulator extends AbstractManipulator implements
     }
 
     /**
-     * @param string $format
-     */
-    public function setFormat($format)
-    {
-        $this->format = $format;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFormat()
-    {
-        return $this->format;
-    }
-
-    /**
      * @param bool $updatingDiFile
      */
     public function setUpdatingDiConfFile($updatingDiFile)
@@ -71,17 +50,5 @@ abstract class AbstractServiceManipulator extends AbstractManipulator implements
     public function isUpdatingDiConfFile()
     {
         return $this->updatingDiFile;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getDefaultExtensionFile()
-    {
-        return sprintf(
-            '%s/DependencyInjection/%s.php',
-            $this->getBundle()->getPath(),
-            str_replace('Bundle', 'Extension', $this->getBundle()->getName())
-        );
     }
 }

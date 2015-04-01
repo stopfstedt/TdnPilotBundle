@@ -4,7 +4,7 @@ namespace Tdn\PilotBundle\Services\DependencyInjection\Parser;
 
 /**
  * Interface ParserInterface
- * @package Tdn\PilotBundle\Services\DependencyInjection\Parser
+ * @package Tdn\PilotBundle\Services\FormatConverter\ServiceFileDriver
  */
 interface ParserInterface
 {

@@ -11,7 +11,7 @@ use Symfony\Component\Yaml\Parser as BaseYamlParser;
  * say it returns an array, but it is not noted in the doc block or through an interface.
  *
  * Class YamlParser
- * @package Tdn\PilotBundle\Services\DependencyInjection\Parser
+ * @package Tdn\PilotBundle\Services\FormatConverter\ServiceFileDriver
  */
 class YamlParser extends BaseYamlParser implements ParserInterface
 {

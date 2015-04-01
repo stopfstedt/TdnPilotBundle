@@ -7,7 +7,7 @@ use Tuck\ConverterBundle\ConfigFormatConverter;
 
 /**
  * Class XmlParser
- * @package Tdn\PilotBundle\Services\DependencyInjection\Parser
+ * @package Tdn\PilotBundle\Services\FormatConverter\ServiceFileDriver
  */
 class XmlParser implements ParserInterface
 {

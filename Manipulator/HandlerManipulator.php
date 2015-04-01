@@ -4,6 +4,7 @@ namespace Tdn\PilotBundle\Manipulator;
 
 use Tdn\PhpTypes\Type\String;
 use Tdn\PilotBundle\Model\File;
+use Tdn\PilotBundle\Model\Format;
 
 /**
  * Class HandlerManipulator
@@ -29,10 +30,13 @@ class HandlerManipulator extends AbstractServiceManipulator
         $handler->setContents($this->getHandlerFileContent());
 
         $this->addFile($handler);
-        $this->addHandlerServiceFile();
         $this->addManagerDependency();
         $this->addFormTypeDependency();
-        $this->setUpdatingDiConfFile(true);
+
+        if ($this->getFormat() !== Format::ANNOTATION) {
+            $this->addHandlerServiceFile();
+            $this->setUpdatingDiConfFile(true);
+        }
 
         return $this;
     }
@@ -68,19 +72,21 @@ class HandlerManipulator extends AbstractServiceManipulator
         ;
 
         $this->addMessage(sprintf(
-            'Make sure to load "%s" in the %s file to enable the new services.',
-            $serviceFile->getFilename() . '.' . $serviceFile->getExtension(),
-            $this->getDefaultExtensionFile()
+            'Make sure to load "%s" in your extension file to enable the new services.',
+            $serviceFile->getBasename()
         ));
+
         $this->addFile($serviceFile);
     }
 
     /**
      * Declares service and returns what the contents would be based on the format selected
      *
+     * @param File $file
+     *
      * @return string
      */
-    public function getServiceFileContents()
+    public function getServiceFileContents(File $file)
     {
         $serviceClass = sprintf(
             '%s\\Handler\\%sHandler',
@@ -114,11 +120,14 @@ class HandlerManipulator extends AbstractServiceManipulator
             ]
         ];
 
-        $diUtils = $this->getServiceUtils();
-        $diUtils->addParameter($paramKey, $serviceClass);
-        $diUtils->addService($serviceId, $service);
+        $serviceUtils = $this->getServiceUtils();
 
-        return $diUtils->getFormattedContents($this->getFormat());
+        return $serviceUtils
+            ->setFile($file)
+            ->addParameter($paramKey, $serviceClass)
+            ->addService($serviceId, $service)
+            ->getFormattedContents($this->getFormat())
+        ;
     }
 
     /**

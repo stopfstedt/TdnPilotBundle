@@ -156,10 +156,9 @@ class ControllerManipulator extends AbstractManipulator
     {
         $controllerTest = new File(
             sprintf(
-                '%s' . DIRECTORY_SEPARATOR . '%s' . DIRECTORY_SEPARATOR . 'Controller' .
+                '%s' . DIRECTORY_SEPARATOR . 'Tests' . DIRECTORY_SEPARATOR . 'Controller' .
                 DIRECTORY_SEPARATOR . '%sControllerTest.php',
                 ($this->getTargetDirectory()) ?: $this->getBundle()->getPath(),
-                'Tests',
                 $this->getEntity()
             )
         );
@@ -194,7 +193,7 @@ class ControllerManipulator extends AbstractManipulator
                 'namespace'              => $this->getBundle()->getNamespace(),
                 'resource'               => $this->isResource(),
                 'swagger'                => $this->hasSwagger(),
-                'format'                 => 'yml',
+                'format'                 => '',
                 'form_type'              => $this->getBundle()->getNamespace() .
                     '\\Form\\Type\\' . $this->getEntity() . 'Type',
                 'entity_form_type'       => (string) String::create($this->getEntity() . 'Type')

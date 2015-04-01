@@ -48,14 +48,14 @@ class FormManipulator extends AbstractManipulator
     {
         $formTypeException = new File(
             sprintf(
-                '%s' . DIRECTORY_SEPARATOR . 'Exception',
+                '%s' . DIRECTORY_SEPARATOR . 'Exception' . DIRECTORY_SEPARATOR . 'InvalidFormException.php',
                 ($this->getTargetDirectory()) ?: $this->getBundle()->getPath()
-            ) . 'InvalidFormException.php'
+            )
         );
 
         //File created only once.
         if (!is_file($formTypeException->isReadable()) || $this->shouldOverwrite()) {
-            $formTypeException->setContents($this->generateFormTypeExceptionContent());
+            $formTypeException->setContents($this->getFormTypeExceptionContent());
             $this->addFile($formTypeException);
         }
     }
@@ -84,7 +84,7 @@ class FormManipulator extends AbstractManipulator
     /**
      * @return string
      */
-    protected function generateFormTypeExceptionContent()
+    protected function getFormTypeExceptionContent()
     {
         return $this->getTemplateStrategy()->render(
             'form/form_exception.php.twig',

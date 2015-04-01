@@ -5,6 +5,7 @@ namespace Tdn\PilotBundle\Manipulator;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Tdn\PilotBundle\Model\File;
 use Tdn\PhpTypes\Type\String;
+use Tdn\PilotBundle\Model\Format;
 
 /**
  * Class RoutingGenerator
@@ -96,12 +97,18 @@ class RoutingManipulator extends AbstractManipulator
      */
     public function prepare()
     {
+        if ($this->getFormat() == Format::ANNOTATION) {
+            $this->addMessage(Format::ANNOTATION . ' was selected. No files generated.');
+            return $this;
+        }
+
         $routing = new File(
             sprintf(
                 '%s' . DIRECTORY_SEPARATOR . 'Resources' .
-                DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . '%s',
+                DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . '%s.%s',
                 ($this->getTargetDirectory()) ?: $this->getBundle()->getPath(),
-                $this->getRoutingFile()
+                $this->getRoutingFile(),
+                $this->getFormat()
             )
         );
 

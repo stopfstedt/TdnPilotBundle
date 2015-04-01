@@ -21,16 +21,6 @@ interface ServiceManipulatorInterface extends ManipulatorInterface
     public function getServiceUtils();
 
     /**
-     * @param string $format
-     */
-    public function setFormat($format);
-
-    /**
-     * @return string
-     */
-    public function getFormat();
-
-    /**
      * @param bool $updatingDiFile
      */
     public function setUpdatingDiConfFile($updatingDiFile);

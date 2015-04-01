@@ -40,13 +40,13 @@ class GeneratePilotProjectCommand extends AbstractGeneratorCommand
     }
 
     /**
-     * Creates a new manipulator instance
+     * @param InputInterface $input
      *
      * @throws \RuntimeException Not needed in this sub type.
      *
      * @return void
      */
-    protected function createManipulator()
+    protected function createManipulator(InputInterface $input)
     {
         throw new \RuntimeException('Not implemented in ' . get_called_class());
     }

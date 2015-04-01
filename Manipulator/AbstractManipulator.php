@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Common\Collections\ArrayCollection;
 use Tdn\PhpTypes\Type\String;
 use Tdn\PilotBundle\Model\File;
+use Tdn\PilotBundle\Model\Format;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 
 /**
@@ -53,6 +54,11 @@ abstract class AbstractManipulator implements ManipulatorInterface
     private $messages;
 
     /**
+     * @var string
+     */
+    private $targetDirectory;
+
+    /**
      * @var boolean
      */
     private $overwrite;
@@ -60,13 +66,14 @@ abstract class AbstractManipulator implements ManipulatorInterface
     /**
      * @var string
      */
-    private $targetDirectory;
+    private $format;
 
     public function __construct() {
         $this->files            = new ArrayCollection();
         $this->fileDependencies = new ArrayCollection();
         $this->messages         = new ArrayCollection();
         $this->setOverwrite(false);
+        $this->setFormat(Format::YAML);
     }
 
     /**
@@ -75,6 +82,16 @@ abstract class AbstractManipulator implements ManipulatorInterface
     public function reset()
     {
         return new static();
+    }
+
+    public static function getSupportedFormats()
+    {
+        return [
+            Format::YAML,
+            Format::YML,
+            Format::XML,
+            Format::ANNOTATION
+        ];
     }
 
     public function setTemplateStrategy(TemplateStrategyInterface $templateStrategy)
@@ -254,11 +271,33 @@ abstract class AbstractManipulator implements ManipulatorInterface
     }
 
     /**
+     * True if the generated files should be overwritten.
+     *
      * @return bool
      */
     public function shouldOverwrite()
     {
         return $this->overwrite;
+    }
+
+    /**
+     * @param string $format
+     */
+    public function setFormat($format)
+    {
+        if (!in_array($format, self::getSupportedFormats())) {
+            throw new \InvalidArgumentException('Invalid format ' . $format);
+        }
+
+        $this->format = $format;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormat()
+    {
+        return $this->format;
     }
 
     /**
@@ -298,8 +337,8 @@ abstract class AbstractManipulator implements ManipulatorInterface
     {
         if ($this->isValid()) {
             foreach ($this->getFiles() as $generatedFile) {
-                if ((!$generatedFile->isAuxFile() || !$generatedFile->isServiceFile()) && $this->shouldOverwrite()
-                    && file_exists($generatedFile->getRealPath())
+                if ((!$generatedFile->isAuxFile() || !$generatedFile->isServiceFile()) &&
+                    ($this->shouldOverwrite() && $generatedFile->isReadable())
                 ) {
                     unlink($generatedFile->getRealPath());
                 }
@@ -324,7 +363,7 @@ abstract class AbstractManipulator implements ManipulatorInterface
      */
     protected function isDependencyValid(File $fileDependency)
     {
-        if (!$fileDependency->isFile() || !$fileDependency->isReadable()) {
+        if (!$fileDependency->isReadable()) {
             throw new \RuntimeException(sprintf(
                 'Please ensure the file %s exists and is readable.',
                 $fileDependency->getRealPath()
@@ -349,7 +388,7 @@ abstract class AbstractManipulator implements ManipulatorInterface
             (!$this->shouldOverwrite() && !$generatedFile->isAuxFile() && !$generatedFile->isServiceFile())
         ) {
             throw new \RuntimeException(sprintf(
-                'Unable to generate the %s form class as it already exists under the file: %s',
+                'Unable to generate the %s file as it already exists under %s',
                 $generatedFile->getBasename($generatedFile->getExtension()),
                 $generatedFile->getRealPath()
             ));
@@ -379,22 +418,6 @@ abstract class AbstractManipulator implements ManipulatorInterface
             }
         }
 
-        $multiTypes = array(
-            ClassMetadata::ONE_TO_MANY,
-            ClassMetadata::MANY_TO_MANY,
-        );
-
-        foreach ($metadata->associationMappings as $fieldName => $relation) {
-            if (in_array($relation['type'], $multiTypes)) {
-                $fields[$fieldName]['relatedType'] = 'many';
-            } else {
-                $fields[$fieldName]['relatedType'] = 'single';
-            }
-
-            $fields[$fieldName]['relatedEntityShortcut'] =
-                $this->getEntityBundleShortcut($fields[$fieldName]['targetEntity']);
-        }
-
         return $fields;
     }
 
@@ -402,7 +425,7 @@ abstract class AbstractManipulator implements ManipulatorInterface
      * Gets the short version of a Entity's FQDN
      *
      * Take an entity name and return the shortcut name
-     * eg Acme\DemoBundle\Entity\Notes -> AcemDemoBundle:Notes
+     * eg Acme\DemoBundle\Entity\Notes -> AcmeDemoBundle:Notes
      *
      * @param string $entity Fully qualified class name of the entity
      *
@@ -410,7 +433,6 @@ abstract class AbstractManipulator implements ManipulatorInterface
      */
     protected function getEntityBundleShortcut($entity)
     {
-        // wrap in EntityManager's Class Metadata function avoid problems with cached proxy classes
         $path = explode('\Entity\\', $entity);
         return str_replace('\\', '', $path[0]) . ':' . $path[1];
     }
@@ -419,7 +441,8 @@ abstract class AbstractManipulator implements ManipulatorInterface
      * Cleans properties with namespaces appended to them.
      *
      * This method always assumes that the directory for entities
-     * will be `Entity` (the doctrine standard).
+     * will be `Entity` (symfony-standard). Will pop the last part of a string on
+     * directory separators and assume it's the proper value.
      *
      * @param string $property
      *

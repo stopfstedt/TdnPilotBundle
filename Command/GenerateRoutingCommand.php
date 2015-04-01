@@ -2,6 +2,7 @@
 
 namespace Tdn\PilotBundle\Command;
 
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Tdn\PilotBundle\Manipulator\RoutingManipulator;
@@ -18,7 +19,7 @@ class GenerateRoutingCommand extends AbstractGeneratorCommand
     /**
      * @var string
      */
-    const DEFAULT_ROUTING = 'routing.yml';
+    const DEFAULT_ROUTING = 'routing';
 
     /**
      * @var string
@@ -41,7 +42,7 @@ class GenerateRoutingCommand extends AbstractGeneratorCommand
                 'routing-file',
                 InputArgument::OPTIONAL,
                 'The routing file, defaults to: ' . self::DEFAULT_ROUTING,
-                self::DEFAULT_ROUTING
+                self::DEFAULT_ROUTING . '.<format>'
             ),
             new InputOption(
                 'route-prefix',
@@ -59,14 +60,16 @@ class GenerateRoutingCommand extends AbstractGeneratorCommand
     }
 
     /**
+     * @param InputInterface $input
+     *
      * @return RoutingManipulator
      */
-    protected function createManipulator()
+    protected function createManipulator(InputInterface $input)
     {
         $manipulator = new RoutingManipulator();
-        $manipulator->setRoutingFile($this->getInput()->getArgument('routing-file'));
-        $manipulator->setRoutePrefix($this->getInput()->getOption('route-prefix'));
-        $manipulator->setRemove(($this->getInput()->getOption('remove') ? true : false));
+        $manipulator->setRoutingFile($input->getArgument('routing-file'));
+        $manipulator->setRoutePrefix($input->getOption('route-prefix'));
+        $manipulator->setRemove(($input->getOption('remove') ? true : false));
 
         return $manipulator;
     }

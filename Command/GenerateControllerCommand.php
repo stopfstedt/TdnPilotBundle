@@ -2,6 +2,7 @@
 
 namespace Tdn\PilotBundle\Command;
 
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Tdn\PilotBundle\Manipulator\ControllerManipulator;
 
@@ -74,14 +75,16 @@ class GenerateControllerCommand extends AbstractGeneratorCommand
     }
 
     /**
+     * @param InputInterface $input
+     *
      * @return ControllerManipulator
      */
-    protected function createManipulator()
+    protected function createManipulator(InputInterface $input)
     {
         $manipulator = new ControllerManipulator();
-        $manipulator->setResource(($this->getInput()->getOption('resource') ? true : false));
-        $manipulator->setSwagger(($this->getInput()->getOption('with-swagger') ? true : false));
-        $manipulator->setRoutePrefix($this->getRoutePrefix($this->getInput()->getOption('route-prefix')));
+        $manipulator->setResource(($input->getOption('resource') ? true : false));
+        $manipulator->setSwagger(($input->getOption('with-swagger') ? true : false));
+        $manipulator->setRoutePrefix($this->getRoutePrefix($input->getOption('route-prefix')));
         $manipulator->setGenerateTests(false);
 
         return $manipulator;

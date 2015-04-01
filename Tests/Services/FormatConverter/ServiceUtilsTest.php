@@ -11,7 +11,7 @@ use Tdn\PilotBundle\Tests\Fixtures\ServiceUtilsData;
 
 /**
  * Class ServiceUtilsTest
- * @package Tdn\PilotBundle\Tests\Services\DependencyInjection
+ * @package Tdn\PilotBundle\Tests\Services\FormatConverter
  */
 class ServiceUtilsTest extends \PHPUnit_Framework_TestCase
 {

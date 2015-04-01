@@ -58,7 +58,7 @@ abstract class AbstractServiceManipulatorTest extends AbstractManipulatorTest
     protected function getDefaultDiFile()
     {
         return sprintf(
-            '%s/DependencyInjection/%s.php',
+            '%s/FormatConverter/%s.php',
             $this->getBundle()->getPath(),
             str_replace('Bundle', 'Extension', $this->getBundle()->getName())
         );

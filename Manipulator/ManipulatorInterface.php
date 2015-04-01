@@ -137,6 +137,16 @@ interface ManipulatorInterface
     public function prepare();
 
     /**
+     * @param string $format
+     */
+    public function setFormat($format);
+
+    /**
+     * @return string
+     */
+    public function getFormat();
+
+    /**
      * Returns a new instance with all values blank.
      *
      * @return static

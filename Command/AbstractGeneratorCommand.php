@@ -68,9 +68,11 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
     abstract protected function getFiles();
 
     /**
+     * @param InputInterface $input
+     *
      * @return ManipulatorInterface
      */
-    abstract protected function createManipulator();
+    abstract protected function createManipulator(InputInterface $input);
 
     /**
      * @param ManipulatorInterface $manipulator
@@ -83,35 +85,37 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
     /**
      * Returns current manipulator if set, otherwise returns a new instance.
      *
-     * Originally this function internally assigned the variable to cache it, but ran into
-     * issues with support entities.
+     * Returns the expected manipulator (based on createManipulator) for the current entity.
+     * Does not assign $this->manipulator so that a new instance is created every time.
      *
      * @param TemplateStrategyInterface $templateStrategy
      * @param BundleInterface           $bundle
      * @param ClassMetadata             $metadata
+     * @param InputInterface            $input
      *
      * @return ManipulatorInterface
      */
     public function getManipulator(
         TemplateStrategyInterface $templateStrategy,
         BundleInterface $bundle,
-        ClassMetadata $metadata
+        ClassMetadata $metadata,
+        InputInterface $input
     ) {
         if ($this->manipulator) {
             return $this->manipulator;
         } else {
-            $manipulator = $this->createManipulator();
+            $manipulator = $this->createManipulator($input);
 
             $manipulator->setMetadata($metadata);
             $manipulator->setTemplateStrategy($templateStrategy);
             $manipulator->setBundle($bundle);
-            $manipulator->setOverwrite(($this->getInput()->getOption('overwrite') ? true : false));
-            $manipulator->setTargetDirectory($this->getInput()->getOption('target-directory'));
+            $manipulator->setOverwrite(($input->getOption('overwrite') ? true : false));
+            $manipulator->setTargetDirectory($input->getOption('target-directory'));
+            $manipulator->setFormat($input->getOption('format'));
 
             if ($manipulator instanceof ServiceManipulatorInterface) {
                 $manipulator->setServiceUtils($this->getContainer()->get('tdn_pilot.di.service.utils'));
                 //Maybe add an abstract service generator command that adds this option
-                $manipulator->setFormat($this->getInput()->getOption('format'));
             }
 
             return $manipulator;
@@ -194,22 +198,19 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
                         InputOption::VALUE_OPTIONAL,
                         'Specify target directory. Defaults to symfony standard.',
                         null
+                    ),
+                    new InputOption(
+                        'format',
+                        'f',
+                        InputOption::VALUE_OPTIONAL,
+                        'The service file format (yaml, xml, annotations). default: yaml',
+                        'yaml'
                     )
                 ],
                 $this->getInputArgs()
             ))
             ->setDescription(static::DESCRIPTION)
             ->setName(static::NAME);
-    }
-
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     */
-    protected function interact(InputInterface $input, OutputInterface $output)
-    {
-        parent::interact($input, $output);
-        $this->input = $input;
     }
 
     /**
@@ -224,7 +225,7 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->ensureValidInput($input, $output);
+        $this->isInputValid($input);
 
         $entities = $this->getEntityUtils()->getEntityDirAsCollection($input->getOption('entities-location'));
         if (null !== $entity = $input->getOption('entity')) {
@@ -247,7 +248,8 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
                 $manipulator = $this->getManipulator(
                     $templateStrategy,
                     $bundle,
-                    $this->getEntityUtils()->getMetadata($doctrine, $this->getEntity())
+                    $this->getEntityUtils()->getMetadata($doctrine, $this->getEntity()),
+                    $input
                 )->prepare();
 
                 if ($this->shouldContinue($input, $output, $manipulator->getFiles(), $entity)) {
@@ -382,19 +384,18 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
 
     /**
      * @param InputInterface $input
-     * @param OutputInterface $output
      *
-     * @throws \RuntimeException when both entity and entities-location are set or both are not set.
+     * @return bool
      */
-    protected function ensureValidInput(InputInterface $input, OutputInterface $output)
+    protected function isInputValid(InputInterface $input)
     {
         if (($input->getOption('entity') === null && $input->getOption('entities-location') === null) ||
             ($input->getOption('entity') !== null && $input->getOption('entities-location') !== null)
         ) {
-            $output->writeln('<error>Please use either entity OR entities-location. One is required.</error>');
-
-            throw new \RuntimeException();
+            return false;
         }
+
+        return true;
     }
 
     /**

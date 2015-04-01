@@ -8,7 +8,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
  * Class Configuration
- * @package Tdn\PilotBundle\DependencyInjection
+ * @package Tdn\PilotBundle\FormatConverter
  */
 class Configuration implements ConfigurationInterface
 {

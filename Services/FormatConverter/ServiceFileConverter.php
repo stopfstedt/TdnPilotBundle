@@ -1,22 +1,23 @@
 <?php
 
-namespace Tdn\PilotBundle\Services\DependencyInjection;
+namespace Tdn\PilotBundle\Services\FormatConverter;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Yaml\Dumper as YamlDumper;
+use Tdn\PilotBundle\Model\Format;
 use Tuck\ConverterBundle\ConfigFormatConverter;
-use Tdn\PilotBundle\Services\DependencyInjection\Parser\ParserInterface;
-use Tdn\PilotBundle\Services\DependencyInjection\Parser\YamlParser;
-use Tdn\PilotBundle\Services\DependencyInjection\Parser\XmlParser;
+use Tdn\PilotBundle\Services\FormatConverter\ServiceFileDriver\DriverInterface;
+use Tdn\PilotBundle\Services\FormatConverter\ServiceFileDriver\YamlDriver;
+use Tdn\PilotBundle\Services\FormatConverter\ServiceFileDriver\XmlDriver;
 
 /**
- * Class ServiceUtils
- * @package Tdn\PilotBundle\Services\DependencyInjection
+ * Class ServiceFileConverter
+ * @package Tdn\PilotBundle\Services\FormatConverter
  */
-class ServiceUtils
+class ServiceFileConverter
 {
     /**
      * @var ArrayCollection
@@ -49,9 +50,9 @@ class ServiceUtils
     public static function getSupportedExtensions()
     {
         return [
-            'yml',
-            'yaml',
-            'xml'
+            Format::YAML,
+            Format::YML,
+            Format::XML
         ];
     }
 
@@ -210,7 +211,9 @@ class ServiceUtils
     public function setFile(SplFileInfo $file)
     {
         $this->file = $file;
-        $this->load();
+        if ($this->file->isReadable()) {
+            $this->load();
+        }
 
         return $this;
     }
@@ -228,7 +231,7 @@ class ServiceUtils
      */
     public function getXml()
     {
-        return $this->formatConverter->convertString($this->getYaml(), 'yml', 'xml');
+        return $this->formatConverter->convertString($this->getYaml(), Format::YML, Format::XML);
     }
 
     /**
@@ -250,10 +253,10 @@ class ServiceUtils
     public function getFormattedContents($format)
     {
         switch (strtolower($format)) {
-            case 'yaml':
-            case 'yml':
+            case Format::YAML:
+            case Format::YML:
                 return $this->getYaml();
-            case 'xml':
+            case Format::XML:
                 return $this->getXml();
             default:
                 throw new \InvalidArgumentException('Invalid format passed: ' . $format);
@@ -311,10 +314,10 @@ class ServiceUtils
     protected function getParser($format)
     {
         switch (strtolower($format)) {
-            case 'yaml':
-            case 'yml':
+            case Format::YAML:
+            case Format::YML:
                 return new YamlParser();
-            case 'xml':
+            case Format::XML:
                 //I really don't want to deal with XML so let's just deal with Yaml internally.
                 //As noted in http://stackoverflow.com/a/6943363/1583093 trying to create a one to one is not
                 //ideal.
