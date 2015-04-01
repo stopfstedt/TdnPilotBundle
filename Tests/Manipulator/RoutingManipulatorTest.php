@@ -99,7 +99,7 @@ class RoutingManipulatorTest extends AbstractManipulatorTest
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Resources' . DIRECTORY_SEPARATOR . 'config',
                     'getExtension' => 'yml',
-                    'getContents'  => RoutingData::ROUTING_FILE,
+                    'getFilteredContents'  => RoutingData::ROUTING_FILE,
                     'getFullPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Resources' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'routing.yml',
                     'hasForceNew'  => true

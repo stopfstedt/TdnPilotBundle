@@ -87,7 +87,7 @@ class TwigStrategyTest extends \PHPUnit_Framework_TestCase
                     'getFilename'  => 'hello',
                     'getPath'      => $this->getOutDir(),
                     'getExtension' => 'txt',
-                    'getContents'  => 'hello world',
+                    'getFilteredContents'  => 'hello world',
                     'getFullPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR . 'hello.txt'
                 ]
             )

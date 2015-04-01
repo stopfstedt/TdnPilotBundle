@@ -85,7 +85,7 @@ class TwigStrategy implements TemplateStrategyInterface
             }
         }
 
-        if (false === file_put_contents($target->getRealPath(), $target->getContents())) {
+        if (false === file_put_contents($target->getRealPath(), $target->getFilteredContents())) {
             throw new IOException(sprintf(
                 'Could not write file %s.',
                 $target->getRealPath()

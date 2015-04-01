@@ -130,7 +130,7 @@ abstract class AbstractManipulatorTest extends \PHPUnit_Framework_TestCase
             $expectedContents = $this->getGeneratedFiles($type)[$generatedFile->getFullPath()]->getContents();
             $this->assertEquals(
                 $expectedContents,
-                $generatedFile->getContents(),
+                $generatedFile->getFilteredContents(),
                 'Contents don\'t match. File: ' . $generatedFile->getFilename()
             );
         }

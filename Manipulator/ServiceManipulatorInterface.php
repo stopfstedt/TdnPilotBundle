@@ -2,7 +2,7 @@
 
 namespace Tdn\PilotBundle\Manipulator;
 
-use Tdn\PilotBundle\Services\DependencyInjection\ServiceUtils;
+use Tdn\PilotBundle\Services\Symfony\ServiceFileUtil;
 
 /**
  * Interface ServiceManipulatorInterface
@@ -11,22 +11,12 @@ use Tdn\PilotBundle\Services\DependencyInjection\ServiceUtils;
 interface ServiceManipulatorInterface extends ManipulatorInterface
 {
     /**
-     * @param ServiceUtils $diUtils
+     * @param ServiceFileUtil $serviceFileUtil
      */
-    public function setServiceUtils(ServiceUtils $diUtils);
+    public function setServiceFileUtil(ServiceFileUtil $serviceFileUtil);
 
     /**
-     * @return ServiceUtils
+     * @return ServiceFileUtil
      */
-    public function getServiceUtils();
-
-    /**
-     * @param bool $updatingDiFile
-     */
-    public function setUpdatingDiConfFile($updatingDiFile);
-
-    /**
-     * @return bool
-     */
-    public function isUpdatingDiConfFile();
+    public function getServiceFileUtil();
 }

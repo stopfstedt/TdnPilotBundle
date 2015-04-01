@@ -28,19 +28,28 @@ class TemplateStrategyUtils
      */
     public function getDefaultSkeletonDirs(BundleInterface $bundle = null, $rootDir = null)
     {
-        $skeletonDirs = array();
+        $skeletonDirs   = [];
+        $skeletonDirs[] = $this->getBundledSkeletonDir();
 
+        //Get app level overrides
         if (isset($bundle) && is_dir($dir = $bundle->getPath() . '/Resources/PilotBundle/skeleton')) {
             $skeletonDirs[] = $dir;
         }
 
+        //Get bundle level overrides
         if (null !== $rootDir && is_dir($dir = $rootDir . '/Resources/PilotBundle/skeleton')) {
             $skeletonDirs[] = $dir;
         }
 
-        $reflClass = new \ReflectionClass(new self());
-        $skeletonDirs[] = dirname($reflClass->getFileName()) . '/../../Resources/skeleton';
-
         return $skeletonDirs;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getBundledSkeletonDir()
+    {
+        $reflClass = new \ReflectionClass(new self());
+        return dirname($reflClass->getFileName()) . '/../../Resources/skeleton';
     }
 }

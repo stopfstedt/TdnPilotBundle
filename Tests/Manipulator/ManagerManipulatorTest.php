@@ -27,7 +27,7 @@ class ManagerManipulatorTest extends AbstractServiceManipulatorTest
         $manipulator->setMetadata($this->getMetadata());
         $manipulator->setOverwrite(false);
         $manipulator->setTargetDirectory($this->getOutDir());
-        $manipulator->setServiceUtils($this->getServiceUtils());
+        $manipulator->setServiceFileUtil($this->getServiceUtils());
         $manipulator->setFormat('xml');
 
         return $manipulator->prepare();
@@ -82,7 +82,7 @@ class ManagerManipulatorTest extends AbstractServiceManipulatorTest
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Entity' . DIRECTORY_SEPARATOR . 'Manager',
                     'getExtension' => 'php',
-                    'getContents'  => ManagerData::FOO_MANAGER,
+                    'getFilteredContents'  => ManagerData::FOO_MANAGER,
                     'getFullPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Entity' . DIRECTORY_SEPARATOR . 'Manager' . DIRECTORY_SEPARATOR . 'FooManager.php'
                 ]
@@ -107,7 +107,7 @@ class ManagerManipulatorTest extends AbstractServiceManipulatorTest
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Entity' . DIRECTORY_SEPARATOR . 'Manager',
                     'getExtension' => 'php',
-                    'getContents'  => ManagerData::FOO_MANAGER_INTERFACE,
+                    'getFilteredContents'  => ManagerData::FOO_MANAGER_INTERFACE,
                     'getFullPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Entity' . DIRECTORY_SEPARATOR . 'Manager' . DIRECTORY_SEPARATOR . 'FooManagerInterface.php'
                 ]
@@ -132,7 +132,7 @@ class ManagerManipulatorTest extends AbstractServiceManipulatorTest
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Resources' . DIRECTORY_SEPARATOR . 'config',
                     'getExtension' => 'xml',
-                    'getContents'  => ManagerData::FOO_MANAGER_SERVICE_XML,
+                    'getFilteredContents'  => ManagerData::FOO_MANAGER_SERVICE_XML,
                     'getFullPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Resources' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'managers.xml'
                 ]

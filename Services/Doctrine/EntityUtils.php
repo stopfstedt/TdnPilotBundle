@@ -11,7 +11,6 @@ use Tdn\PhpTypes\Type\String;
 
 class EntityUtils
 {
-
     /**
      * @param string|null $directory
      *

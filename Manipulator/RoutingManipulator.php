@@ -113,7 +113,7 @@ class RoutingManipulator extends AbstractManipulator
         );
 
         $routing
-            ->setContents($this->getRoutingContents($routing))
+            ->setFilteredContents($this->getRoutingContents($routing))
             ->setAuxFile(true) //Needed because this might exist but we still want to add routes to it.
         ;
 
@@ -129,7 +129,7 @@ class RoutingManipulator extends AbstractManipulator
      */
     protected function getRoutingContents(File $routingFile)
     {
-        $content = $routingFile->getContents() ?: '';
+        $content = $routingFile->getFilteredContents() ?: '';
         $configurationText = $this->getConfigurationText();
         $this->isInFile    = $this->hasConfigurationText($content, $configurationText);
 

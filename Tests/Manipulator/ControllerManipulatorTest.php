@@ -117,7 +117,7 @@ class ControllerManipulatorTest extends AbstractManipulatorTest
                     'getFilename'  => 'FooController',
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR . 'Controller',
                     'getExtension' => 'php',
-                    'getContents'  => ControllerData::BASIC_FOO_CONTROLLER,
+                    'getFilteredContents'  => ControllerData::BASIC_FOO_CONTROLLER,
                     'getFullPath'  => $this->getOutDir() .
                         DIRECTORY_SEPARATOR . 'Controller' .
                         DIRECTORY_SEPARATOR . 'FooController.php'

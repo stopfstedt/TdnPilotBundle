@@ -114,7 +114,7 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
             $manipulator->setFormat($input->getOption('format'));
 
             if ($manipulator instanceof ServiceManipulatorInterface) {
-                $manipulator->setServiceUtils($this->getContainer()->get('tdn_pilot.di.service.utils'));
+                $manipulator->setServiceFileUtil($this->getContainer()->get('tdn_pilot.di.service.utils'));
                 //Maybe add an abstract service generator command that adds this option
             }
 
@@ -337,7 +337,7 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
         if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
             $output->writeln(sprintf(
                 'Contents:' . PHP_EOL . '%s',
-                $file->getContents()
+                $file->getFilteredContents()
             ));
         }
     }

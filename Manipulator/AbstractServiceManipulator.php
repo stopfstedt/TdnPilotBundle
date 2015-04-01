@@ -2,7 +2,7 @@
 
 namespace Tdn\PilotBundle\Manipulator;
 
-use Tdn\PilotBundle\Services\DependencyInjection\ServiceUtils;
+use Tdn\PilotBundle\Services\Symfony\ServiceFileUtil;
 
 /**
  * Abstract Class AbstractServiceManipulator
@@ -11,44 +11,23 @@ use Tdn\PilotBundle\Services\DependencyInjection\ServiceUtils;
 abstract class AbstractServiceManipulator extends AbstractManipulator implements ServiceManipulatorInterface
 {
     /**
-     * @var ServiceUtils
+     * @var ServiceFileUtil
      */
-    private $serviceUtils;
+    private $serviceFileUtil;
 
     /**
-     * @var bool
+     * @param ServiceFileUtil $serviceFileUtil
      */
-    private $updatingDiFile;
-
-    /**
-     * @param ServiceUtils $serviceUtils
-     */
-    public function setServiceUtils(ServiceUtils $serviceUtils)
+    public function setServiceFileUtil(ServiceFileUtil $serviceFileUtil)
     {
-        $this->serviceUtils = $serviceUtils;
+        $this->serviceFileUtil = $serviceFileUtil;
     }
 
     /**
-     * @return ServiceUtils
+     * @return ServiceFileUtil
      */
-    public function getServiceUtils()
+    public function getServiceFileUtil()
     {
-        return $this->serviceUtils;
-    }
-
-    /**
-     * @param bool $updatingDiFile
-     */
-    public function setUpdatingDiConfFile($updatingDiFile)
-    {
-        $this->updatingDiFile = $updatingDiFile;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isUpdatingDiConfFile()
-    {
-        return $this->updatingDiFile;
+        return $this->serviceFileUtil;
     }
 }

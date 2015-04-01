@@ -37,7 +37,7 @@ class FormManipulator extends AbstractManipulator
             )
         );
 
-        $formType->setContents($this->generateFormTypeContent($formType->getFilename()));
+        $formType->setFilteredContents($this->generateFormTypeContent($formType->getFilename()));
         $this->addFile($formType);
     }
 
@@ -55,7 +55,7 @@ class FormManipulator extends AbstractManipulator
 
         //File created only once.
         if (!is_file($formTypeException->isReadable()) || $this->shouldOverwrite()) {
-            $formTypeException->setContents($this->getFormTypeExceptionContent());
+            $formTypeException->setFilteredContents($this->getFormTypeExceptionContent());
             $this->addFile($formTypeException);
         }
     }

@@ -27,7 +27,7 @@ class HandlerManipulatorTest extends AbstractServiceManipulatorTest
         $manipulator->setMetadata($this->getMetadata());
         $manipulator->setOverwrite(false);
         $manipulator->setTargetDirectory($this->getOutDir());
-        $manipulator->setServiceUtils($this->getServiceUtils());
+        $manipulator->setServiceFileUtil($this->getServiceUtils());
         $manipulator->setFormat('xml');
 
         return $manipulator->prepare();
@@ -98,7 +98,7 @@ class HandlerManipulatorTest extends AbstractServiceManipulatorTest
                     'getFilename'  => 'FooHandler',
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR . 'Handler',
                     'getExtension' => 'php',
-                    'getContents'  => HandlerData::FOO_HANDLER,
+                    'getFilteredContents'  => HandlerData::FOO_HANDLER,
                     'getFullPath'  => $this->getOutDir() .
                         DIRECTORY_SEPARATOR . 'Handler' . DIRECTORY_SEPARATOR . 'FooHandler.php'
                 ]
@@ -123,7 +123,7 @@ class HandlerManipulatorTest extends AbstractServiceManipulatorTest
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Resources' . DIRECTORY_SEPARATOR . 'config',
                     'getExtension' => 'xml',
-                    'getContents'  => HandlerData::FOO_HANDLER_SERVICE_XML,
+                    'getFilteredContents'  => HandlerData::FOO_HANDLER_SERVICE_XML,
                     'getFullPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Resources' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'handlers.xml'
                 ]

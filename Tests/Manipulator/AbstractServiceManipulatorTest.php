@@ -42,9 +42,9 @@ abstract class AbstractServiceManipulatorTest extends AbstractManipulatorTest
     {
         /** @var ServiceManipulatorInterface $manipulator */
         $manipulator = $this->getServiceManipulator()->reset();
-        $this->assertNull($manipulator->getServiceUtils());
-        $manipulator->setServiceUtils($this->getServiceUtils());
-        $this->assertEquals($this->getServiceUtils(), $manipulator->getServiceUtils());
+        $this->assertNull($manipulator->getServiceFileUtil());
+        $manipulator->setServiceFileUtil($this->getServiceUtils());
+        $this->assertEquals($this->getServiceUtils(), $manipulator->getServiceFileUtil());
     }
 
     public function testUpdatingDiConfFile()
@@ -58,7 +58,7 @@ abstract class AbstractServiceManipulatorTest extends AbstractManipulatorTest
     protected function getDefaultDiFile()
     {
         return sprintf(
-            '%s/FormatConverter/%s.php',
+            '%s/Symfony/%s.php',
             $this->getBundle()->getPath(),
             str_replace('Bundle', 'Extension', $this->getBundle()->getName())
         );

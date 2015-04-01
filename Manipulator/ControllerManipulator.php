@@ -144,7 +144,7 @@ class ControllerManipulator extends AbstractManipulator
             )
         );
 
-        $generatedController->setContents($this->generateControllerFileContent());
+        $generatedController->setFilteredContents($this->generateControllerFileContent());
 
         $this->addFile($generatedController);
     }
@@ -164,7 +164,7 @@ class ControllerManipulator extends AbstractManipulator
         );
 
         $controllerTest
-            ->setContents($this->generateControllerTestContent())
+            ->setFilteredContents($this->generateControllerTestContent())
             ->setAuxFile(true)
         ;
 

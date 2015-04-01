@@ -14,7 +14,7 @@ class File extends SplFileInfo
     /**
      * @var string
      */
-    private $contents;
+    private $filteredContents;
 
     /**
      * @var bool
@@ -40,29 +40,23 @@ class File extends SplFileInfo
     }
 
     /**
-     * @param string $contents
+     * @param string $filteredContents
      *
      * @return $this
      */
-    public function setContents($contents)
+    public function setFilteredContents($filteredContents)
     {
-        $this->contents = $contents;
+        $this->filteredContents = $filteredContents;
 
         return $this;
     }
 
     /**
-     * Gets the content of the file constructed from full path.
-     *
-     * Will return contents in this order: if content is set already
-     * return that. Otherwise try to get the fullpath's content
-     * If that fails, value will be null.
-     *
      * @return string
      */
-    public function getContents()
+    public function getFilteredContents()
     {
-        return $this->contents;
+        return $this->filteredContents;
     }
 
     /**
@@ -98,21 +92,5 @@ class File extends SplFileInfo
     public function isServiceFile()
     {
         return $this->serviceFile;
-    }
-
-    public function save()
-    {
-        if ($this->isWritable()) {
-            $file = $this->openFile('w');
-            $file->fwrite($this->getContents());
-            $file = null;
-        }
-
-        throw new IOException(
-            sprintf(
-                'Could not write to file %s',
-                $this->getRealPath()
-            )
-        );
     }
 }

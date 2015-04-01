@@ -2,10 +2,12 @@
 
 namespace Tdn\PilotBundle\Manipulator;
 
+use Symfony\Component\DependencyInjection\Definition;
 use Tdn\PhpTypes\Type\String;
 use Tdn\PilotBundle\Model\File;
 use Tdn\PilotBundle\Model\FileInterface;
 use Tdn\PilotBundle\Model\Format;
+use Tdn\PilotBundle\Model\ServiceDefinition;
 
 /**
  * Class ManagerManipulator
@@ -55,7 +57,7 @@ class ManagerManipulator extends AbstractServiceManipulator
             )
         );
 
-        $manager->setContents($this->getManagerContent($entityConstructor));
+        $manager->setFilteredContents($this->getManagerContent($entityConstructor));
 
         $this->addFile($manager);
     }
@@ -75,7 +77,7 @@ class ManagerManipulator extends AbstractServiceManipulator
         );
 
         $managerInterface
-            ->setContents($this->getManagerInterfaceContent($entityConstructor))
+            ->setFilteredContents($this->getManagerInterfaceContent($entityConstructor))
             ->setAuxFile(true)
         ;
 
@@ -97,7 +99,7 @@ class ManagerManipulator extends AbstractServiceManipulator
         );
 
         $serviceFile
-            ->setContents($this->getServiceFileContents($serviceFile))
+            ->setFilteredContents($this->getServiceFileContents($serviceFile))
             ->setServiceFile(true)
         ;
 
@@ -243,26 +245,23 @@ class ManagerManipulator extends AbstractServiceManipulator
             strtolower($this->getEntity())
         );
 
-        $service = [
-            'class' => '%' . $paramKey . '%',
-            'arguments' => [
-                '@doctrine',
+        $definition = new Definition('%' . $paramKey . '%');
+        $definition
+            ->addArgument('@doctrine')
+            ->addArgument(
                 sprintf(
                     '%s\\Entity\\%s%s',
                     $this->getBundle()->getNamespace(),
                     $this->getEntityNamespace(),
                     $this->getEntity()
                 )
-            ]
-        ];
+            )
+        ;
 
-        $serviceUtils = $this->getServiceUtils();
-
-        return $serviceUtils
-            ->setFile($file)
+        return $this->getServiceFileUtil()
             ->addParameter($paramKey, $serviceClass)
-            ->addService($serviceId, $service)
-            ->getFormattedContents($this->getFormat())
+            ->addServiceDefinition(new servicedefinition($serviceId, $definition))
+            ->dump($file)
         ;
     }
 }

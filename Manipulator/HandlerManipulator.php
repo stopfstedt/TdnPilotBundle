@@ -2,9 +2,11 @@
 
 namespace Tdn\PilotBundle\Manipulator;
 
+use Symfony\Component\DependencyInjection\Definition;
 use Tdn\PhpTypes\Type\String;
 use Tdn\PilotBundle\Model\File;
 use Tdn\PilotBundle\Model\Format;
+use Tdn\PilotBundle\Model\ServiceDefinition;
 
 /**
  * Class HandlerManipulator
@@ -27,7 +29,7 @@ class HandlerManipulator extends AbstractServiceManipulator
             )
         );
 
-        $handler->setContents($this->getHandlerFileContent());
+        $handler->setFilteredContents($this->getHandlerFileContent());
 
         $this->addFile($handler);
         $this->addManagerDependency();
@@ -35,7 +37,6 @@ class HandlerManipulator extends AbstractServiceManipulator
 
         if ($this->getFormat() !== Format::ANNOTATION) {
             $this->addHandlerServiceFile();
-            $this->setUpdatingDiConfFile(true);
         }
 
         return $this;
@@ -67,7 +68,7 @@ class HandlerManipulator extends AbstractServiceManipulator
         );
 
         $serviceFile
-            ->setContents($this->getServiceFileContents($serviceFile))
+            ->setFilteredContents($this->getServiceFileContents($serviceFile))
             ->setServiceFile(true)
         ;
 
@@ -106,27 +107,24 @@ class HandlerManipulator extends AbstractServiceManipulator
             strtolower($this->getEntity())
         );
 
-        $service = [
-            'class' => '%' . $paramKey . '%',
-            'arguments' => [
-                '@doctrine',
+        $definition = new Definition('%'. $paramKey . '%');
+        $definition
+            ->addArgument('@doctrine')
+            ->addArgument(
                 sprintf(
                     '%s\\Entity\\%s%s',
                     $this->getBundle()->getNamespace(),
                     $this->getEntityNamespace(),
                     $this->getEntity()
-                ),
-                '@form.factory'
-            ]
-        ];
+                )
+            )
+            ->addArgument('@form.factory')
+        ;
 
-        $serviceUtils = $this->getServiceUtils();
-
-        return $serviceUtils
-            ->setFile($file)
+        return $this->getServiceFileUtil()
             ->addParameter($paramKey, $serviceClass)
-            ->addService($serviceId, $service)
-            ->getFormattedContents($this->getFormat())
+            ->addServiceDefinition(new servicedefinition($serviceId, $definition))
+            ->dump($file)
         ;
     }
 

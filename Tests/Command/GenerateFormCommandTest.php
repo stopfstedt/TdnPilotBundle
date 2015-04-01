@@ -86,7 +86,7 @@ class GenerateFormCommandTest extends AbstractGeneratorCommandTest
                     'getFilename'  => 'FooType',
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR . 'Form' . DIRECTORY_SEPARATOR . 'Type',
                     'getExtension' => 'php',
-                    'getContents'  => FormData::FOO_FORM_TYPE,
+                    'getFilteredContents'  => FormData::FOO_FORM_TYPE,
                     'getFullPath'  => $this->getOutDir() .
                         DIRECTORY_SEPARATOR . 'Form' . DIRECTORY_SEPARATOR . 'Type' .
                         DIRECTORY_SEPARATOR . 'FooType.php'
@@ -111,7 +111,7 @@ class GenerateFormCommandTest extends AbstractGeneratorCommandTest
                     'getFilename'  => 'InvalidFormException',
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR . 'Exception',
                     'getExtension' => 'php',
-                    'getContents'  => FormData::FORM_EXCEPTION,
+                    'getFilteredContents'  => FormData::FORM_EXCEPTION,
                     'getFullPath'  => $this->getOutDir() .
                         DIRECTORY_SEPARATOR . 'Exception' . DIRECTORY_SEPARATOR . 'InvalidFormException.php'
                 ]

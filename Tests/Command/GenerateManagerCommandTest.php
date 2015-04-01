@@ -89,7 +89,7 @@ class GenerateManagerCommandTest extends AbstractGeneratorCommandTest
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Entity' . DIRECTORY_SEPARATOR . 'Manager',
                     'getExtension' => 'php',
-                    'getContents'  => ManagerData::FOO_MANAGER,
+                    'getFilteredContents'  => ManagerData::FOO_MANAGER,
                     'getFullPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Entity' . DIRECTORY_SEPARATOR . 'Manager' . DIRECTORY_SEPARATOR . 'FooManager.php'
                 ]
@@ -114,7 +114,7 @@ class GenerateManagerCommandTest extends AbstractGeneratorCommandTest
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Entity' . DIRECTORY_SEPARATOR . 'Manager',
                     'getExtension' => 'php',
-                    'getContents'  => ManagerData::FOO_MANAGER_INTERFACE,
+                    'getFilteredContents'  => ManagerData::FOO_MANAGER_INTERFACE,
                     'getFullPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Entity' . DIRECTORY_SEPARATOR . 'Manager' . DIRECTORY_SEPARATOR . 'FooManagerInterface.php'
                 ]
@@ -139,7 +139,7 @@ class GenerateManagerCommandTest extends AbstractGeneratorCommandTest
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Resources' . DIRECTORY_SEPARATOR . 'config',
                     'getExtension' => 'xml',
-                    'getContents'  => ManagerData::FOO_MANAGER_SERVICE_XML,
+                    'getFilteredContents'  => ManagerData::FOO_MANAGER_SERVICE_XML,
                     'getFullPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Resources' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'managers.xml'
                 ]
