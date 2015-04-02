@@ -17,7 +17,7 @@ use Tdn\PilotBundle\Template\Strategy\TwigStrategy;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 use Tdn\PilotBundle\Manipulator\ManipulatorInterface;
 use Tdn\PilotBundle\Model\File;
-use Tdn\PilotBundle\Services\Doctrine\EntityUtils;
+use Tdn\PilotBundle\Services\Utils\Doctrine\EntityUtils;
 use \Mockery as Mockery;
 
 /**

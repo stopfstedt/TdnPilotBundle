@@ -2,7 +2,7 @@
 
 namespace Tdn\PilotBundle\Manipulator;
 
-use Tdn\PilotBundle\Services\Symfony\ServiceFileUtil;
+use Tdn\PilotBundle\Services\Utils\Symfony\ServiceFileUtils;
 
 /**
  * Abstract Class AbstractServiceManipulator
@@ -11,20 +11,20 @@ use Tdn\PilotBundle\Services\Symfony\ServiceFileUtil;
 abstract class AbstractServiceManipulator extends AbstractManipulator implements ServiceManipulatorInterface
 {
     /**
-     * @var ServiceFileUtil
+     * @var ServiceFileUtils
      */
     private $serviceFileUtil;
 
     /**
-     * @param ServiceFileUtil $serviceFileUtil
+     * @param ServiceFileUtils $serviceFileUtil
      */
-    public function setServiceFileUtil(ServiceFileUtil $serviceFileUtil)
+    public function setServiceFileUtil(ServiceFileUtils $serviceFileUtil)
     {
         $this->serviceFileUtil = $serviceFileUtil;
     }
 
     /**
-     * @return ServiceFileUtil
+     * @return ServiceFileUtils
      */
     public function getServiceFileUtil()
     {

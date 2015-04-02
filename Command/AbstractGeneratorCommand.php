@@ -17,9 +17,10 @@ use Sensio\Bundle\GeneratorBundle\Command\Validators;
 use Tdn\PilotBundle\Manipulator\ManipulatorInterface;
 use Tdn\PilotBundle\Manipulator\ServiceManipulatorInterface;
 use Tdn\PilotBundle\Model\File;
-use Tdn\PilotBundle\Services\Doctrine\EntityUtils;
+use Tdn\PilotBundle\Services\Utils\Doctrine\EntityUtils;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyUtils;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
+use Tdn\PilotBundle\Services\Utils\Symfony\ServiceFileUtils;
 
 /**
  * Class AbstractGeneratorCommand
@@ -109,7 +110,7 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
             $manipulator->setFormat($input->getOption('format'));
 
             if ($manipulator instanceof ServiceManipulatorInterface) {
-                $manipulator->setServiceFileUtil($this->getContainer()->get('tdn_pilot.di.service.utils'));
+                $manipulator->setServiceFileUtil($this->getServiceFileUtils());
                 //Maybe add an abstract service generator command that adds this option
             }
 
@@ -302,6 +303,14 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
     protected function getTemplateStrategy()
     {
         return $this->getContainer()->get('tdn_pilot.template.strategy.default');
+    }
+
+    /**
+     * @return ServiceFileUtils
+     */
+    protected function getServiceFileUtils()
+    {
+        return $this->getContainer()->get('tdn_pilot.');
     }
 
     /**

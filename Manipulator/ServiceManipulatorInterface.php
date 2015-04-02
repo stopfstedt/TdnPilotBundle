@@ -2,7 +2,7 @@
 
 namespace Tdn\PilotBundle\Manipulator;
 
-use Tdn\PilotBundle\Services\Symfony\ServiceFileUtil;
+use Tdn\PilotBundle\Services\Utils\Symfony\ServiceFileUtils;
 
 /**
  * Interface ServiceManipulatorInterface
@@ -11,12 +11,12 @@ use Tdn\PilotBundle\Services\Symfony\ServiceFileUtil;
 interface ServiceManipulatorInterface extends ManipulatorInterface
 {
     /**
-     * @param ServiceFileUtil $serviceFileUtil
+     * @param ServiceFileUtils $serviceFileUtil
      */
-    public function setServiceFileUtil(ServiceFileUtil $serviceFileUtil);
+    public function setServiceFileUtil(ServiceFileUtils $serviceFileUtil);
 
     /**
-     * @return ServiceFileUtil
+     * @return ServiceFileUtils
      */
     public function getServiceFileUtil();
 }

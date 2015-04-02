@@ -1,6 +1,6 @@
 <?php
 
-namespace Tdn\PilotBundle\Services\Doctrine;
+namespace Tdn\PilotBundle\Services\Utils\Doctrine;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ManagerRegistry;

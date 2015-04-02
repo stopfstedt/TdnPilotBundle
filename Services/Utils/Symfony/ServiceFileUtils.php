@@ -1,6 +1,6 @@
 <?php
 
-namespace Tdn\PilotBundle\Services\Symfony;
+namespace Tdn\PilotBundle\Services\Utils\Symfony;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -14,10 +14,10 @@ use Tdn\PilotBundle\Model\Format;
 use Tdn\PilotBundle\Model\ServiceDefinition;
 
 /**
- * Class ServiceFileUtil
+ * Class ServiceFileUtils
  * @package Tdn\PilotBundle\ServiceFileLoader\Symfony
  */
-class ServiceFileUtil
+class ServiceFileUtils
 {
     /**
      * @var ArrayCollection
