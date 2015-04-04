@@ -68,7 +68,8 @@ abstract class AbstractManipulator implements ManipulatorInterface
      */
     private $format;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->files            = new ArrayCollection();
         $this->fileDependencies = new ArrayCollection();
         $this->messages         = new ArrayCollection();
@@ -84,6 +85,9 @@ abstract class AbstractManipulator implements ManipulatorInterface
         return new static();
     }
 
+    /**
+     * @return array
+     */
     public static function getSupportedFormats()
     {
         return [
@@ -94,6 +98,9 @@ abstract class AbstractManipulator implements ManipulatorInterface
         ];
     }
 
+    /**
+     * @param TemplateStrategyInterface $templateStrategy
+     */
     public function setTemplateStrategy(TemplateStrategyInterface $templateStrategy)
     {
         $this->templateStrategy = $templateStrategy;
@@ -124,22 +131,6 @@ abstract class AbstractManipulator implements ManipulatorInterface
     }
 
     /**
-     * @return string
-     */
-    public function getEntity()
-    {
-        return $this->cleanMetadataProperty($this->getMetadata()->getName());
-    }
-
-    /**
-     * @return string
-     */
-    public function getEntityNamespace()
-    {
-        return $this->cleanMetadataProperty($this->getMetadata()->namespace);
-    }
-
-    /**
      * @param ClassMetadata $metadata
      */
     public function setMetadata(ClassMetadata $metadata)
@@ -160,6 +151,22 @@ abstract class AbstractManipulator implements ManipulatorInterface
     public function getMetadata()
     {
         return $this->metadata;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntity()
+    {
+        return $this->cleanMetadataProperty($this->getMetadata()->getName());
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntityNamespace()
+    {
+        return $this->cleanMetadataProperty($this->getMetadata()->namespace);
     }
 
     /**
@@ -235,7 +242,7 @@ abstract class AbstractManipulator implements ManipulatorInterface
      */
     public function addMessage($message)
     {
-        $this->messages->add($message);
+        $this->messages->add((string) $message);
     }
 
     /**
@@ -336,14 +343,14 @@ abstract class AbstractManipulator implements ManipulatorInterface
     public function generate()
     {
         if ($this->isValid()) {
-            foreach ($this->getFiles() as $generatedFile) {
-                if ((!$generatedFile->isAuxFile() || !$generatedFile->isServiceFile()) &&
-                    ($this->shouldOverwrite() && $generatedFile->isReadable())
+            foreach ($this->getFiles() as $file) {
+                if ((!$file->isAuxFile() || !$file->isServiceFile()) &&
+                    ($this->shouldOverwrite() && $file->isReadable())
                 ) {
-                    unlink($generatedFile->getRealPath());
+                    unlink($file->getRealPath());
                 }
 
-                $this->getTemplateStrategy()->renderFile($generatedFile);
+                $this->getTemplateStrategy()->renderFile($file);
             }
 
             return $this->getFiles();
@@ -358,15 +365,15 @@ abstract class AbstractManipulator implements ManipulatorInterface
      * Certain objects we're generating declare their dependencies
      * on other objects. This ensures those dependencies exist.
      *
-     * @param File $fileDependency
+     * @param File $file
      * @return bool
      */
-    protected function isDependencyValid(File $fileDependency)
+    protected function isDependencyValid(File $file)
     {
-        if (!$fileDependency->isReadable()) {
+        if (!$file->isReadable()) {
             throw new \RuntimeException(sprintf(
                 'Please ensure the file %s exists and is readable.',
-                $fileDependency->getRealPath()
+                $file->getRealPath()
             ));
         }
 
@@ -379,18 +386,18 @@ abstract class AbstractManipulator implements ManipulatorInterface
      * Of if a conflict is present, that the class has been configured
      * to properly handle that conflict.
      *
-     * @param File $generatedFile
+     * @param File $file
      * @return bool
      */
-    protected function isFileValid(File $generatedFile)
+    protected function isFileValid(File $file)
     {
-        if (file_exists($generatedFile->getRealPath()) &&
-            (!$this->shouldOverwrite() && !$generatedFile->isAuxFile() && !$generatedFile->isServiceFile())
+        if (file_exists($file->getRealPath()) &&
+            (!$this->shouldOverwrite() && !$file->isAuxFile() && !$file->isServiceFile())
         ) {
             throw new \RuntimeException(sprintf(
                 'Unable to generate the %s file as it already exists under %s',
-                $generatedFile->getBasename($generatedFile->getExtension()),
-                $generatedFile->getRealPath()
+                $file->getBasename($file->getExtension()),
+                $file->getRealPath()
             ));
         }
 

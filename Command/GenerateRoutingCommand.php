@@ -5,6 +5,7 @@ namespace Tdn\PilotBundle\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Output\OutputInterface;
 use Tdn\PilotBundle\Manipulator\RoutingManipulator;
 
 /**
@@ -33,43 +34,69 @@ class GenerateRoutingCommand extends AbstractGeneratorCommand
         'Adds a routing entry for a rest controller based on an entity. Removes it with the --remove flag.';
 
     /**
-     * @return array<InputArgument|InputOption>
+     * @var string
      */
-    protected function getInputArgs()
+    protected $routingFile;
+
+    /**
+     * @var string
+     */
+    protected $routePrefix;
+
+    /**
+     * @var bool
+     */
+    protected $remove;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function configure()
     {
-        return [
-            new InputArgument(
+        $this
+            ->addArgument(
                 'routing-file',
                 InputArgument::OPTIONAL,
                 'The routing file, defaults to: ' . self::DEFAULT_ROUTING,
                 self::DEFAULT_ROUTING . '.<format>'
-            ),
-            new InputOption(
+            )
+            ->addOption(
                 'route-prefix',
                 'p',
                 InputOption::VALUE_REQUIRED,
                 'The route prefix'
-            ),
-            new InputOption(
+            )
+            ->addOption(
                 'remove',
                 'r',
                 InputOption::VALUE_NONE,
                 'Remove route instead of add.'
             )
-        ];
+        ;
+
+        parent::configure();
     }
 
     /**
      * @param InputInterface $input
-     *
+     * @param OutputInterface $output
+     */
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
+        $this->routingFile = $input->getArgument('routing-file');
+        $this->routePrefix = $input->getOption('route-prefix');
+        $this->remove      = $input->getOption('remove') ? true : false;
+    }
+
+    /**
      * @return RoutingManipulator
      */
-    protected function createManipulator(InputInterface $input)
+    protected function createManipulator()
     {
         $manipulator = new RoutingManipulator();
-        $manipulator->setRoutingFile($input->getArgument('routing-file'));
-        $manipulator->setRoutePrefix($input->getOption('route-prefix'));
-        $manipulator->setRemove(($input->getOption('remove') ? true : false));
+        $manipulator->setRoutingFile($this->routingFile);
+        $manipulator->setRoutePrefix($this->routePrefix);
+        $manipulator->setRemove($this->remove);
 
         return $manipulator;
     }
@@ -79,6 +106,6 @@ class GenerateRoutingCommand extends AbstractGeneratorCommand
      */
     protected function getFiles()
     {
-        return ['Routing conf'];
+        return ['Routing config'];
     }
 }

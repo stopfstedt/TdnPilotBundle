@@ -17,6 +17,7 @@ use Sensio\Bundle\GeneratorBundle\Command\Validators;
 use Tdn\PilotBundle\Manipulator\ManipulatorInterface;
 use Tdn\PilotBundle\Manipulator\ServiceManipulatorInterface;
 use Tdn\PilotBundle\Model\File;
+use Tdn\PilotBundle\Model\Format;
 use Tdn\PilotBundle\Services\Utils\Doctrine\EntityUtils;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyUtils;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
@@ -64,11 +65,9 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
     abstract protected function getFiles();
 
     /**
-     * @param InputInterface $input
-     *
      * @return ManipulatorInterface
      */
-    abstract protected function createManipulator(InputInterface $input);
+    abstract protected function createManipulator();
 
     /**
      * @param ManipulatorInterface $manipulator
@@ -87,7 +86,9 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
      * @param TemplateStrategyInterface $templateStrategy
      * @param BundleInterface           $bundle
      * @param ClassMetadata             $metadata
-     * @param InputInterface            $input
+     * @param string                    $format
+     * @param bool                      $overWrite
+     * @param string                    $targetDirectory
      *
      * @return ManipulatorInterface
      */
@@ -95,22 +96,33 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
         TemplateStrategyInterface $templateStrategy,
         BundleInterface $bundle,
         ClassMetadata $metadata,
-        InputInterface $input
+        $format          = Format::YML,
+        $overWrite       = false,
+        $targetDirectory = null
     ) {
         if ($this->manipulator) {
             return $this->manipulator;
         } else {
-            $manipulator = $this->createManipulator($input);
+            $manipulator = $this->createManipulator();
 
             $manipulator->setMetadata($metadata);
             $manipulator->setTemplateStrategy($templateStrategy);
             $manipulator->setBundle($bundle);
-            $manipulator->setOverwrite(($input->getOption('overwrite') ? true : false));
-            $manipulator->setTargetDirectory($input->getOption('target-directory'));
-            $manipulator->setFormat($input->getOption('format'));
+
+            if ($overWrite) {
+                $manipulator->setOverwrite($overWrite);
+            }
+
+            if ($targetDirectory) {
+                $manipulator->setTargetDirectory($targetDirectory);
+            }
+
+            if ($format) {
+                $manipulator->setFormat($format);
+            }
 
             if ($manipulator instanceof ServiceManipulatorInterface) {
-                $manipulator->setServiceFileUtil($this->getServiceFileUtils());
+                $manipulator->setServiceFileUtils($this->getServiceFileUtils());
                 //Maybe add an abstract service generator command that adds this option
             }
 
@@ -166,47 +178,40 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
         }
 
         $this
-            ->setDefinition(array_merge(
-                [
-                    new InputOption(
-                        'entity',
-                        't',
-                        InputOption::VALUE_OPTIONAL,
-                        'The entity class name to initialize (shortcut notation: FooBarBundle:Entity)',
-                        null
-                    ),
-                    new InputOption(
-                        'entities-location',
-                        'l',
-                        InputOption::VALUE_OPTIONAL,
-                        'The directory containing the entities classes to target',
-                        null
-                    ),
-                    new InputOption(
-                        'overwrite',
-                        'o',
-                        InputOption::VALUE_NONE,
-                        'Overwrite existing ' . implode(', ', $this->getFiles())
-                    ),
-                    new InputOption(
-                        'target-directory',
-                        'd',
-                        InputOption::VALUE_OPTIONAL,
-                        'Specify target directory. Defaults to symfony standard.',
-                        null
-                    ),
-                    new InputOption(
-                        'format',
-                        'f',
-                        InputOption::VALUE_OPTIONAL,
-                        'The service file format (yaml, xml, annotations). default: yaml',
-                        'yaml'
-                    )
-                ],
-                $this->getInputArgs()
-            ))
+            ->addOption(
+                'entity',
+                't',
+                InputOption::VALUE_OPTIONAL,
+                'The entity class name to initialize (shortcut notation: FooBarBundle:Entity)'
+            )
+            ->addOption(
+                'entities-location',
+                'l',
+                InputOption::VALUE_OPTIONAL,
+                'The directory containing the entity classes to target'
+            )
+            ->addOption(
+                'overwrite',
+                'o',
+                InputOption::VALUE_NONE,
+                'Overwrite existing ' . implode(',', $this->getFiles())
+            )
+            ->addOption(
+                'target-directory',
+                'd',
+                InputOption::VALUE_OPTIONAL,
+                'Specify a different target directory (namespaces will have to be changed manually)'
+            )
+            ->addOption(
+                'format',
+                'f',
+                InputOption::VALUE_OPTIONAL,
+                'The service file format (yaml, xml, annotations). default: yaml',
+                Format::YAML
+            )
             ->setDescription(static::DESCRIPTION)
-            ->setName(static::NAME);
+            ->setName(static::NAME)
+        ;
     }
 
     /**
@@ -239,17 +244,23 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
             $entity = Validators::validateEntityName($entity);
             list($bundle, $entity) = $this->getEntityUtils()->parseShortcutNotation($entity);
             $this->setEntity($doctrine->getAliasNamespace($bundle) . '\\' . $entity);
+            //This could be made better if we could guarantee that all entities share the same bundle
+            //(although they should)
             $bundle = $this->getKernel()->getBundle($bundle);
             $templateStrategy->setSkeletonDirs(
                 $this->getTemplateStrategyUtils()->getDefaultSkeletonDirs($bundle)
             );
 
             try {
+                //Same as above, and just calling setMetadata() instead...hmm.
                 $manipulator = $this->getManipulator(
                     $templateStrategy,
                     $bundle,
                     $this->getEntityUtils()->getMetadata($doctrine, $this->getEntity()),
-                    $input
+                    $this->getServiceFileUtils(),
+                    $input->getOption('format'),
+                    ($input->getOption('overwrite') ? true : false),
+                    ($input->hasOption('target-directory') ? $input->getOption('target-directory') : null)
                 )->prepare();
 
                 if ($this->shouldContinue($input, $output, $manipulator->getFiles(), $entity)) {
@@ -310,7 +321,7 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
      */
     protected function getServiceFileUtils()
     {
-        return $this->getContainer()->get('tdn_pilot.');
+        return $this->getContainer()->get('tdn_pilot.symfony.service.utils.class');
     }
 
     /**

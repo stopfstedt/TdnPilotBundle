@@ -4,11 +4,10 @@ namespace Tdn\PilotBundle\Tests\Manipulator;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use Symfony\Component\Finder\SplFileInfo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Tdn\PilotBundle\Manipulator\ManipulatorInterface;
-use Tdn\PilotBundle\Model\FileInterface;
+use Tdn\PilotBundle\Model\File;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 use Tdn\PilotBundle\Template\Strategy\TwigStrategy;
 use Tdn\PilotBundle\TdnPilotBundle;
@@ -51,12 +50,12 @@ abstract class AbstractManipulatorTest extends \PHPUnit_Framework_TestCase
     abstract protected function getManipulator();
 
     /**
-     * @return ArrayCollection|SplFileInfo[]
+     * @return ArrayCollection|File[]
      */
     abstract protected function getFileDependencies();
 
     /**
-     * @return ArrayCollection|FileInterface[]
+     * @return ArrayCollection|File[]
      */
     abstract protected function getGeneratedFiles();
 

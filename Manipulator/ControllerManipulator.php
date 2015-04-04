@@ -193,7 +193,7 @@ class ControllerManipulator extends AbstractManipulator
                 'namespace'              => $this->getBundle()->getNamespace(),
                 'resource'               => $this->isResource(),
                 'swagger'                => $this->hasSwagger(),
-                'format'                 => '',
+                'format'                 => $this->getFormat(),
                 'form_type'              => $this->getBundle()->getNamespace() .
                     '\\Form\\Type\\' . $this->getEntity() . 'Type',
                 'entity_form_type'       => (string) String::create($this->getEntity() . 'Type')

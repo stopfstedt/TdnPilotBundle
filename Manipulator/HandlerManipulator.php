@@ -48,7 +48,8 @@ class HandlerManipulator extends AbstractServiceManipulator
     protected function getHandlerFileContent()
     {
         return $this->getTemplateStrategy()->render('handler/handler.php.twig', [
-            'entity' => $this->getEntity(),
+            'entity'    => $this->getEntity(),
+            'format'    => $this->getFormat(),
             'namespace' => $this->getBundle()->getNamespace(),
         ]);
     }
@@ -121,7 +122,7 @@ class HandlerManipulator extends AbstractServiceManipulator
             ->addArgument('@form.factory')
         ;
 
-        return $this->getServiceFileUtil()
+        return $this->getServiceFileUtils()
             ->addParameter($paramKey, $serviceClass)
             ->addServiceDefinition(new servicedefinition($serviceId, $definition))
             ->dump($file)

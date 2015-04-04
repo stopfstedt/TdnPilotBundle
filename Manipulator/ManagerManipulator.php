@@ -197,6 +197,7 @@ class ManagerManipulator extends AbstractServiceManipulator
                 'entity'                  => $this->getEntity(),
                 'entity_namespace'        => $this->getEntityNamespace(),
                 'namespace'               => $this->getBundle()->getNamespace(),
+                'format'                  => $this->getFormat(),
                 'entity_construct_params' => $this->getParams($constructorMethod),
                 'construct_params'        => $this->getConstructParams($constructorMethod)
             ]
@@ -258,7 +259,7 @@ class ManagerManipulator extends AbstractServiceManipulator
             )
         ;
 
-        return $this->getServiceFileUtil()
+        return $this->getServiceFileUtils()
             ->addParameter($paramKey, $serviceClass)
             ->addServiceDefinition(new servicedefinition($serviceId, $definition))
             ->dump($file)

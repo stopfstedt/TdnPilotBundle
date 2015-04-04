@@ -1,9 +1,9 @@
 <?php
 
-namespace Tdn\PilotBundle\Tests\Template\Engine;
+namespace Tdn\PilotBundle\Tests\Template\Strategy;
 
 use Symfony\Component\Filesystem\Filesystem;
-use Tdn\PilotBundle\Model\FileInterface;
+use Tdn\PilotBundle\Model\File;
 use Tdn\PilotBundle\Template\Strategy\TwigStrategy;
 use Tdn\PilotBundle\TdnPilotBundle;
 use \Mockery;
@@ -32,8 +32,8 @@ class TwigStrategyTest extends \PHPUnit_Framework_TestCase
     public function testRenderFile()
     {
         $this->getOutputEngine()->renderFile($this->getFileMock());
-        $this->assertTrue(file_exists($this->getFileMock()->getFullPath()));
-        $this->assertEquals('hello world', file_get_contents($this->getFileMock()->getFullPath()));
+        $this->assertTrue(file_exists($this->getFileMock()->getRealPath()));
+        $this->assertEquals('hello world', file_get_contents($this->getFileMock()->getRealPath()));
     }
 
     protected function setUp()
@@ -75,20 +75,20 @@ class TwigStrategyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return FileInterface
+     * @return File
      */
     protected function getFileMock()
     {
-        $file = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
+        $file = Mockery::mock('\Tdn\PilotBundle\Model\File');
         $file
             ->shouldDeferMissing()
             ->shouldReceive(
                 [
-                    'getFilename'  => 'hello',
+                    'getFilteredContents'  => 'hello world',
+                    'getFileName'  => 'hello',
                     'getPath'      => $this->getOutDir(),
                     'getExtension' => 'txt',
-                    'getFilteredContents'  => 'hello world',
-                    'getFullPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR . 'hello.txt'
+                    'getRealPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR . 'hello.txt'
                 ]
             )
             ->zeroOrMoreTimes()

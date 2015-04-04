@@ -37,7 +37,7 @@ class FormManipulator extends AbstractManipulator
             )
         );
 
-        $formType->setFilteredContents($this->generateFormTypeContent($formType->getFilename()));
+        $formType->setFilteredContents($this->generateFormTypeContent($formType->getBasename('.php')));
         $this->addFile($formType);
     }
 
@@ -74,6 +74,7 @@ class FormManipulator extends AbstractManipulator
                 'namespace'             => $this->getBundle()->getNamespace(),
                 'entity_namespace'      => $this->getEntityNamespace(),
                 'entity_class'          => $this->getEntity(),
+                'format'                 => $this->getFormat(),
                 'bundle'                => $this->getBundle()->getName(),
                 'entity_identifier'     => $this->getEntityIdentifier(),
                 'form_class'            => String::create($fileName)->underscored()->toLowerCase(),

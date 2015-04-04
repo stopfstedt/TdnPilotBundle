@@ -4,7 +4,7 @@ namespace Tdn\PilotBundle\Tests\Command;
 
 use Tdn\PilotBundle\Command\GenerateHandlerCommand;
 use Tdn\PilotBundle\Manipulator\HandlerManipulator;
-use Tdn\PilotBundle\Model\FileInterface;
+use Tdn\PilotBundle\Model\File;
 use \Mockery;
 use Tdn\PilotBundle\Tests\Fixtures\HandlerData;
 
@@ -25,7 +25,7 @@ class GenerateHandlerCommandTest extends AbstractGeneratorCommandTest
     /**
      * @return array
      */
-    protected function getOptions()
+    public function getOptions()
     {
         return [
             'command'            => $this->getCommand()->getName(),
@@ -60,7 +60,7 @@ class GenerateHandlerCommandTest extends AbstractGeneratorCommandTest
     }
 
     /**
-     * @return FileInterface[]
+     * @return File[]
      */
     protected function getGeneratedFiles()
     {
@@ -68,29 +68,30 @@ class GenerateHandlerCommandTest extends AbstractGeneratorCommandTest
         $handlerServiceMock = $this->getHandlerServiceMock();
 
         return [
-            $handlerFileMock->getFullPath() => $handlerFileMock,
-            $handlerServiceMock->getFullPath() => $handlerServiceMock
+            $handlerFileMock->getRealPath() => $handlerFileMock,
+            $handlerServiceMock->getRealPath() => $handlerServiceMock
         ];
     }
 
     /**
-     * @return FileInterface
+     * @return File
      */
     protected function getHandlerFileMock()
     {
-        $handlerFileMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
+        $handlerFileMock = Mockery::mock('\Tdn\PilotBundle\Model\File');
         $handlerFileMock
             ->shouldDeferMissing()
             ->shouldReceive(
                 [
-                    'getFilename'  => 'FooHandler',
-                    'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR . 'Handler',
+                    'getFilteredContents' => HandlerData::FOO_HANDLER,
+                    'getBaseName'  => 'FooHandler',
                     'getExtension' => 'php',
-                    'getFilteredContents'  => HandlerData::FOO_HANDLER,
-                    'getFullPath'  => $this->getOutDir() .
+                    'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR . 'Handler',
+                    'getRealPath'  => $this->getOutDir() .
                         DIRECTORY_SEPARATOR . 'Handler' . DIRECTORY_SEPARATOR . 'FooHandler.php'
                 ]
             )
+            ->withAnyArgs()
             ->zeroOrMoreTimes()
         ;
 
@@ -98,24 +99,25 @@ class GenerateHandlerCommandTest extends AbstractGeneratorCommandTest
     }
 
     /**
-     * @return FileInterface
+     * @return File
      */
     protected function getHandlerServiceMock()
     {
-        $handlrServMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
+        $handlrServMock = Mockery::mock('\Tdn\PilotBundle\Model\File');
         $handlrServMock
             ->shouldDeferMissing()
             ->shouldReceive(
                 [
-                    'getFilename'  => 'handlers',
+                    'getFilteredContents' => HandlerData::FOO_HANDLER_SERVICE_YAML,
+                    'getBaseName'  => 'handlers',
+                    'getExtension' => 'yaml',
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Resources' . DIRECTORY_SEPARATOR . 'config',
-                    'getExtension' => 'xml',
-                    'getFilteredContents'  => HandlerData::FOO_HANDLER_SERVICE_XML,
-                    'getFullPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR .
-                        'Resources' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'handlers.xml'
+                    'getRealPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR .
+                        'Resources' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'handlers.yaml'
                 ]
             )
+            ->withAnyArgs()
             ->zeroOrMoreTimes()
         ;
 

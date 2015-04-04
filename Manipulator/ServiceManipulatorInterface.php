@@ -13,10 +13,10 @@ interface ServiceManipulatorInterface extends ManipulatorInterface
     /**
      * @param ServiceFileUtils $serviceFileUtil
      */
-    public function setServiceFileUtil(ServiceFileUtils $serviceFileUtil);
+    public function setServiceFileUtils(ServiceFileUtils $serviceFileUtil);
 
     /**
      * @return ServiceFileUtils
      */
-    public function getServiceFileUtil();
+    public function getServiceFileUtils();
 }

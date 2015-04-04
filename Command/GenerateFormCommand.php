@@ -2,7 +2,6 @@
 
 namespace Tdn\PilotBundle\Command;
 
-use Symfony\Component\Console\Input\InputInterface;
 use Tdn\PilotBundle\Manipulator\FormManipulator;
 
 /**
@@ -25,11 +24,9 @@ class GenerateFormCommand extends AbstractGeneratorCommand
     const DESCRIPTION = 'Generates a form type class based on a doctrine entity.';
 
     /**
-     * @param InputInterface $input
-     *
      * @return FormManipulator
      */
-    protected function createManipulator(InputInterface $input)
+    protected function createManipulator()
     {
         return new FormManipulator();
     }

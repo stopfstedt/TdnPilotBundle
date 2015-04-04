@@ -4,6 +4,7 @@ namespace Tdn\PilotBundle\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 use Tdn\PilotBundle\Manipulator\ControllerManipulator;
 
 /**
@@ -26,30 +27,47 @@ class GenerateControllerCommand extends AbstractGeneratorCommand
     const DESCRIPTION = 'Generates a Restful controller based on a doctrine entity.';
 
     /**
-     * @return InputOption[]
+     * @var bool
      */
-    protected function getInputArgs()
+    protected $resource;
+
+    /**
+     * @var bool
+     */
+    protected $swagger;
+
+    /**
+     * @var string
+     */
+    protected $routePrefix;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function configure()
     {
-        return [
-            new InputOption(
+        $this
+            ->addOption(
                 'resource',
                 'r',
                 InputOption::VALUE_NONE,
                 'The object will return with the resource name'
-            ),
-            new InputOption(
+            )
+            ->addOption(
                 'with-swagger',
                 'g',
                 InputOption::VALUE_NONE,
                 'Use NelmioApiDocBundle (which uses swagger-ui) to document the controller'
-            ),
-            new InputOption(
+            )
+            ->addOption(
                 'route-prefix',
                 'p',
                 InputOption::VALUE_NONE,
                 'If using annotations, you should also add a route prefix to the controller.'
             )
-        ];
+        ;
+
+        parent::configure();
     }
 
     /**
@@ -76,15 +94,24 @@ class GenerateControllerCommand extends AbstractGeneratorCommand
 
     /**
      * @param InputInterface $input
-     *
+     * @param OutputInterface $output
+     */
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
+        $this->resource = ($input->getOption('resource') ? true : false);
+        $this->swagger  = ($input->getOption('with-swagger') ? true : false);
+        $this->routePrefix = $this->getRoutePrefix($input->getOption('route-prefix'));
+    }
+
+    /**
      * @return ControllerManipulator
      */
-    protected function createManipulator(InputInterface $input)
+    protected function createManipulator()
     {
         $manipulator = new ControllerManipulator();
-        $manipulator->setResource(($input->getOption('resource') ? true : false));
-        $manipulator->setSwagger(($input->getOption('with-swagger') ? true : false));
-        $manipulator->setRoutePrefix($this->getRoutePrefix($input->getOption('route-prefix')));
+        $manipulator->setResource($this->resource);
+        $manipulator->setSwagger($this->swagger);
+        $manipulator->setRoutePrefix($this->routePrefix);
         $manipulator->setGenerateTests(false);
 
         return $manipulator;
@@ -97,4 +124,5 @@ class GenerateControllerCommand extends AbstractGeneratorCommand
     {
         return ['Rest Controller'];
     }
+
 }

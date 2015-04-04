@@ -16,6 +16,16 @@ use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 interface ManipulatorInterface
 {
     /**
+     * @return static
+     */
+    public function reset();
+
+    /**
+     * @return array
+     */
+    public static function getSupportedFormats();
+
+    /**
      * @param TemplateStrategyInterface $templateStrategy
      */
     public function setTemplateStrategy(TemplateStrategyInterface $templateStrategy);
@@ -36,16 +46,6 @@ interface ManipulatorInterface
     public function getBundle();
 
     /**
-     * @return string
-     */
-    public function getEntity();
-
-    /**
-     * @return string
-     */
-    public function getEntityNamespace();
-
-    /**
      * @param ClassMetadata $metadata
      */
     public function setMetadata(ClassMetadata $metadata);
@@ -56,14 +56,24 @@ interface ManipulatorInterface
     public function getMetadata();
 
     /**
-     * @param Collection $generatedFiles
+     * @return string
      */
-    public function setFiles(Collection $generatedFiles);
+    public function getEntity();
 
     /**
-     * @param File $generatedFile
+     * @return string
      */
-    public function addFile(File $generatedFile);
+    public function getEntityNamespace();
+
+    /**
+     * @param Collection $files
+     */
+    public function setFiles(Collection $files);
+
+    /**
+     * @param File $file
+     */
+    public function addFile(File $file);
 
     /**
      * @return ArrayCollection|File[]
@@ -111,30 +121,14 @@ interface ManipulatorInterface
     public function getTargetDirectory();
 
     /**
-     * @param bool $overWrite
+     * @param bool $overwrite
      */
-    public function setOverwrite($overWrite);
+    public function setOverwrite($overwrite);
 
     /**
      * @return bool
      */
     public function shouldOverwrite();
-
-    /**
-     * @return bool
-     */
-    public function isValid();
-
-    /**
-     * @return ArrayCollection|File[]
-     */
-    public function generate();
-
-    /**
-     * Sets up appropriate file contents.
-     * @return $this
-     */
-    public function prepare();
 
     /**
      * @param string $format
@@ -147,9 +141,18 @@ interface ManipulatorInterface
     public function getFormat();
 
     /**
-     * Returns a new instance with all values blank.
-     *
-     * @return static
+     * @throws \RunTimeException
+     * @return bool
      */
-    public function reset();
+    public function isValid();
+
+    /**
+     * @return $this
+     */
+    public function prepare();
+
+    /**
+     * @return ArrayCollection|File[]
+     */
+    public function generate();
 }

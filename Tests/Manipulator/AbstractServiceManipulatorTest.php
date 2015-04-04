@@ -42,9 +42,9 @@ abstract class AbstractServiceManipulatorTest extends AbstractManipulatorTest
     {
         /** @var ServiceManipulatorInterface $manipulator */
         $manipulator = $this->getServiceManipulator()->reset();
-        $this->assertNull($manipulator->getServiceFileUtil());
-        $manipulator->setServiceFileUtil($this->getServiceUtils());
-        $this->assertEquals($this->getServiceUtils(), $manipulator->getServiceFileUtil());
+        $this->assertNull($manipulator->getServiceFileUtils());
+        $manipulator->setServiceFileUtils($this->getServiceUtils());
+        $this->assertEquals($this->getServiceUtils(), $manipulator->getServiceFileUtils());
     }
 
     public function testUpdatingDiConfFile()

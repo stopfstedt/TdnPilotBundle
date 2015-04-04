@@ -50,6 +50,6 @@ class TemplateStrategyUtils
     protected function getBundledSkeletonDir()
     {
         $reflClass = new \ReflectionClass(new self());
-        return dirname($reflClass->getFileName()) . '/../../Resources/skeleton';
+        return realpath(dirname($reflClass->getFileName()) . '/../../Resources/skeleton');
     }
 }

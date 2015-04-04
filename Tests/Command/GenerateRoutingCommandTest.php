@@ -25,7 +25,7 @@ class GenerateRoutingCommandTest extends AbstractGeneratorCommandTest
     /**
      * @return array
      */
-    protected function getOptions()
+    public function getOptions()
     {
         return [
             'command'            => $this->getCommand()->getName(),
@@ -33,8 +33,7 @@ class GenerateRoutingCommandTest extends AbstractGeneratorCommandTest
             '--target-directory' => $this->getOutDir(),
             '--route-prefix'     => 'v1',
             '--remove'           => false,
-            '--entity'           => 'FooBarBundle:Foo',
-            'routing-file'       => 'routing.yml'
+            '--entity'           => 'FooBarBundle:Foo'
         ];
     }
 
@@ -63,22 +62,22 @@ class GenerateRoutingCommandTest extends AbstractGeneratorCommandTest
     }
 
     /**
-     * @return Mockery\MockInterface|File[]
+     * @return File[]
      */
     protected function getGeneratedFiles()
     {
-        $routingFileMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
+        $routingFileMock = Mockery::mock('\Tdn\PilotBundle\Model\File');
         $routingFileMock
             ->shouldDeferMissing()
             ->shouldReceive(
                 [
-                    'getFilename'  => 'routing',
+                    'getFilteredContents'  => RoutingData::ROUTING_FILE,
+                    'getFileName'  => 'routing',
+                    'getExtension' => 'yml',
                     'getPath'      => $this->getOutDir() .
                         DIRECTORY_SEPARATOR . 'Resources' .
                         DIRECTORY_SEPARATOR . 'config',
-                    'getExtension' => 'yml',
-                    'getFilteredContents'  => RoutingData::ROUTING_FILE,
-                    'getFullPath'  => $this->getOutDir() .
+                    'getRealPath'  => $this->getOutDir() .
                         DIRECTORY_SEPARATOR . 'Resources' .
                         DIRECTORY_SEPARATOR . 'config' .
                         DIRECTORY_SEPARATOR . 'routing.yml'
@@ -88,7 +87,7 @@ class GenerateRoutingCommandTest extends AbstractGeneratorCommandTest
         ;
 
         return [
-            $routingFileMock->getFullPath() => $routingFileMock
+            $routingFileMock->getRealPath() => $routingFileMock
         ];
     }
 }

@@ -2,8 +2,6 @@
 
 namespace Tdn\PilotBundle\Command;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Tdn\PilotBundle\Manipulator\HandlerManipulator;
 
 /**
@@ -26,11 +24,9 @@ class GenerateHandlerCommand extends AbstractGeneratorCommand
     const DESCRIPTION = 'Generates an entity REST handler file for a controller.';
 
     /**
-     * @param InputInterface $input
-     *
      * @return HandlerManipulator
      */
-    protected function createManipulator(InputInterface $input)
+    protected function createManipulator()
     {
         return new HandlerManipulator();
     }

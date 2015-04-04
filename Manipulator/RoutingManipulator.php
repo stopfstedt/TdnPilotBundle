@@ -3,6 +3,7 @@
 namespace Tdn\PilotBundle\Manipulator;
 
 use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Routing\RouteCollection;
 use Tdn\PilotBundle\Model\File;
 use Tdn\PhpTypes\Type\String;
 use Tdn\PilotBundle\Model\Format;
@@ -32,6 +33,11 @@ class RoutingManipulator extends AbstractManipulator
      * @var bool
      */
     private $isInFile;
+
+    /**
+     * @var RoutingFileUtils
+     */
+    private $routingFileUtils;
 
     /**
      */
@@ -168,6 +174,11 @@ class RoutingManipulator extends AbstractManipulator
      */
     protected function getConfigurationText()
     {
+        $routeCollection = new RouteCollection();
+        $routeCollection->addPrefix((string) String::create($this->getRoutePrefix())->replace('/', ''));
+
+//        $route = new Route($this->getRouteFromEntity());
+
         $output = sprintf("%s:\n", $this->getRouteFromEntity());
         $output .=
             sprintf(
@@ -177,11 +188,9 @@ class RoutingManipulator extends AbstractManipulator
             );
         $output .=
             sprintf(
-                "    prefix:   /%s\n",
-                (string) String::create($this->getRoutePrefix())->replace('/', '')
+                "    defaults: {_format:%s}\n",
+                'json'
             );
-        $output .=
-            sprintf("    defaults: {_format:%s}\n", 'json');
 
         return $output;
     }

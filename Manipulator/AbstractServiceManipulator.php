@@ -13,21 +13,21 @@ abstract class AbstractServiceManipulator extends AbstractManipulator implements
     /**
      * @var ServiceFileUtils
      */
-    private $serviceFileUtil;
+    private $serviceFileUtils;
 
     /**
-     * @param ServiceFileUtils $serviceFileUtil
+     * @param ServiceFileUtils $serviceFileUtils
      */
-    public function setServiceFileUtil(ServiceFileUtils $serviceFileUtil)
+    public function setServiceFileUtils(ServiceFileUtils $serviceFileUtils)
     {
-        $this->serviceFileUtil = $serviceFileUtil;
+        $this->serviceFileUtils = $serviceFileUtils;
     }
 
     /**
      * @return ServiceFileUtils
      */
-    public function getServiceFileUtil()
+    public function getServiceFileUtils()
     {
-        return $this->serviceFileUtil;
+        return $this->serviceFileUtils;
     }
 }
