@@ -5,7 +5,7 @@ namespace Tdn\PilotBundle\Tests\Manipulator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Finder\SplFileInfo;
 use Tdn\PilotBundle\Manipulator\ControllerManipulator;
-use Tdn\PilotBundle\Model\FileInterface;
+use Tdn\PilotBundle\Model\File;
 use \Mockery;
 use Tdn\PilotBundle\Tests\Fixtures\ControllerData;
 
@@ -20,14 +20,7 @@ class ControllerManipulatorTest extends AbstractManipulatorTest
         $manipulator = $this->getManipulator();
         $manipulator->setRoutePrefix('v1');
         $this->assertEquals('v1', $manipulator->getRoutePrefix());
-    }
-
-    public function testRouteNamePrefix()
-    {
-        $manipulator = $this->getManipulator();
-        $manipulator->setRoutePrefix('v1');
         $this->assertEquals('v1', $manipulator->getRouteNamePrefix());
-
     }
 
     public function testResource()
@@ -84,41 +77,37 @@ class ControllerManipulatorTest extends AbstractManipulatorTest
         );
 
         return new ArrayCollection([
-            new SplFileInfo($handlerFile, null, null)
+            new File($handlerFile)
         ]);
     }
 
     /**
-     * @param  string|null              $type
-     *
-     * @return FileInterface[]
+     * @return File[]
      */
-    protected function getGeneratedFiles($type = null)
+    protected function getGeneratedFiles()
     {
-        $controllerFileMock = $this->getControllerFileMock($type);
+        $controllerFileMock = $this->getControllerFileMock();
 
         return [
-            $controllerFileMock->getFullPath() => $controllerFileMock
+            $controllerFileMock->getRealPath() => $controllerFileMock
         ];
     }
 
     /**
-     * @param  string|null            $type
-     *
-     * @return FileInterface
+     * @return File
      */
-    protected function getControllerFileMock($type = null)
+    protected function getControllerFileMock()
     {
-        $controllerFileMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
+        $controllerFileMock = Mockery::mock('\Tdn\PilotBundle\Model\File');
         $controllerFileMock
             ->shouldDeferMissing()
             ->shouldReceive(
                 [
-                    'getFilename'  => 'FooController',
-                    'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR . 'Controller',
-                    'getExtension' => 'php',
                     'getFilteredContents'  => ControllerData::BASIC_FOO_CONTROLLER,
-                    'getFullPath'  => $this->getOutDir() .
+                    'getFilename'  => 'FooController',
+                    'getExtension' => 'php',
+                    'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR . 'Controller',
+                    'getRealPath'  => $this->getOutDir() .
                         DIRECTORY_SEPARATOR . 'Controller' .
                         DIRECTORY_SEPARATOR . 'FooController.php'
                 ]

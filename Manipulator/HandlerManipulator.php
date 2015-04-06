@@ -3,6 +3,7 @@
 namespace Tdn\PilotBundle\Manipulator;
 
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 use Tdn\PhpTypes\Type\String;
 use Tdn\PilotBundle\Model\File;
 use Tdn\PilotBundle\Model\Format;
@@ -110,7 +111,7 @@ class HandlerManipulator extends AbstractServiceManipulator
 
         $definition = new Definition('%'. $paramKey . '%');
         $definition
-            ->addArgument('@doctrine')
+            ->addArgument(new Reference('doctrine'))
             ->addArgument(
                 sprintf(
                     '%s\\Entity\\%s%s',
@@ -119,7 +120,7 @@ class HandlerManipulator extends AbstractServiceManipulator
                     $this->getEntity()
                 )
             )
-            ->addArgument('@form.factory')
+            ->addArgument(new Reference('form.factory'))
         ;
 
         return $this->getServiceFileUtils()

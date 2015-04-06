@@ -119,7 +119,7 @@ class GenerateControllerCommandTest extends AbstractGeneratorCommandTest
             ->shouldReceive(
                 [
                     'getFilteredContents'  => ControllerData::BASIC_FOO_CONTROLLER,
-                    'getFileName'  => 'FooController',
+                    'getFilename'  => 'FooController',
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR . 'Controller',
                     'getExtension' => 'php',
                     'getFullPath'  => $this->getOutDir() .

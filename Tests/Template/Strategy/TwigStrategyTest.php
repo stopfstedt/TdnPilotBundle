@@ -62,7 +62,7 @@ class TwigStrategyTest extends \PHPUnit_Framework_TestCase
     {
         $bundleClass    = new \ReflectionClass(new TdnPilotBundle());
         $skeletonDirs   = [];
-        $skeletonDirs[] = dirname($bundleClass->getFileName()) . '/Tests/skeleton';
+        $skeletonDirs[] = dirname($bundleClass->getFileName()) . '/Tests/Fixtures/skeleton';
 
         return $skeletonDirs;
     }
@@ -85,7 +85,7 @@ class TwigStrategyTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive(
                 [
                     'getFilteredContents'  => 'hello world',
-                    'getFileName'  => 'hello',
+                    'getFilename'  => 'hello',
                     'getPath'      => $this->getOutDir(),
                     'getExtension' => 'txt',
                     'getRealPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR . 'hello.txt'

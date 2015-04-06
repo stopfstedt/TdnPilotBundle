@@ -3,9 +3,8 @@
 namespace Tdn\PilotBundle\Tests\Manipulator;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Finder\SplFileInfo;
 use Tdn\PilotBundle\Manipulator\FormManipulator;
-use Tdn\PilotBundle\Model\FileInterface;
+use Tdn\PilotBundle\Model\File;
 use \Mockery;
 use Tdn\PilotBundle\Tests\Fixtures\FormData;
 
@@ -32,7 +31,7 @@ class FormManipulatorTest extends AbstractManipulatorTest
     }
 
     /**
-     * @return ArrayCollection|SplFileInfo[]
+     * @return ArrayCollection|File[]
      */
     protected function getFileDependencies()
     {
@@ -45,12 +44,12 @@ class FormManipulatorTest extends AbstractManipulatorTest
         );
 
         return new ArrayCollection([
-            new SplFileInfo($managerFile, null, null)
+            new File($managerFile)
         ]);
     }
 
     /**
-     * @return FileInterface[]
+     * @return File[]
      */
     protected function getGeneratedFiles()
     {
@@ -58,27 +57,28 @@ class FormManipulatorTest extends AbstractManipulatorTest
         $exceptionFileMock = $this->getExceptionFileMock();
 
         return [
-            $formTypeFileMock->getFullPath()  => $formTypeFileMock,
-            $exceptionFileMock->getFullPath() => $exceptionFileMock
+            $formTypeFileMock->getRealPath()  => $formTypeFileMock,
+            $exceptionFileMock->getRealPath() => $exceptionFileMock
         ];
     }
 
     /**
-     * @return FileInterface
+     * @return File
      */
     protected function getFormTypeMock()
     {
-        $formTypeFileMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
+        $formTypeFileMock = Mockery::mock('\Tdn\PilotBundle\Model\File');
         $formTypeFileMock
             ->shouldDeferMissing()
             ->shouldReceive(
                 [
-                    'getFilename'  => 'FooType',
-                    'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR . 'Form' . DIRECTORY_SEPARATOR . 'Type',
-                    'getExtension' => 'php',
                     'getFilteredContents'  => FormData::FOO_FORM_TYPE,
-                    'getFullPath'  => $this->getOutDir() .
-                        DIRECTORY_SEPARATOR . 'Form' . DIRECTORY_SEPARATOR . 'Type' .
+                    'getFilename'  => 'FooType',
+                    'getExtension' => 'php',
+                    'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR . 'Form' . DIRECTORY_SEPARATOR . 'Type',
+                    'getRealPath'  => $this->getOutDir() .
+                        DIRECTORY_SEPARATOR . 'Form' .
+                        DIRECTORY_SEPARATOR . 'Type' .
                         DIRECTORY_SEPARATOR . 'FooType.php'
                 ]
             )
@@ -89,21 +89,22 @@ class FormManipulatorTest extends AbstractManipulatorTest
     }
 
     /**
-     * @return FileInterface
+     * @return File
      */
     protected function getExceptionFileMock()
     {
-        $exceptionFileMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
+        $exceptionFileMock = Mockery::mock('\Tdn\PilotBundle\Model\File');
         $exceptionFileMock
             ->shouldDeferMissing()
             ->shouldReceive(
                 [
-                    'getFilename'  => 'InvalidFormException',
-                    'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR . 'Exception',
-                    'getExtension' => 'php',
                     'getFilteredContents'  => FormData::FORM_EXCEPTION,
-                    'getFullPath'  => $this->getOutDir() .
-                        DIRECTORY_SEPARATOR . 'Exception' . DIRECTORY_SEPARATOR . 'InvalidFormException.php'
+                    'getFilename'  => 'InvalidFormException',
+                    'getExtension' => 'php',
+                    'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR . 'Exception',
+                    'getRealPath'  => $this->getOutDir() .
+                        DIRECTORY_SEPARATOR . 'Exception' .
+                        DIRECTORY_SEPARATOR . 'InvalidFormException.php'
                 ]
             )
             ->zeroOrMoreTimes()

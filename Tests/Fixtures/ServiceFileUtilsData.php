@@ -13,12 +13,11 @@ class ServiceFileUtilsData
     const YAML = <<<'YAML'
 parameters:
     foo_bar.manager.foo_manager.class: Foo\BarBundle\Entity\Manager\FooManager
+
 services:
     foo_bar.manager.foo_manager:
-        class: '%foo_bar.manager.foo_manager.class%'
+        class: %foo_bar.manager.foo_manager.class%
         arguments: ['@doctrine', Foo\BarBundle\Entity\Foo]
-imports:
-    - { resource: "@FooBarBundle/Resources/config/services.yml" }
 
 YAML;
 
@@ -34,9 +33,6 @@ YAML;
       <argument>Foo\BarBundle\Entity\Foo</argument>
     </service>
   </services>
-  <imports>
-    <import resource="@FooBarBundle/Resources/config/services.xml"/>
-  </imports>
 </container>
 
 XML;

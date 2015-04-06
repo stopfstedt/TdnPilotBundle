@@ -3,6 +3,7 @@
 namespace Tdn\PilotBundle\Manipulator;
 
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 use Tdn\PhpTypes\Type\String;
 use Tdn\PilotBundle\Model\File;
 use Tdn\PilotBundle\Model\FileInterface;
@@ -37,7 +38,6 @@ class ManagerManipulator extends AbstractServiceManipulator
 
         if ($this->getFormat() !== Format::ANNOTATION) {
             $this->addManagerServiceFile();
-            $this->setUpdatingDiConfFile(true);
         }
 
         return $this;
@@ -248,7 +248,7 @@ class ManagerManipulator extends AbstractServiceManipulator
 
         $definition = new Definition('%' . $paramKey . '%');
         $definition
-            ->addArgument('@doctrine')
+            ->addArgument(new Reference('doctrine'))
             ->addArgument(
                 sprintf(
                     '%s\\Entity\\%s%s',

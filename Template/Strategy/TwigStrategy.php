@@ -79,16 +79,16 @@ class TwigStrategy implements TemplateStrategyInterface
         //Always recreate
         //Used specifically for auxiliary files (e.g. interfaces) and not the main file that the manipulator generates.
         //See controller manipulator or manager manipulator for example.
-        if ($target->isServiceFile() || $target->isAuxFile()) {
-            if (file_exists($target->getRealPath())) {
-                unlink($target->getRealPath()); //Remove before recreating
-            }
+        if (($target->isServiceFile() ||$target->isAuxFile()) && file_exists($target->getRealPath())) {
+            ladybug_dump($target->getRealPath() . ' deleted.');
+            unlink($target->getRealPath()); //Remove before recreating
         }
 
         if (false === file_put_contents($target->getRealPath(), $target->getFilteredContents())) {
             throw new IOException(sprintf(
-                'Could not write file %s.',
-                $target->getRealPath()
+                'Could not write file %s. Reason: %s',
+                $target->getRealPath(),
+                error_get_last()
             ));
         }
     }

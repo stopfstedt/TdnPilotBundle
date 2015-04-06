@@ -3,9 +3,8 @@
 namespace Tdn\PilotBundle\Tests\Manipulator;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Finder\SplFileInfo;
 use Tdn\PilotBundle\Manipulator\HandlerManipulator;
-use Tdn\PilotBundle\Model\FileInterface;
+use Tdn\PilotBundle\Model\File;
 use \Mockery;
 use Tdn\PilotBundle\Tests\Fixtures\HandlerData;
 
@@ -34,7 +33,7 @@ class HandlerManipulatorTest extends AbstractServiceManipulatorTest
     }
 
     /**
-     * @return ArrayCollection|SplFileInfo[]
+     * @return ArrayCollection|File[]
      */
     protected function getFileDependencies()
     {
@@ -55,13 +54,13 @@ class HandlerManipulatorTest extends AbstractServiceManipulatorTest
         );
 
         return new ArrayCollection([
-            new SplFileInfo($managerFile, null, null),
-            new SplFileInfo($formType, null, null)
+            new File($managerFile),
+            new File($formType)
         ]);
     }
 
     /**
-     * @return FileInterface[]
+     * @return File[]
      */
     protected function getGeneratedFiles()
     {
@@ -69,37 +68,39 @@ class HandlerManipulatorTest extends AbstractServiceManipulatorTest
         $handlerServiceMock = $this->getHandlerServiceMock();
 
         return [
-            $handlerFileMock->getFullPath()    => $handlerFileMock,
-            $handlerServiceMock->getFullPath() => $handlerServiceMock
+            $handlerFileMock->getRealPath()    => $handlerFileMock,
+            $handlerServiceMock->getRealPath() => $handlerServiceMock
         ];
     }
 
+    /**
+     * @return ArrayCollection
+     */
     protected function getExpectedMessages()
     {
         return new ArrayCollection([
             sprintf(
-                'Make sure to load "%s" in the %s file to enable the new services.',
-                'handlers.xml',
-                $this->getDefaultDiFile()
+                'Make sure to load "%s" in your extension file to enable the new services.',
+                'handlers.xml'
             )
         ]);
     }
 
     /**
-     * @return FileInterface
+     * @return File
      */
     protected function getHandlerFileMock()
     {
-        $handlerFileMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
+        $handlerFileMock = Mockery::mock('\Tdn\PilotBundle\Model\File');
         $handlerFileMock
             ->shouldDeferMissing()
             ->shouldReceive(
                 [
-                    'getFilename'  => 'FooHandler',
-                    'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR . 'Handler',
-                    'getExtension' => 'php',
                     'getFilteredContents'  => HandlerData::FOO_HANDLER,
-                    'getFullPath'  => $this->getOutDir() .
+                    'getFilename'  => 'FooHandler',
+                    'getExtension' => 'php',
+                    'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR . 'Handler',
+                    'getRealPath'  => $this->getOutDir() .
                         DIRECTORY_SEPARATOR . 'Handler' . DIRECTORY_SEPARATOR . 'FooHandler.php'
                 ]
             )
@@ -110,21 +111,21 @@ class HandlerManipulatorTest extends AbstractServiceManipulatorTest
     }
 
     /**
-     * @return FileInterface
+     * @return File
      */
     protected function getHandlerServiceMock()
     {
-        $handlrServMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
+        $handlrServMock = Mockery::mock('\Tdn\PilotBundle\Model\File');
         $handlrServMock
             ->shouldDeferMissing()
             ->shouldReceive(
                 [
+                    'getFilteredContents'  => HandlerData::FOO_HANDLER_SERVICE_XML,
                     'getFilename'  => 'handlers',
+                    'getExtension' => 'xml',
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Resources' . DIRECTORY_SEPARATOR . 'config',
-                    'getExtension' => 'xml',
-                    'getFilteredContents'  => HandlerData::FOO_HANDLER_SERVICE_XML,
-                    'getFullPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR .
+                    'getRealPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Resources' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'handlers.xml'
                 ]
             )

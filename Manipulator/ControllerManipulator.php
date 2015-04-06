@@ -139,7 +139,7 @@ class ControllerManipulator extends AbstractManipulator
         $generatedController = new File(
             sprintf(
                 '%s' . DIRECTORY_SEPARATOR . 'Controller' . DIRECTORY_SEPARATOR . '%sController.php',
-                ($this->getTargetDirectory()) ?: $this->getBundle()->getPath(),
+                ($this->getTargetDirectory()) ?: realpath($this->getBundle()->getPath()),
                 $this->getEntity()
             )
         );
@@ -158,7 +158,7 @@ class ControllerManipulator extends AbstractManipulator
             sprintf(
                 '%s' . DIRECTORY_SEPARATOR . 'Tests' . DIRECTORY_SEPARATOR . 'Controller' .
                 DIRECTORY_SEPARATOR . '%sControllerTest.php',
-                ($this->getTargetDirectory()) ?: $this->getBundle()->getPath(),
+                ($this->getTargetDirectory()) ?: realpath($this->getBundle()->getPath()),
                 $this->getEntity()
             )
         );
@@ -278,7 +278,7 @@ class ControllerManipulator extends AbstractManipulator
     {
         $handlerFile = sprintf(
             '%s' . DIRECTORY_SEPARATOR . 'Handler' . DIRECTORY_SEPARATOR . '%sHandler.php',
-            ($this->getTargetDirectory()) ?: $this->getBundle()->getPath(),
+            ($this->getTargetDirectory()) ?: realpath($this->getBundle()->getPath()),
             $this->getEntity()
         );
 

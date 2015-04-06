@@ -111,10 +111,10 @@ class RoutingManipulator extends AbstractManipulator
         $routing = new File(
             sprintf(
                 '%s' . DIRECTORY_SEPARATOR . 'Resources' .
-                DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . '%s.%s',
+                DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . '%s',
                 ($this->getTargetDirectory()) ?: $this->getBundle()->getPath(),
-                $this->getRoutingFile(),
-                $this->getFormat()
+                $this->getRoutingFile()//,
+                //$this->getFormat()
             )
         );
 

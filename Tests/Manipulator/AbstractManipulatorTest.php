@@ -116,7 +116,7 @@ abstract class AbstractManipulatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, $manipulator->shouldOverwrite());
     }
 
-    public function testGeneratedFiles($type = null)
+    public function testGeneratedFiles()
     {
         $manipulator = $this->getManipulator();
         $manipulator->setTargetDirectory($this->getOutDir()); //Ensure test directory
@@ -124,12 +124,14 @@ abstract class AbstractManipulatorTest extends \PHPUnit_Framework_TestCase
         $manipulator->setFileDependencies(new ArrayCollection()); //Dependencies will have to be ignored.
         $this->assertEquals(true, $manipulator->isValid()); //And now should be valid...
         $generatedFiles = $manipulator->generate();
+        $expectedFiles = $this->getGeneratedFiles();
 
         foreach ($generatedFiles as $generatedFile) {
-            $expectedContents = $this->getGeneratedFiles($type)[$generatedFile->getFullPath()]->getContents();
+            //Not get filtered contents
+            $expectedContents = $expectedFiles[$generatedFile->getRealPath()]->getFilteredContents();
             $this->assertEquals(
                 $expectedContents,
-                $generatedFile->getFilteredContents(),
+                $generatedFile->getContents(),
                 'Contents don\'t match. File: ' . $generatedFile->getFilename()
             );
         }

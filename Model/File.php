@@ -11,6 +11,8 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 class File extends SplFileInfo
 {
+    private $fileLocation;
+
     /**
      * @var string
      */
@@ -33,6 +35,7 @@ class File extends SplFileInfo
      */
     public function __construct($file, $relativePath = null, $relativePathName = null)
     {
+        $this->fileLocation = $file;
         $this->auxFile = false;
         $this->serviceFile = false;
 
@@ -92,5 +95,13 @@ class File extends SplFileInfo
     public function isServiceFile()
     {
         return $this->serviceFile;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRealPath()
+    {
+        return (parent::getRealPath()) ?: $this->fileLocation;
     }
 }

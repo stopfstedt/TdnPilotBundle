@@ -6,8 +6,6 @@ use Symfony\Component\Yaml\Parser;
 use Tdn\PilotBundle\Tests\Fixtures\RouteUtilsData;
 
 $parser = new Parser();
-$yml    = RouteUtilsData::YAML;
-
-$config = $parser->parse($yml);
+$config = $parser->parse(RouteUtilsData::YAML);
 
 var_dump($config);

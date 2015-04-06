@@ -266,7 +266,7 @@ abstract class AbstractManipulator implements ManipulatorInterface
      */
     public function getTargetDirectory()
     {
-        return $this->targetDirectory;
+        return realpath($this->targetDirectory);
     }
 
     /**
@@ -395,8 +395,7 @@ abstract class AbstractManipulator implements ManipulatorInterface
             (!$this->shouldOverwrite() && !$file->isAuxFile() && !$file->isServiceFile())
         ) {
             throw new \RuntimeException(sprintf(
-                'Unable to generate the %s file as it already exists under %s',
-                $file->getBasename($file->getExtension()),
+                'Unable to generate the %s file as it already exists',
                 $file->getRealPath()
             ));
         }

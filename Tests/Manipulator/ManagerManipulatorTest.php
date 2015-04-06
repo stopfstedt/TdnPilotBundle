@@ -5,7 +5,7 @@ namespace Tdn\PilotBundle\Tests\Manipulator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Finder\SplFileInfo;
 use Tdn\PilotBundle\Manipulator\ManagerManipulator;
-use Tdn\PilotBundle\Model\FileInterface;
+use Tdn\PilotBundle\Model\File;
 use \Mockery;
 use Tdn\PilotBundle\Tests\Fixtures\ManagerData;
 
@@ -45,15 +45,14 @@ class ManagerManipulatorTest extends AbstractServiceManipulatorTest
     {
         return new ArrayCollection([
             sprintf(
-                'Make sure to load "%s" in the %s file to enable the new services.',
-                'managers.xml',
-                $this->getDefaultDiFile()
+                'Make sure to load "%s" in your extension file to enable the new services.',
+                'managers.xml'
             )
         ]);
     }
 
     /**
-     * @return FileInterface[]
+     * @return File[]
      */
     protected function getGeneratedFiles()
     {
@@ -62,28 +61,28 @@ class ManagerManipulatorTest extends AbstractServiceManipulatorTest
         $mgrServiceMock       = $this->getManagerServiceMock();
 
         return [
-            $managerFileMock->getFullPath()      => $managerFileMock,
-            $mgrInterfaceFileMock->getFullPath() => $mgrInterfaceFileMock,
-            $mgrServiceMock->getFullPath()       => $mgrServiceMock
+            $managerFileMock->getRealPath()      => $managerFileMock,
+            $mgrInterfaceFileMock->getRealPath() => $mgrInterfaceFileMock,
+            $mgrServiceMock->getRealPath()       => $mgrServiceMock
         ];
     }
 
     /**
-     * @return FileInterface
+     * @return File
      */
     protected function getManagerFileMock()
     {
-        $managerFileMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
+        $managerFileMock = Mockery::mock('\Tdn\PilotBundle\Model\File');
         $managerFileMock
             ->shouldDeferMissing()
             ->shouldReceive(
                 [
+                    'getFilteredContents'  => ManagerData::FOO_MANAGER,
                     'getFilename'  => 'FooManager',
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Entity' . DIRECTORY_SEPARATOR . 'Manager',
                     'getExtension' => 'php',
-                    'getFilteredContents'  => ManagerData::FOO_MANAGER,
-                    'getFullPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR .
+                    'getRealPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Entity' . DIRECTORY_SEPARATOR . 'Manager' . DIRECTORY_SEPARATOR . 'FooManager.php'
                 ]
             )
@@ -94,21 +93,21 @@ class ManagerManipulatorTest extends AbstractServiceManipulatorTest
     }
 
     /**
-     * @return FileInterface
+     * @return File
      */
     protected function getMgrInterfaceFileMock()
     {
-        $mgrInterfaceFileMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
+        $mgrInterfaceFileMock = Mockery::mock('\Tdn\PilotBundle\Model\File');
         $mgrInterfaceFileMock
             ->shouldDeferMissing()
             ->shouldReceive(
                 [
+                    'getFilteredContents'  => ManagerData::FOO_MANAGER_INTERFACE,
                     'getFilename'  => 'FooManagerInterface',
+                    'getExtension' => 'php',
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Entity' . DIRECTORY_SEPARATOR . 'Manager',
-                    'getExtension' => 'php',
-                    'getFilteredContents'  => ManagerData::FOO_MANAGER_INTERFACE,
-                    'getFullPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR .
+                    'getRealPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Entity' . DIRECTORY_SEPARATOR . 'Manager' . DIRECTORY_SEPARATOR . 'FooManagerInterface.php'
                 ]
             )
@@ -119,21 +118,21 @@ class ManagerManipulatorTest extends AbstractServiceManipulatorTest
     }
 
     /**
-     * @return FileInterface
+     * @return File
      */
     protected function getManagerServiceMock()
     {
-        $mgrServiceMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
+        $mgrServiceMock = Mockery::mock('\Tdn\PilotBundle\Model\File');
         $mgrServiceMock
             ->shouldDeferMissing()
             ->shouldReceive(
                 [
+                    'getFilteredContents'  => ManagerData::FOO_MANAGER_SERVICE_XML,
                     'getFilename'  => 'managers',
+                    'getExtension' => 'xml',
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Resources' . DIRECTORY_SEPARATOR . 'config',
-                    'getExtension' => 'xml',
-                    'getFilteredContents'  => ManagerData::FOO_MANAGER_SERVICE_XML,
-                    'getFullPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR .
+                    'getRealPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Resources' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'managers.xml'
                 ]
             )
