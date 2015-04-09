@@ -37,6 +37,7 @@
         "friendsofsymfony/rest-bundle": "~1.5",
         "jms/serializer-bundle": "~0.13.0",
         "tuck/converter-bundle": "~0.3",
+        "sed/route-exporter-bundle": "dev-master",
         "tdn/php-types": "~1.0"
     },
     "require-dev": {
@@ -61,6 +62,12 @@
         "fzaninotto/faker": "[~1.4]Required when using test generation commands",
         "nelmio/cors-bundle": "[~1.4]Cross-origin resource sharing resources (e.g. fonts, JavaScript, etc.) to be requested from another domains"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/vpassapera/SedRouteExporterBundle.git"
+        }
+    ],
     "config": {
         "bin-dir": "bin"
     },
