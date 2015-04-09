@@ -16,5 +16,5 @@ interface LoaderFactoryInterface
      *
      * @return LoaderInterface
      */
-    public function getLoader($type, $path);
+    public function createLoader($type, $path);
 }

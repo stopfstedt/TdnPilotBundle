@@ -3,21 +3,19 @@
 namespace Tdn\PilotBundle\Services\Utils\Symfony;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\Finder\SplFileInfo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Tuck\ConverterBundle\ConfigFormatConverter;
 use Tuck\ConverterBundle\Dumper\StandardDumperFactory;
 use Tuck\ConverterBundle\File\SysTempFileFactory;
 use Tuck\ConverterBundle\Loader\StandardLoaderFactory;
 use Tdn\PilotBundle\Model\File;
-use Tdn\PilotBundle\Model\Format;
 use Tdn\PilotBundle\Model\ServiceDefinition;
 
 /**
  * Class ServiceFileUtils
  * @package Tdn\PilotBundle\ServiceFileLoader\Symfony
  */
-class ServiceFileUtils
+class ServiceFileUtils extends AbstractFileUtils
 {
     /**
      * @var ArrayCollection
@@ -34,18 +32,6 @@ class ServiceFileUtils
         $this->parameters = new ArrayCollection();
         $this->serviceDefinitions = new ArrayCollection();
         $this->container = new ContainerBuilder();
-    }
-
-    /**
-     * @return array
-     */
-    public static function getSupportedExtensions()
-    {
-        return [
-            Format::YAML,
-            Format::YML,
-            Format::XML
-        ];
     }
 
     /**
@@ -140,30 +126,11 @@ class ServiceFileUtils
         return new StandardDumperFactory();
     }
 
+    /**
+     * @return SysTempFileFactory
+     */
     protected function getTempFileFactory()
     {
         return new SysTempFileFactory();
     }
-
-    /**
-     * @param SplFileInfo $file
-     * @throws \InvalidArgumentException when file is not a supported format.
-     *
-     * @return string
-     */
-    protected function getFormat(SplFileInfo $file)
-    {
-        if (!in_array(strtolower($file->getExtension()), self::getSupportedExtensions())) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Invalid format. Expected one of %s, got %s.',
-                    implode(',', self::getSupportedExtensions()),
-                    $file->getExtension()
-                )
-            );
-        }
-
-        return strtolower($file->getExtension());
-    }
-
 }

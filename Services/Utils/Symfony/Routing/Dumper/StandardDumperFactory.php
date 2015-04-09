@@ -2,9 +2,14 @@
 
 namespace Tdn\PilotBundle\Services\Utils\Symfony\Routing\Dumper;
 
+use Symfony\Component\Routing\RouteCollection;
 use Tuck\ConverterBundle\Exception\UnknownFormatException;
 use Tdn\PilotBundle\Services\Utils\Symfony\Routing\Dumper\Driver\DumperInterface;
 
+/**
+ * Class StandardDumperFactory
+ * @package Tdn\PilotBundle\Services\Utils\Symfony\Routing\Dumper
+ */
 class StandardDumperFactory implements DumperFactoryInterface
 {
     protected $dumperMap = [
@@ -14,17 +19,18 @@ class StandardDumperFactory implements DumperFactoryInterface
     ];
 
     /**
-     * @param $type
+     * @param string $type
+     * @param RouteCollection $routeCollection
      *
      * @return DumperInterface
      *
      * @throws UnknownFormatException
      */
-    public function getDumper($type)
+    public function createDumper($type, RouteCollection $routeCollection)
     {
         $class = $this->getClassFromType($type);
 
-        return new $class();
+        return new $class($routeCollection);
     }
 
     /**

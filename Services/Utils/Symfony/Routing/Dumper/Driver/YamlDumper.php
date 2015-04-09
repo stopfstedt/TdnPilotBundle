@@ -2,21 +2,24 @@
 
 namespace Tdn\PilotBundle\Services\Utils\Symfony\Routing\Dumper\Driver;
 
-use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Routing\Route;
 use Symfony\Component\Yaml\Yaml;
 
-class YamlDumper implements DumperInterface
+/**
+ * Class YamlDumper
+ * @package Tdn\PilotBundle\Services\Utils\Symfony\Routing\Dumper\Driver
+ */
+class YamlDumper extends AbstractDumper implements DumperInterface
 {
     /**
-     * @param RouteCollection $routes
+     * Dumps the YAML representation of a Route Collection.
+     *
      * @return string
      */
-    public function dump(RouteCollection $routes)
+    public function dump()
     {
         $definitions = [];
 
-        foreach ($routes->all() as $name => $route) {
+        foreach ($this->routeCollection->all() as $name => $route) {
             $definitions[$name] = [
                 'path' => $route->getPath(),
                 'defaults' => $route->getDefaults()

@@ -11,8 +11,7 @@ use Symfony\Component\Routing\RouteCollection;
 interface DumperInterface
 {
     /**
-     * @param RouteCollection $routes
      * @return string
      */
-    public function dump(RouteCollection $routes);
+    public function dump();
 }

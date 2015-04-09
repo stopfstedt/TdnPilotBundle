@@ -35,9 +35,19 @@ class ServiceFileUtilsTest extends \PHPUnit_Framework_TestCase
         $this->dumpToFormat(ServiceFileUtilsData::XML, 'tmp-service.xml');
     }
 
+    public function testSeededXml()
+    {
+
+    }
+
     public function testServiceAsYaml()
     {
         $this->dumpToFormat(ServiceFileUtilsData::YAML, 'tmp-service.yaml');
+    }
+
+    public function testSeededYaml()
+    {
+
     }
 
     /**

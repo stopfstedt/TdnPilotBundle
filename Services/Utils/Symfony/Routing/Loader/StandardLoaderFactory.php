@@ -26,7 +26,7 @@ class StandardLoaderFactory implements LoaderFactoryInterface
      *
      * @throws UnknownFormatException
      */
-    public function getLoader($type, $path)
+    public function createLoader($type, $path)
     {
         $class = $this->getClassFromType($type);
 
