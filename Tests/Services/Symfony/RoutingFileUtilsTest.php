@@ -3,6 +3,7 @@
 namespace Tdn\PilotBundle\Tests\Services\Symfony;
 
 use Symfony\Component\Routing\RouteCollection;
+use Tdn\PilotBundle\Services\Utils\Symfony\RoutingFileUtils;
 
 /**
  * Class RoutingFileUtilsTest
@@ -10,6 +11,9 @@ use Symfony\Component\Routing\RouteCollection;
  */
 class RoutingFileUtilsTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var RoutingFileUtils
+     */
     protected $routingFileUtils;
 
     protected function setUp()
@@ -20,8 +24,8 @@ class RoutingFileUtilsTest extends \PHPUnit_Framework_TestCase
     public function testAddCollection()
     {
         $collection = new RouteCollection();
-        $this->routingFileUtils->addRouteCollection($collection);
-        $this->assertContains($collection, $this->routingFileUtils->getRouteCollections());
+        $this->routingFileUtils->addCollection($collection);
+
     }
 
     public function testRoutesAsXml()

@@ -30,7 +30,8 @@ class FormManipulator extends AbstractManipulator
      */
     protected function addFormType()
     {
-        $formType = new File(sprintf(
+        $formType = new File(
+            sprintf(
                 '%s' . DIRECTORY_SEPARATOR . 'Form' . DIRECTORY_SEPARATOR . 'Type' . DIRECTORY_SEPARATOR . '%sType.php',
                 ($this->getTargetDirectory()) ?: $this->getBundle()->getPath(),
                 $this->getEntity()

@@ -96,8 +96,8 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
         TemplateStrategyInterface $templateStrategy,
         BundleInterface $bundle,
         ClassMetadata $metadata,
-        $format          = Format::YML,
-        $overWrite       = false,
+        $format = Format::YML,
+        $overWrite = false,
         $targetDirectory = null
     ) {
         if ($this->manipulator) {
@@ -226,7 +226,7 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if(!$this->isInputValid($input)) {
+        if (!$this->isInputValid($input)) {
             $output->writeln('<error>Please use either entity OR entities-location. One is required.</error>');
 
             return 1;

@@ -17,7 +17,7 @@ class XmlDumper extends AbstractDumper implements DumperInterface
     {
         $routesXml = new \SimpleXMLElement(
             '<?xml version="1.0" encoding="UTF-8" ?>' .
-            '<routes mlns="http://symfony.co/schema/routing"' .
+            '<routes xmlns="http://symfony.com/schema/routing"' .
             'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' .
             'xsi:schemaLocation="http://symfony.com/schema/routing ' .
             'http://symfony.com/schema/routing/routing-1.0.xsd" />'

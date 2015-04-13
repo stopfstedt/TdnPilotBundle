@@ -124,5 +124,4 @@ class GenerateControllerCommand extends AbstractGeneratorCommand
     {
         return ['Rest Controller'];
     }
-
 }
