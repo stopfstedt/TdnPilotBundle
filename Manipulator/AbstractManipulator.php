@@ -444,6 +444,21 @@ abstract class AbstractManipulator implements ManipulatorInterface
     }
 
     /**
+     * @param ClassMetadata $metadata
+     * @return mixed
+     */
+    protected function getEntityIdentifier(ClassMetadata $metadata)
+    {
+        if (count($metadata->identifier) !== 1) {
+            throw new \InvalidArgumentException(
+                'TdnPilotBundle is incompatible with entities that contain more than one identifier or no identifier.'
+            );
+        }
+
+        return array_values($metadata->identifier)[0];
+    }
+
+    /**
      * Cleans properties with namespaces appended to them.
      *
      * This method always assumes that the directory for entities

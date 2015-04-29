@@ -18,15 +18,16 @@
             ${{ entity|lowerfirst }},
             array('method' => $method)
         );
-        $form->submit($parameters, 'PATCH' !== $method);
 
+        $form->submit($parameters, 'PATCH' !== $method);
+        $statusCode = ${{ entity }}->get{{ entity_identifier }}() ? 201 : 204;
         if ($form->isValid()) {
-            ${{ entity|lowerfirst }} = $form->getContentsInFormat();
+            ${{ entity|lowerfirst }} = $form->getData();
             $this->update{{ entity }}(${{ entity|lowerfirst }}, true);
 
             return ${{ entity|lowerfirst }};
         }
 
-        throw new InvalidFormException('Invalid submitted data', $form);
+        throw new InvalidFormException((string) $form);
     }
 {% endblock extras_methods %}

@@ -49,9 +49,10 @@ class HandlerManipulator extends AbstractServiceManipulator
     protected function getHandlerFileContent()
     {
         return $this->getTemplateStrategy()->render('handler/handler.php.twig', [
-            'entity'    => $this->getEntity(),
-            'format'    => $this->getFormat(),
-            'namespace' => $this->getBundle()->getNamespace(),
+            'entity'            => $this->getEntity(),
+            'entity_identifier' => $this->getEntityIdentifier($this->getMetadata()),
+            'format'            => $this->getFormat(),
+            'namespace'         => $this->getBundle()->getNamespace(),
         ]);
     }
 

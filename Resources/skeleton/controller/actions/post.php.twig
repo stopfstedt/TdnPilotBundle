@@ -20,7 +20,7 @@
      *
 {% endif %}
 {% endblock documentation %}
-     * @View(statusCode=201, serializerEnableMaxDepthChecks=true)
+     * @Rest\View(statusCode=201, serializerEnableMaxDepthChecks=true)
      *
      * @param Request $request
      *
@@ -36,11 +36,21 @@
     {
 {% block method_body %}
         try {
-            $new  =  $this->get{{ entity }}Handler()
+            ${{ entity }} = $this->get{{ entity }}Handler()
                 ->post($this->getPostData($request));
-            $answer{{ resource ? "['" ~ entity|lowerfirst ~  "']" }} = $new;
 
-            return $answer;
+            $response = new Response();
+            $response->setStatusCode(Codes::HTTP_CREATED);
+            $response->headers->set(
+                'Location',
+                $this->generateUrl(
+                    'get_{{ entity|lower }}',
+                    ['{{ entity_identifier }}' => ${{ entity }}->get{{ entity_identifier }}()],
+                    true
+                )
+            );
+
+            return $response;
         } catch (InvalidFormException $exception) {
             return $exception->getForm();
         }
