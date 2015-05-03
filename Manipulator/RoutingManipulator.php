@@ -174,8 +174,8 @@ class RoutingManipulator extends AbstractManipulator
      */
     protected function getConfigurationText()
     {
-        $routeCollection = new RouteCollection();
-        $routeCollection->addPrefix((string) String::create($this->getRoutePrefix())->replace('/', ''));
+//        $routeCollection = new RouteCollection();
+//        $routeCollection->addPrefix((string) String::create($this->getRoutePrefix())->replace('/', ''));
 
 //        $route = new Route($this->getRouteFromEntity());
 
@@ -188,7 +188,9 @@ class RoutingManipulator extends AbstractManipulator
             );
         $output .=
             sprintf(
+                "    prefix:   /%s\n" .
                 "    defaults: {_format:%s}\n",
+                (string) String::create($this->getRoutePrefix())->replace('/', ''),
                 'json'
             );
 

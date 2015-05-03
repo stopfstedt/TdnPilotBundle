@@ -444,18 +444,24 @@ abstract class AbstractManipulator implements ManipulatorInterface
     }
 
     /**
-     * @param ClassMetadata $metadata
+     * Find entity identifier.
+     *
+     * Figures out what an entity's identifier is from it's metadata
+     * And returns the name of the identifier.
+     *
+     * @throws \RuntimeException
+     *
      * @return mixed
      */
-    protected function getEntityIdentifier(ClassMetadata $metadata)
+    protected function getEntityIdentifier()
     {
-        if (count($metadata->identifier) !== 1) {
-            throw new \InvalidArgumentException(
+        if (count($this->getMetadata()->identifier) !== 1) {
+            throw new \RuntimeException(
                 'TdnPilotBundle is incompatible with entities that contain more than one identifier or no identifier.'
             );
         }
 
-        return array_values($metadata->identifier)[0];
+        return $this->getMetadata()->getIdentifierFieldNames()[0];
     }
 
     /**

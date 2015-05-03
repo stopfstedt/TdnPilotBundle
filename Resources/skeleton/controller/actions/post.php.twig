@@ -36,7 +36,7 @@
     {
 {% block method_body %}
         try {
-            ${{ entity }} = $this->get{{ entity }}Handler()
+            ${{ entity|lower }} = $this->get{{ entity }}Handler()
                 ->post($this->getPostData($request));
 
             $response = new Response();
@@ -45,7 +45,7 @@
                 'Location',
                 $this->generateUrl(
                     'get_{{ entity|lower }}',
-                    ['{{ entity_identifier }}' => ${{ entity }}->get{{ entity_identifier }}()],
+                    ['{{ entity_identifier }}' => ${{ entity|lower }}->get{{ entity_identifier|capitalize }}()],
                     true
                 )
             );

@@ -108,23 +108,4 @@ class FormManipulator extends AbstractManipulator
 
         $this->addFileDependency(new File($managerFile));
     }
-
-    /**
-     * Find entity identifier.
-     *
-     * Figures out what an entity's identifier is from it's metadata
-     * And returns the name of the identifier.
-     *
-     * @throws \RuntimeException
-     *
-     * @return mixed
-     */
-    protected function getEntityIdentifier()
-    {
-        if (count($this->getMetadata()->getIdentifierFieldNames()) !== 1) {
-            throw new \RuntimeException('Only one identifier allowed at this time.');
-        }
-
-        return $this->getMetadata()->getIdentifierFieldNames()[0];
-    }
 }

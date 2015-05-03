@@ -171,11 +171,21 @@ class FooController extends FOSRestController
     public function postAction(Request $request)
     {
         try {
-            $new  =  $this->getFooHandler()
+            $foo = $this->getFooHandler()
                 ->post($this->getPostData($request));
-            $answer['foo'] = $new;
 
-            return $answer;
+            $response = new Response();
+            $response->setStatusCode(Codes::HTTP_CREATED);
+            $response->headers->set(
+                'Location',
+                $this->generateUrl(
+                    'get_foo',
+                    ['id' => $foo->getId()],
+                    true
+                )
+            );
+
+            return $response;
         } catch (InvalidFormException $exception) {
             return $exception->getForm();
         }

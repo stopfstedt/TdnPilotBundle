@@ -50,7 +50,7 @@ class HandlerManipulator extends AbstractServiceManipulator
     {
         return $this->getTemplateStrategy()->render('handler/handler.php.twig', [
             'entity'            => $this->getEntity(),
-            'entity_identifier' => $this->getEntityIdentifier($this->getMetadata()),
+            'entity_identifier' => $this->getEntityIdentifier(),
             'format'            => $this->getFormat(),
             'namespace'         => $this->getBundle()->getNamespace(),
         ]);

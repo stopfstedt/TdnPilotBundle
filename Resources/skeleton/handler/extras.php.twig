@@ -20,7 +20,7 @@
         );
 
         $form->submit($parameters, 'PATCH' !== $method);
-        $statusCode = ${{ entity }}->get{{ entity_identifier }}() ? 201 : 204;
+
         if ($form->isValid()) {
             ${{ entity|lowerfirst }} = $form->getData();
             $this->update{{ entity }}(${{ entity|lowerfirst }}, true);
@@ -28,6 +28,6 @@
             return ${{ entity|lowerfirst }};
         }
 
-        throw new InvalidFormException((string) $form);
+        throw new InvalidFormException('Invalid submitted data', $form);
     }
 {% endblock extras_methods %}
