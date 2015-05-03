@@ -3,7 +3,6 @@
 namespace Tdn\PilotBundle\Manipulator;
 
 use Symfony\Component\Filesystem\Exception\IOException;
-use Symfony\Component\Routing\RouteCollection;
 use Tdn\PilotBundle\Model\File;
 use Tdn\PhpTypes\Type\String;
 use Tdn\PilotBundle\Model\Format;
@@ -33,11 +32,6 @@ class RoutingManipulator extends AbstractManipulator
      * @var bool
      */
     private $isInFile;
-
-    /**
-     * @var RoutingFileUtils
-     */
-    private $routingFileUtils;
 
     /**
      */
@@ -104,11 +98,16 @@ class RoutingManipulator extends AbstractManipulator
     public function prepare()
     {
         if ($this->getFormat() == Format::ANNOTATION) {
-            $this->addMessage(Format::ANNOTATION . ' was selected. No files generated.');
+            $this->addMessage(
+                Format::ANNOTATION . ' was selected. No files generated. ' .
+                'Use the appropriate controller for the entity with the' .
+                ' --format=annotation and --route-prefix=<prefix> flag.'
+            );
+
             return $this;
         }
 
-        $routing = new File(
+        $routingFile = new File(
             sprintf(
                 '%s' . DIRECTORY_SEPARATOR . 'Resources' .
                 DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . '%s',
@@ -118,12 +117,13 @@ class RoutingManipulator extends AbstractManipulator
             )
         );
 
-        $routing
-            ->setFilteredContents($this->getRoutingContents($routing))
-            ->setAuxFile(true) //Needed because this might exist but we still want to add routes to it.
+        $routingFile
+            ->setFilteredContents($this->getRoutingContents($routingFile))
+            //Needed because this might exist but we still want to add routes to it
+            ->setAuxFile(true)
         ;
 
-        $this->addFile($routing);
+        $this->addFile($routingFile);
         $this->addControllerDependency();
 
         return $this;
