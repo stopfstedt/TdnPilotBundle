@@ -42,6 +42,11 @@ class GenerateControllerCommand extends AbstractGeneratorCommand
     protected $routePrefix;
 
     /**
+     * @var bool
+     */
+    protected $generateTests;
+
+    /**
      * {@inheritdoc}
      */
     protected function configure()
@@ -64,6 +69,13 @@ class GenerateControllerCommand extends AbstractGeneratorCommand
                 'p',
                 InputOption::VALUE_NONE,
                 'If using annotations, you should also add a route prefix to the controller.'
+            )
+            ->addOption(
+                'generate-tests',
+                't',
+                InputOption::VALUE_NONE,
+                'Use flag to generate standard CRUD tests. ' .
+                'Requires doctrine fixtures to be present. Specifications in Readme.'
             )
         ;
 
@@ -101,6 +113,7 @@ class GenerateControllerCommand extends AbstractGeneratorCommand
         $this->resource = ($input->getOption('resource') ? true : false);
         $this->swagger  = ($input->getOption('with-swagger') ? true : false);
         $this->routePrefix = $this->getRoutePrefix($input->getOption('route-prefix'));
+        $this->generateTests = ($input->getOption('generate-tests') ? true : false);
     }
 
     /**
@@ -112,7 +125,7 @@ class GenerateControllerCommand extends AbstractGeneratorCommand
         $manipulator->setResource($this->resource);
         $manipulator->setSwagger($this->swagger);
         $manipulator->setRoutePrefix($this->routePrefix);
-        $manipulator->setGenerateTests(false);
+        $manipulator->setGenerateTests($this->generateTests);
 
         return $manipulator;
     }
