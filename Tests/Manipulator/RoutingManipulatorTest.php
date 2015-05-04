@@ -19,7 +19,7 @@ class RoutingManipulatorTest extends AbstractManipulatorTest
     public function testRoutingFile()
     {
         $manipulator = $this->getManipulator();
-        $this->assertEquals('routing.yaml', $manipulator->getRoutingFile());
+        $this->assertEquals('routing.yml', $manipulator->getRoutingFile());
         $manipulator->setRoutingFile('test.yml');
         $this->assertEquals('test.yml', $manipulator->getRoutingFile());
     }
@@ -51,7 +51,7 @@ class RoutingManipulatorTest extends AbstractManipulatorTest
         $manipulator->setBundle($this->getBundle());
         $manipulator->setMetadata($this->getMetadata());
         $manipulator->setRoutePrefix('v1');
-        $manipulator->setRoutingFile('routing.yaml');
+        $manipulator->setRoutingFile('routing.yml');
         $manipulator->setOverwrite(false);
         $manipulator->setTargetDirectory($this->getOutDir());
 
@@ -103,7 +103,7 @@ class RoutingManipulatorTest extends AbstractManipulatorTest
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR .
                         'Resources' . DIRECTORY_SEPARATOR . 'config',
                     'getRealPath'  => $this->getOutDir() . DIRECTORY_SEPARATOR .
-                        'Resources' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'routing.yaml'
+                        'Resources' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'routing.yml'
                 ]
             )
             ->zeroOrMoreTimes()

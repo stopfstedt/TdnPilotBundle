@@ -57,18 +57,18 @@ class GenerateRoutingCommand extends AbstractGeneratorCommand
             ->addArgument(
                 'routing-file',
                 InputArgument::OPTIONAL,
-                'The routing file, defaults to: ' . self::DEFAULT_ROUTING,
-                self::DEFAULT_ROUTING . '.<format>'
+                'The routing file, defaults to: ' . self::DEFAULT_ROUTING . '.' . self::DEFAULT_FORMAT,
+                self::DEFAULT_ROUTING . '.' . self::DEFAULT_FORMAT
             )
             ->addOption(
                 'route-prefix',
-                'p',
+                '',
                 InputOption::VALUE_REQUIRED,
                 'The route prefix'
             )
             ->addOption(
                 'remove',
-                'r',
+                '',
                 InputOption::VALUE_NONE,
                 'Remove route instead of add.'
             )

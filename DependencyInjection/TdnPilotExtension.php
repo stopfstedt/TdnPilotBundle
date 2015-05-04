@@ -25,7 +25,7 @@ class TdnPilotExtension extends Extension
         $loader->load('template-strategies.yml');
         $loader->load('utils.yml');
 
-        $this->verifyDependencies($container);
+        $this->verifyDependencies();
         $this->setDefaultTemplateStrategy($config, $container);
     }
 
@@ -39,11 +39,11 @@ class TdnPilotExtension extends Extension
         }
     }
 
-    protected function verifyDependencies(ContainerBuilder $container)
+    protected function verifyDependencies()
     {
-        if (!$container->has('tuck_converter.config_format_converter')) {
+        if (!class_exists('Tuck\\ConverterBundle\\TuckConverterBundle')) {
             throw new \RuntimeException(
-                'Please make sure that rosstuck/TuckConverterBundle is installed and configured'
+                'Please make sure that tuck/TuckConverterBundle is installed and configured'
             );
         }
     }

@@ -40,7 +40,7 @@ class YamlDumperTest extends \PHPUnit_Framework_TestCase
     public function testExport()
     {
         $dumper = new YamlDumper($this->routeCollection);
-        $this->assertEquals($dumper->dump(), file_get_contents($this->fixtureDirPath . '/routing.yaml'));
+        $this->assertEquals($dumper->dump(), file_get_contents($this->fixtureDirPath . '/routing.yml'));
     }
 
     private function getRouteCollection()

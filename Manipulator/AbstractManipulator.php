@@ -266,7 +266,7 @@ abstract class AbstractManipulator implements ManipulatorInterface
      */
     public function getTargetDirectory()
     {
-        return realpath($this->targetDirectory);
+        return (is_dir($this->targetDirectory)) ? realpath($this->targetDirectory) : null;
     }
 
     /**

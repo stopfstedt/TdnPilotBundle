@@ -54,25 +54,25 @@ class GenerateControllerCommand extends AbstractGeneratorCommand
         $this
             ->addOption(
                 'resource',
-                'r',
+                '',
                 InputOption::VALUE_NONE,
                 'The object will return with the resource name'
             )
             ->addOption(
                 'with-swagger',
-                'g',
+                '',
                 InputOption::VALUE_NONE,
                 'Use NelmioApiDocBundle (which uses swagger-ui) to document the controller'
             )
             ->addOption(
                 'route-prefix',
-                'p',
+                '',
                 InputOption::VALUE_NONE,
                 'If using annotations, you should also add a route prefix to the controller.'
             )
             ->addOption(
                 'generate-tests',
-                't',
+                '',
                 InputOption::VALUE_NONE,
                 'Use flag to generate standard CRUD tests. ' .
                 'Requires doctrine fixtures to be present. Specifications in Readme.'

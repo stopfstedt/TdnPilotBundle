@@ -55,7 +55,7 @@ class FormManipulator extends AbstractManipulator
         );
 
         //File created only once.
-        if (!is_file($formTypeException->isReadable()) || $this->shouldOverwrite()) {
+        if (!is_file($formTypeException->getRealPath()) || $this->shouldOverwrite()) {
             $formTypeException->setFilteredContents($this->getFormTypeExceptionContent());
             $this->addFile($formTypeException);
         }

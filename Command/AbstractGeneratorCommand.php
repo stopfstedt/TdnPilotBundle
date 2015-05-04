@@ -47,6 +47,11 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
     /**
      * @var string
      */
+    const DEFAULT_FORMAT = Format::YAML;
+
+    /**
+     * @var string
+     */
     private $entity;
 
     /**
@@ -207,7 +212,7 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
                 'f',
                 InputOption::VALUE_OPTIONAL,
                 'The service file format (yaml, xml, annotations). default: yaml',
-                Format::YAML
+                self::DEFAULT_FORMAT
             )
             ->setDescription(static::DESCRIPTION)
             ->setName(static::NAME)
@@ -257,7 +262,6 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
                     $templateStrategy,
                     $bundle,
                     $this->getEntityUtils()->getMetadata($doctrine, $this->getEntity()),
-                    $this->getServiceFileUtils(),
                     $input->getOption('format'),
                     ($input->getOption('overwrite') ? true : false),
                     ($input->hasOption('target-directory') ? $input->getOption('target-directory') : null)
@@ -321,7 +325,7 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
      */
     protected function getServiceFileUtils()
     {
-        return $this->getContainer()->get('tdn_pilot.symfony.service.utils.class');
+        return $this->getContainer()->get('tdn_pilot.symfony.service.utils');
     }
 
     /**
@@ -349,7 +353,7 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
     {
         $output->writeln(sprintf(
             'The new <info>%s</info> file has been created under <info>%s</info>.',
-            $file->getFilename() . '.' . $file->getExtension(),
+            $file->getFilename(),
             $file->getRealPath()
         ));
 

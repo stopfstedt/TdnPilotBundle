@@ -32,8 +32,9 @@ class TemplateStrategyUtils
         $skeletonDirs[] = $this->getBundledSkeletonDir();
 
         //Get app level overrides
-        if (isset($bundle) && is_dir($dir = $bundle->getPath() . '/Resources/PilotBundle/skeleton')) {
-            $skeletonDirs[] = $dir;
+        if (isset($bundle) && is_dir($dir = dirname($bundle->getPath() .
+                '/../../../app/Resources/PilotBundle/skeleton'))) {
+            $skeletonDirs[] = realpath($dir);
         }
 
         //Get bundle level overrides
