@@ -23,13 +23,13 @@ class {{ entity }}ControllerTest extends WebTestCase
 
     {%- include 'controller/test-actions/post.php.twig' %}
 
+    {%- include 'controller/test-actions/badPost.php.twig' %}
+
     {%- include 'controller/test-actions/put.php.twig' %}
 
     {%- include 'controller/test-actions/patch.php.twig' %}
 
     {%- include 'controller/test-actions/delete.php.twig' %}
 
-    {%- include 'controller/test-actions/getOr404.php.twig' %}
-
-    {%- include 'controller/test-actions/extra.php.twig' %}{% endblock class_body %}
+    {%- include 'controller/test-actions/404.php.twig' %}{% endblock class_body %}
 }

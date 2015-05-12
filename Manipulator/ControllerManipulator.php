@@ -5,6 +5,7 @@ namespace Tdn\PilotBundle\Manipulator;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Tdn\PhpTypes\Type\String;
 use Tdn\PilotBundle\Model\File;
+use \SplFileInfo;
 
 /**
  * Class ControllerManipulator
@@ -32,11 +33,27 @@ class ControllerManipulator extends AbstractManipulator
      */
     private $generateTests;
 
+    /**
+     * @var SplFileInfo
+     */
+    protected $fixturesPath;
+
+    /**
+     * @var bool
+     */
+    protected $forcedTests;
+
+    /**
+     * @var SplFileInfo
+     */
+    protected $dataPath;
+
     public function __construct()
     {
         $this->setResource(false);
         $this->setSwagger(false);
         $this->setGenerateTests(false);
+        $this->setForcedTests(false);
 
         parent::__construct();
     }
@@ -114,6 +131,54 @@ class ControllerManipulator extends AbstractManipulator
     }
 
     /**
+     * @param SplFileInfo $fixturesPath
+     */
+    public function setFixturesPath(SplFileInfo $fixturesPath)
+    {
+        $this->fixturesPath = $fixturesPath;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFixturesPath()
+    {
+        return $this->fixturesPath;
+    }
+
+    /**
+     * @param bool $forcedTests
+     */
+    public function setForcedTests($forcedTests)
+    {
+        $this->forcedTests = $forcedTests;
+    }
+
+    /**
+     * @return bool
+     */
+    public function shouldForceTests()
+    {
+        return $this->forcedTests;
+    }
+
+    /**
+     * @param SplFileInfo $dataPath
+     */
+    public function setDataPath(SplFileInfo $dataPath)
+    {
+        $this->dataPath = $dataPath;
+    }
+
+    /**
+     * @return SplFileInfo
+     */
+    public function getDataPath()
+    {
+        return $this->dataPath;
+    }
+
+    /**
      * Sets up a controller based on an entity.
      * Sets up controller test files if flag is set.
      * @return $this
@@ -123,7 +188,8 @@ class ControllerManipulator extends AbstractManipulator
         $this->addController();
 
         if ($this->shouldGenerateTests()) {
-            $this->addControllerTests();
+            $this->addBaseControllerTest();
+            $this->addControllerTest();
         }
 
         $this->addHandlerDependency();
@@ -144,7 +210,7 @@ class ControllerManipulator extends AbstractManipulator
             )
         );
 
-        $generatedController->setFilteredContents($this->generateControllerFileContent());
+        $generatedController->setFilteredContents($this->getControllerContent());
 
         $this->addFile($generatedController);
     }
@@ -152,7 +218,7 @@ class ControllerManipulator extends AbstractManipulator
     /**
      * @return void
      */
-    protected function addControllerTests()
+    protected function addControllerTest()
     {
         $controllerTest = new File(
             sprintf(
@@ -164,7 +230,7 @@ class ControllerManipulator extends AbstractManipulator
         );
 
         $controllerTest
-            ->setFilteredContents($this->generateControllerTestContent())
+            ->setFilteredContents($this->getControllerTestContent())
             ->setAuxFile(true)
         ;
 
@@ -172,9 +238,29 @@ class ControllerManipulator extends AbstractManipulator
     }
 
     /**
+     * @return void
+     */
+    protected function addBaseControllerTest()
+    {
+        $abstractControllerTest = new File(
+            sprintf(
+                '%s' . DIRECTORY_SEPARATOR . 'Tests' . DIRECTORY_SEPARATOR . 'Controller' .
+                DIRECTORY_SEPARATOR . 'AbstractControllerTest.php',
+                ($this->getTargetDirectory()) ?: realpath($this->getBundle()->getPath())
+            )
+        );
+
+        //File created only once.
+        if (!is_file($abstractControllerTest->getRealPath()) || $this->shouldOverwrite()) {
+            $abstractControllerTest->setFilteredContents($this->getAbstractControllerTestContent());
+            $this->addFile($abstractControllerTest);
+        }
+    }
+
+    /**
      * @return string The controller contents
      */
-    protected function generateControllerFileContent()
+    protected function getControllerContent()
     {
         $idType = $this->getIdentifierType($this->getMetadata());
 
@@ -202,12 +288,22 @@ class ControllerManipulator extends AbstractManipulator
         );
     }
 
+    protected function getAbstractControllerTestContent()
+    {
+        return $this->getTemplateStrategy()->render(
+            'controller/abstract-controller-test.php.twig',
+            [
+                'namespace' => $this->getBundle()->getNamespace()
+            ]
+        );
+    }
+
     /**
      * Generates the functional test class only.
      *
      * @return string The file contents
      */
-    protected function generateControllerTestContent()
+    protected function getControllerTestContent()
     {
         return $this->getTemplateStrategy()->render(
             'controller/controller-test.php.twig',

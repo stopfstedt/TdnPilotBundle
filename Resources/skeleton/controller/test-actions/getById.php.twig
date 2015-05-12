@@ -1,0 +1,17 @@
+{% block method_definition %}
+    public function testGet{{ entity }}()
+{% endblock method_definition %}
+{
+{% block method_body %}
+    ${{ entity|lowerfist }} = array_shift({{ entity }}Data::cget());
+    $this->createJsonRequest('GET', $this->getUrl('get_{{ entity|lower|pluralize }}', ['id' => ${{ entity|lowerfist }}['{{ entity_identifier }}']]));
+
+    $response = $this->client->getResponse();
+
+    $this->assertJsonResponse($response, Codes::HTTP_OK);
+    $this->assertEquals(
+        $user,
+        json_decode($response->getContent(), true)
+    );
+{% endblock method_body %}
+}

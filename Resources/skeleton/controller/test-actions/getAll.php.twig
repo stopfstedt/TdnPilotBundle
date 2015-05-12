@@ -1,0 +1,15 @@
+{% block method_definition %}
+    public function testGetAll{{ entity|pluralize }}()
+{% endblock method_definition %}
+    {
+{% block method_body %}
+        $this->createJsonRequest('GET', $this->getUrl('cget_{{ entity|lower|pluralize }}'));
+        $response = $this->client->getResponse();
+
+        $this->assertJsonResponse($response, Codes::HTTP_OK);
+        $this->assertEquals(
+            {{ entity }}Data::cget(),
+            json_decode($response->getContent(), true)
+        );
+{% endblock method_body %}
+    }

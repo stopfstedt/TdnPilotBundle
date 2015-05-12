@@ -177,7 +177,7 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
     protected function configure()
     {
         if (static::NAME == '' || static::DESCRIPTION == '') {
-            throw new \RuntimeException(
+            throw new \LogicException(
                 'Please set the name and description of the command. Error in: ' . get_called_class()
             );
         }
@@ -231,19 +231,21 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$this->isInputValid($input)) {
+        if (($input->getOption('entity') === null && $input->getOption('entities-location') === null) ||
+            ($input->getOption('entity') !== null && $input->getOption('entities-location') !== null)
+        ) {
             $output->writeln('<error>Please use either entity OR entities-location. One is required.</error>');
 
             return 1;
         }
 
         $entities = $this->getEntityUtils()->getEntityDirAsCollection($input->getOption('entities-location'));
+        $doctrine = $this->getManagerRegistry();
+        $templateStrategy = $this->getTemplateStrategy();
+
         if (null !== $entity = $input->getOption('entity')) {
             $entities->add($entity);
         }
-
-        $doctrine = $this->getManagerRegistry();
-        $templateStrategy = $this->getTemplateStrategy();
 
         foreach ($entities as $entity) {
             $entity = Validators::validateEntityName($entity);
@@ -400,22 +402,6 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
             );
 
             return (bool) $this->getQuestionHelper()->ask($input, $output, $question);
-        }
-
-        return true;
-    }
-
-    /**
-     * @param InputInterface $input
-     *
-     * @return bool
-     */
-    protected function isInputValid(InputInterface $input)
-    {
-        if (($input->getOption('entity') === null && $input->getOption('entities-location') === null) ||
-            ($input->getOption('entity') !== null && $input->getOption('entities-location') !== null)
-        ) {
-            return false;
         }
 
         return true;

@@ -80,12 +80,16 @@ class GenerateRoutingCommand extends AbstractGeneratorCommand
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
+     *
+     * @return int
      */
-    protected function interact(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output)
     {
         $this->routingFile = $input->getArgument('routing-file');
         $this->routePrefix = $input->getOption('route-prefix');
         $this->remove      = $input->getOption('remove') ? true : false;
+
+        return parent::execute($input, $output);
     }
 
     /**
