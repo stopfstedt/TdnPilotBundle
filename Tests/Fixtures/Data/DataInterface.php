@@ -14,11 +14,20 @@ interface DataInterface
     /**
      * @return array
      */
-    public static function cget();
+    public function cget();
 
-    public static function post();
+    /**
+     * @return array
+     */
+    public function post();
 
-    public static function badPost();
+    /**
+     * @return array
+     */
+    public function badPost();
 
-    public static function put();
+    /**
+     * @return array
+     */
+    public function put();
 }
