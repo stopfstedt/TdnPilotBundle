@@ -8,6 +8,7 @@ use Liip\FunctionalTestBundle\Test\WebTestCase;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
 {% block phpdoc_class_header %}
@@ -19,6 +20,11 @@ use Symfony\Component\HttpFoundation\Response;
 abstract class AbstractControllerTest extends WebTestCase
 {% endblock class_definition %}
 {
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
     {% block class_body %}
     /**
      * @var Client
@@ -33,6 +39,7 @@ abstract class AbstractControllerTest extends WebTestCase
     public function setUp()
     {
         $this->client = static::createClient();
+        $this->container = $this->client->getContainer();
         $this->loadFixtures($this->getFixtures());
     }
 

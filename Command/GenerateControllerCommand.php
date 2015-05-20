@@ -109,7 +109,7 @@ class GenerateControllerCommand extends AbstractGeneratorCommand
                 'data-path',
                 '',
                 InputOption::VALUE_OPTIONAL,
-                'Path to static data files that implement the DataInterface provided in this bundle. ' .
+                'Path to static data files that implement the SeedInterface provided in this bundle. ' .
                 'This might be automatically generated at a later time.'
             )
             ->addOption(

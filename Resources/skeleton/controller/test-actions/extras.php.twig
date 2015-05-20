@@ -5,7 +5,7 @@
 {% block method_body %}
     return [
     {%- for fixture in fixtures %}
-        '{{ fixture_namespace }}\{{ fixture }}'
+        '{{ fixture }}'
     {% endfor -%}
     ]
 {% endblock method_body %}

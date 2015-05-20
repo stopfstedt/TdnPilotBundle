@@ -8,7 +8,7 @@
 
         $this->assertJsonResponse($response, Codes::HTTP_OK);
         $this->assertEquals(
-            {{ entity }}Data::cget(),
+            $this->container->get('{{ dataloader_ns }}.{{ entity|lower|pluralize }}')->get(),
             json_decode($response->getContent(), true)
         );
 {% endblock method_body %}

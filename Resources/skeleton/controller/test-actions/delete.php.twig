@@ -3,13 +3,18 @@
 {% endblock method_definition %}
     {
 {% block method_body %}
-        $this->createJsonRequest('PUT', $this->getUrl('put_{{ entity|lower|pluralize }}'), json_encode({{ entity }}Data::put()));
+        $this->createJsonRequest(
+            'PUT',
+            $this->getUrl('put_{{ entity|lower|pluralize }}'),
+            json_encode($this->container->get('{{ dataloader_ns }}.{{ entity|lower|pluralize }}')->put())
+        );
+
         $response = $this->client->getResponse();
         $this->assertJsonResponse($response, Codes::HTTP_CREATED);
-        $this->client->request('DELETE', $this->getUrl('delete_{{ entity|lower|pluralize }}', ['id' => {{ entity }}Data::put()['{{ entity_identifier }}']]));
+        $this->client->request('DELETE', $this->getUrl('delete_{{ entity|lower|pluralize }}', ['id' => $this->container->get('{{ dataloader_ns }}.{{ entity|lower|pluralize }}')->put()['{{ entity_identifier }}']]));
         $response = $this->client->getResponse();
         $this->assertEquals(Codes::HTTP_NO_CONTENT, $response->getStatusCode());
-        $this->client->request('GET', $this->getUrl('get_{{ entity|lower|pluralize }}', ['id' => {{ entity }}Data::put()['{{ entity_identifier }}']]));
+        $this->client->request('GET', $this->getUrl('get_{{ entity|lower|pluralize }}', ['id' => $this->container->get('{{ dataloader_ns }}.{{ entity|lower|pluralize }}')->put()['{{ entity_identifier }}']]));
         $response = $this->client->getResponse();
         $this->assertEquals(Codes::HTTP_NOT_FOUND, $response->getStatusCode());
 {% endblock method_body %}

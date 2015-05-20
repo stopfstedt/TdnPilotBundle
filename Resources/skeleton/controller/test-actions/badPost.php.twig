@@ -3,7 +3,8 @@
 {% endblock method_definition %}
     {
 {% block method_body %}
-        $this->createJsonRequest('POST', $this->getUrl('post_{{ entity|lower|pluralize }}'), {{ entity }}Data::badPost());
+        $badPost = array_shift($this->container->get('{{ dataloader_ns }}.{{ entity|lower|pluralize }}')->badPosts());
+        $this->createJsonRequest('POST', $this->getUrl('post_{{ entity|lower|pluralize }}'), $badPost);
         $response = $this->client->getResponse();
         $this->assertEquals($response->getStatusCode(), Codes::HTTP_BAD_REQUEST);
 {% endblock method_body %}

@@ -2,17 +2,20 @@
 
 namespace Tdn\PilotBundle\Manipulator;
 
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Tdn\PhpTypes\Type\String;
 use Tdn\PilotBundle\Model\File;
 use Tdn\PilotBundle\ClassLoader\ClassMapGenerator;
 use \SplFileInfo;
+use Tdn\PilotBundle\Model\ServiceDefinition;
 
 /**
  * Class ControllerManipulator
  * @package Tdn\PilotBundle\Manipulator
  */
-class ControllerManipulator extends AbstractManipulator
+class ControllerManipulator extends AbstractServiceManipulator
 {
     /**
      * @var string
@@ -211,6 +214,7 @@ class ControllerManipulator extends AbstractManipulator
         $this->addController();
 
         if ($this->shouldGenerateTests()) {
+            $this->addDataLoaderServiceFile();//For ilios only.
             $this->addBaseControllerTest();
             $this->addControllerTest();
         }
@@ -218,6 +222,73 @@ class ControllerManipulator extends AbstractManipulator
         $this->addHandlerDependency();
 
         return $this;
+    }
+
+    /**
+     * @deprecated
+     */
+    private function addDataLoaderServiceFile()
+    {
+        $serviceFile = new File(
+            sprintf(
+                '%s' . DIRECTORY_SEPARATOR . 'Resources' .
+                DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'dataloaders.%s',
+                ($this->getTargetDirectory()) ?: $this->getBundle()->getPath(),
+                $this->getFormat()
+            )
+        );
+
+        $serviceFile
+            ->setFilteredContents($this->getServiceFileContents($serviceFile))
+            ->setServiceFile(true)
+        ;
+
+        $this->addMessage(sprintf(
+            'Make sure to load "%s" in your extension file to enable the new services.',
+            $serviceFile->getBasename()
+        ));
+
+        $this->addFile($serviceFile);
+    }
+
+    /**
+     * @deprecated
+     * @param File $file
+     *
+     * @return string
+     */
+    protected function getServiceFileContents(File $file)
+    {
+        $serviceClass = $this->findClassInFqdnArray(
+            String::create($this->getEntity())->pluralize(), $this->getDataSeeds()
+        );
+
+        $serviceId = sprintf(
+            '%s.dataloader.%s',
+            (string) String::create($this->getBundle()->getName())->toLowerCase()->replace('bundle', ''),
+            (string) String::create($this->getEntity())->pluralize()->toLowerCase()
+        );
+
+        $paramKey = $serviceId . '.class';
+
+        $definition = new Definition('%' . $paramKey . '%');
+        $definition
+            ->addArgument(new Reference('doctrine'))
+            ->addArgument(
+                sprintf(
+                    '%s\\Entity\\%s%s',
+                    $this->getBundle()->getNamespace(),
+                    $this->getEntityNamespace(),
+                    $this->getEntity()
+                )
+            )
+        ;
+
+        return $this->getServiceFileUtils()
+            ->addParameter($paramKey, $serviceClass)
+            ->addServiceDefinition(new servicedefinition($serviceId, $definition))
+            ->dump($file)
+        ;
     }
 
     /**
@@ -343,10 +414,17 @@ class ControllerManipulator extends AbstractManipulator
             [
                 'entity'            => $this->getEntity(),
                 'namespace'         => $this->getBundle()->getNamespace(),
-                'seed_namespace'    => $this->getDataSeedNamespace(),
-                'fixture_namespace' => $this->getFixtureNamespace(),
+                'dataloader_ns'     => $this->getDataLoaderNs(),
                 'fixtures'          => $this->getRelevantFixtures()
             ]
+        );
+    }
+
+    protected function getDataLoaderNs()
+    {
+        return sprintf(
+            '%s.dataloader.',
+            (string) String::create($this->getBundle()->getName())->toLowerCase()->replace('bundle', '')
         );
     }
 
@@ -495,7 +573,7 @@ class ControllerManipulator extends AbstractManipulator
     private function getRelevantFixtures()
     {
         $related = $this->getMetadata()->associationMappings;
-        exit;
+
         //Load Entity Class.
         //Get related objects.
         //Find each fixture based on the class name and path. (Optionally ignore it if the ForcedTests is enabled)
@@ -510,7 +588,7 @@ class ControllerManipulator extends AbstractManipulator
     private function getNamespaceFromClass($fqdn)
     {
         $lastSlash = String::create($fqdn)->strrpos('\\');
-        ladybug_dump((string) String::create($fqdn)->substr($lastSlash));
+        ladybug_dump((string) String::create($fqdn)->substr($lastSlash + 1));
         return (string) String::create($fqdn)->substr($lastSlash);
     }
 

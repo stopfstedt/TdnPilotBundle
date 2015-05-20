@@ -3,7 +3,6 @@
 namespace {{ namespace }}\Test\Controller;
 
 {% block use_statements %}
-use {{ seed_namespace }}\{{ entity }}Data;
 {% endblock use_statements %}
 
 use Symfony\Framework\WebBundle\WebTestCase;
@@ -18,7 +17,7 @@ use Symfony\Framework\WebBundle\WebTestCase;
 class {{ entity }}ControllerTest extends WebTestCase
 {% endblock class_definition %}
 {
-    {% block class_body %}{%-  include 'controller/test-actions/extra.php.twig' %}
+    {% block class_body %}{%-  include 'controller/test-actions/extras.php.twig' %}
 
     {%- include 'controller/test-actions/getById.php.twig' %}
 
