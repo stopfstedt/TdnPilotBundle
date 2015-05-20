@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "acfae39d6b6cbdfda66205a2d3480ddd",
+    "hash": "bebb3944cade35318a41a4006441ecba",
     "packages": [
         {
             "name": "danielstjules/stringy",
@@ -2912,7 +2912,7 @@
         },
         {
             "name": "tdn/php-types",
-            "version": "1.1.1",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/TheDevNetwork/PhpTypes.git",
@@ -6788,7 +6788,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "sed/route-exporter-bundle": 20
+        "sed/route-exporter-bundle": 20,
+        "tdn/php-types": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
