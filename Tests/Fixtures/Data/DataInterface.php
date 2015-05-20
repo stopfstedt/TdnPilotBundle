@@ -24,7 +24,7 @@ interface DataInterface
     /**
      * @return array
      */
-    public function badPost();
+    public function badPosts();
 
     /**
      * @return array

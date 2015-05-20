@@ -6,6 +6,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Tdn\PilotBundle\Manipulator\ControllerManipulator;
+use Tdn\PhpTypes\Type\String;
 use \SplFileInfo;
 
 /**
@@ -48,12 +49,12 @@ class GenerateControllerCommand extends AbstractGeneratorCommand
     protected $generateTests;
 
     /**
-     * @var string
+     * @var SplFileInfo
      */
     protected $fixturesPath;
 
     /**
-     * @var string
+     * @var SplFileInfo
      */
     protected $dataPath;
 
@@ -61,6 +62,11 @@ class GenerateControllerCommand extends AbstractGeneratorCommand
      * @var bool
      */
     protected $forcedTests;
+
+    /**
+     * @var int
+     */
+    protected $pathDepth;
 
     /**
      * {@inheritdoc}
@@ -96,15 +102,22 @@ class GenerateControllerCommand extends AbstractGeneratorCommand
             ->addOption(
                 'fixtures-path',
                 '',
-                InputOption::VALUE_NONE,
-                'Absolute path to DoctrineFixture files. Required if generating tests.'
+                InputOption::VALUE_OPTIONAL,
+                'Path to DoctrineFixture files. Required if generating tests.'
             )
             ->addOption(
-                'static-data-path',
+                'data-path',
                 '',
-                InputOption::VALUE_NONE,
-                'Absolute path to static data files that implement the DataInterface provided in this bundle. ' .
+                InputOption::VALUE_OPTIONAL,
+                'Path to static data files that implement the DataInterface provided in this bundle. ' .
                 'This might be automatically generated at a later time.'
+            )
+            ->addOption(
+                'path-depth',
+                '',
+                InputOption::VALUE_OPTIONAL,
+                'Depth to search to for the paths set as parameters (Affects both data and fixtures paths).',
+                0
             )
             ->addOption(
                 'force-tests',
@@ -147,15 +160,16 @@ class GenerateControllerCommand extends AbstractGeneratorCommand
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->resource = ($input->getOption('resource') ? true : false);
-        $this->swagger  = ($input->getOption('with-swagger') ? true : false);
-        $this->routePrefix = $this->getRoutePrefix($input->getOption('route-prefix'));
+        $this->resource      = ($input->getOption('resource') ? true : false);
+        $this->swagger       = ($input->getOption('with-swagger') ? true : false);
+        $this->routePrefix   = $this->getRoutePrefix($input->getOption('route-prefix'));
         $this->generateTests = ($input->getOption('generate-tests') ? true : false);
-        $this->fixturesPath = ($input->getOption('fixtures-path')) ?
-            new SplFileInfo($input->getOption('fixtures-path')) : new SplFileInfo(null);
-        $this->forcedTests = ($input->getOption('force-tests') ? true : false);
-        $this->dataPath    = ($input->getOption('static-data-path')) ?
-            new SplFileInfo($input->getOption('static-data-path')) : new SplFileInfo(null);
+        $this->fixturesPath  = ($input->getOption('fixtures-path')) ?
+            new SplFileInfo($this->getAbsolutePath($input->getOption('fixtures-path'))) : new SplFileInfo(null);
+        $this->forcedTests   = ($input->getOption('force-tests') ? true : false);
+        $this->dataPath      = ($input->getOption('data-path')) ?
+            new SplFileInfo($this->getAbsolutePath($input->getOption('data-path'))) : new SplFileInfo(null);
+        $this->pathDepth     = $input->getOption('path-depth');
 
         //For now dataPath is required (until we can auto generate those.
         //Same goes for fixtures.
@@ -164,7 +178,7 @@ class GenerateControllerCommand extends AbstractGeneratorCommand
                 sprintf(
                     'Directory %s is not valid.',
                     (!$this->fixturesPath->isDir()) ?
-                        $input->getOption('fixtures-path') : $input->getOption('static-data-path')
+                        $input->getOption('fixtures-path') : $input->getOption('data-path')
                 )
             );
         }
@@ -185,6 +199,7 @@ class GenerateControllerCommand extends AbstractGeneratorCommand
         $manipulator->setFixturesPath($this->fixturesPath);
         $manipulator->setForcedTests($this->forcedTests);
         $manipulator->setDataPath($this->dataPath);
+        $manipulator->setPathDepth($this->pathDepth);
 
         return $manipulator;
     }
@@ -195,5 +210,47 @@ class GenerateControllerCommand extends AbstractGeneratorCommand
     protected function getFiles()
     {
         return ['Rest Controller'];
+    }
+
+    /**
+     * Figures out absolute if relative path is passed in.
+     *
+     * @param string $relativePath
+     * @return string
+     */
+    private function getAbsolutePath($relativePath)
+    {
+        $absolutePath = $relativePath = String::create($relativePath);
+
+        if ($relativePath->startsWith('.') || !$relativePath->startsWith('/')) {
+            $absolutePath = String::create(__FILE__)
+                    ->replace('\\', '/')
+                    ->subStrUntil('/vendor', true)
+                    ->ensureRight(DIRECTORY_SEPARATOR . $this->getCleanPathName($relativePath))
+            ;
+
+        }
+
+        return (string) $absolutePath;
+    }
+
+    /**
+     * Returns a relative path name without the separator.
+     *
+     * @param \Tdn\PhpTypes\Type\String $path
+     *
+     * @return string
+     */
+    private function getCleanPathName(String $path)
+    {
+        if ($path[0] == '.' || $path[0] == '/') {
+            if ($path[1] == '/') {
+                return (string) $path->subStrAfter($path->at(2));
+            }
+
+            return (string) $path->subStrAfter($path->at(1));
+        }
+
+        return (string) $path;
     }
 }

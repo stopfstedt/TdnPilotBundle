@@ -64,7 +64,7 @@ Road Map
   to create a relationship of one-to-many between notes and labels.
 - [ ] Add hypermedia documentation (How to mix with other bundles)
 - [ ] Add option to implement symfony ACL and use @Secure and @PreAuthorize in controllers.
-- [ ] Generate a working configuration between popular FOS UserBundle, RestBundle, and WSSE Authorization tokens.
+- [ ] Generate a working configuration between popular FOS UserBundle, RestBundle, and HWIOAuthBundle.
 - [ ] Generate Entity Interfaces
 - [ ] Generate Behat functional api tests
 - [ ] Generate initial serializer annotations

@@ -5,6 +5,7 @@ namespace Tdn\PilotBundle\Manipulator;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Tdn\PhpTypes\Type\String;
 use Tdn\PilotBundle\Model\File;
+use Tdn\PilotBundle\ClassLoader\ClassMapGenerator;
 use \SplFileInfo;
 
 /**
@@ -48,12 +49,18 @@ class ControllerManipulator extends AbstractManipulator
      */
     protected $dataPath;
 
+    /**
+     * @var int
+     */
+    protected $pathDepth;
+
     public function __construct()
     {
         $this->setResource(false);
         $this->setSwagger(false);
         $this->setGenerateTests(false);
         $this->setForcedTests(false);
+        $this->setPathDepth(0);
 
         parent::__construct();
     }
@@ -139,7 +146,7 @@ class ControllerManipulator extends AbstractManipulator
     }
 
     /**
-     * @return string
+     * @return SplFileInfo
      */
     public function getFixturesPath()
     {
@@ -179,6 +186,22 @@ class ControllerManipulator extends AbstractManipulator
     }
 
     /**
+     * @param int $depth
+     */
+    public function setPathDepth($depth)
+    {
+        $this->pathDepth = $depth;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPathDepth()
+    {
+        return $this->pathDepth;
+    }
+
+    /**
      * Sets up a controller based on an entity.
      * Sets up controller test files if flag is set.
      * @return $this
@@ -195,6 +218,28 @@ class ControllerManipulator extends AbstractManipulator
         $this->addHandlerDependency();
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        if ($this->shouldGenerateTests()) {
+            if (!class_exists('Doctrine\\Bundle\\FixturesBundle\\DoctrineFixturesBundle')) {
+                throw new \RuntimeException(
+                    'DoctrineFixturesBundle is not installed. Please install it.'
+                );
+            }
+
+            if (!function_exists('sqlite_open')) {
+                throw new \RuntimeException(
+                    'PHP Detected no SQLite Support. Please ensure SQLite extension is installed.'
+                );
+            }
+        }
+
+        return parent::isValid();
     }
 
     /**
@@ -288,12 +333,19 @@ class ControllerManipulator extends AbstractManipulator
         );
     }
 
+    /**
+     * @return string
+     */
     protected function getAbstractControllerTestContent()
     {
         return $this->getTemplateStrategy()->render(
             'controller/abstract-controller-test.php.twig',
             [
-                'namespace' => $this->getBundle()->getNamespace()
+                'entity'            => $this->getEntity(),
+                'namespace'         => $this->getBundle()->getNamespace(),
+                'seed_namespace'    => $this->getDataSeedNamespace(),
+                'fixture_namespace' => $this->getFixtureNamespace(),
+                'fixtures'          => $this->getRelevantFixtures()
             ]
         );
     }
@@ -354,6 +406,9 @@ class ControllerManipulator extends AbstractManipulator
         }
     }
 
+    /**
+     * @return void
+     */
     protected function addHandlerDependency()
     {
         $handlerFile = sprintf(
@@ -366,24 +421,113 @@ class ControllerManipulator extends AbstractManipulator
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    public function isValid()
+    private function getFixtureNamespace()
     {
-        if ($this->shouldGenerateTests()) {
-            if (!class_exists('Doctrine\\Bundle\\FixturesBundle\\DoctrineFixturesBundle')) {
-                throw new \RuntimeException(
-                    'DoctrineFixturesBundle is not installed. Please install it.'
-                );
-            }
+        $fixtures = $this->getFixtures();
 
-            if (!function_exists('sqlite_open')) {
-                throw new \RuntimeException(
-                    'PHP Detected no SQLite Support. Please ensure SQLite extension is installed.'
-                );
+        if (empty($fixtures)) {
+            throw new \RuntimeException(
+                sprintf(
+                    'Invalid fixtures path %s. No classes found there.',
+                    ($this->getFixturesPath() ?: 'null')
+                )
+            );
+        }
+
+        return $this->getNamespaceFromClass($fixtures[0]);
+    }
+
+    /**
+     * @return string
+     */
+    private function getDataSeedNamespace()
+    {
+        $dataSeeds = $this->getDataSeeds();
+
+        if (empty($dataSeeds) && !$this->shouldForceTests()) {
+            throw new \RuntimeException(
+                sprintf(
+                    'Invalid data path %s. No classes found there.',
+                    ($this->getDataPath() ?: 'null')
+                )
+            );
+        }
+
+        return $this->getNamespaceFromClass(($dataSeeds[0] ?: ''));
+    }
+
+    /**
+     * @return array
+     */
+    private function getFixtures()
+    {
+        if ($this->getFixturesPath() == null && !$this->shouldForceTests()) {
+            throw new \InvalidArgumentException(
+                'Fixtures path must be present.'
+            );
+        }
+
+        return array_keys(ClassMapGenerator::createMap($this->getFixturesPath()->getRealPath(), $this->getPathDepth()));
+    }
+
+    /**
+     * This will be replaced with support for alice.
+     *
+     * @deprecated
+     * @return array
+     */
+    private function getDataSeeds()
+    {
+        if ($this->getDataPath() == null && !$this->shouldForceTests()) {
+            throw new \InvalidArgumentException(
+                'Data path must be present.'
+            );
+        }
+
+        return array_keys(ClassMapGenerator::createMap($this->getDataPath()->getRealPath(), $this->getPathDepth()));
+    }
+
+    /**
+     * @return array
+     */
+    private function getRelevantFixtures()
+    {
+        $related = $this->getMetadata()->associationMappings;
+        exit;
+        //Load Entity Class.
+        //Get related objects.
+        //Find each fixture based on the class name and path. (Optionally ignore it if the ForcedTests is enabled)
+        //Construct FQDN for each one.
+        //Return array of constructed FQDNs.
+    }
+
+    /**
+     * @param string $fqdn
+     * @return string
+     */
+    private function getNamespaceFromClass($fqdn)
+    {
+        $lastSlash = String::create($fqdn)->strrpos('\\');
+        ladybug_dump((string) String::create($fqdn)->substr($lastSlash));
+        return (string) String::create($fqdn)->substr($lastSlash);
+    }
+
+    /**
+     * @param $class
+     * @param array $fqdnArray
+     *
+     * @return string|null
+     */
+    private function findClassInFqdnArray($class, array $fqdnArray)
+    {
+        foreach ($fqdnArray as $fqdn) {
+            if (String::create($fqdn)->endsWith($class)) {
+                return $fqdn;
             }
         }
 
-        return parent::isValid();
+        return null;
     }
 }

@@ -28,9 +28,10 @@
     "prefer-stable": true,
     "require": {
         "php": ">=5.4",
-        "symfony/form": "~2.6",
-        "symfony/options-resolver": "~2.6",
-        "symfony/finder": "~2.6",
+        "symfony/form": "~2.3",
+        "symfony/options-resolver": "~2.3",
+        "symfony/finder": "~2.3",
+        "symfony/class-loader": "~2.3",
         "sensio/generator-bundle": "~2.5",
         "doctrine/orm": "~2.4",
         "doctrine/doctrine-bundle": "~1.3",
@@ -38,8 +39,14 @@
         "jms/serializer-bundle": "~0.13.0",
         "tuck/converter-bundle": "~0.3",
         "sed/route-exporter-bundle": "dev-master",
-        "tdn/php-types": "~1.0"
+        "tdn/php-types": "dev-develop"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/vpassapera/PhpTypes"
+        }
+    ],
     "require-dev": {
         "apigen/apigen": "~4.0",
         "phpunit/phpunit": "~4.5",
