@@ -499,44 +499,6 @@ class ControllerManipulator extends AbstractServiceManipulator
     }
 
     /**
-     * @return string
-     */
-    private function getFixtureNamespace()
-    {
-        $fixtures = $this->getFixtures();
-
-        if (empty($fixtures)) {
-            throw new \RuntimeException(
-                sprintf(
-                    'Invalid fixtures path %s. No classes found there.',
-                    ($this->getFixturesPath() ?: 'null')
-                )
-            );
-        }
-
-        return $this->getNamespaceFromClass($fixtures[0]);
-    }
-
-    /**
-     * @return string
-     */
-    private function getDataSeedNamespace()
-    {
-        $dataSeeds = $this->getDataSeeds();
-
-        if (empty($dataSeeds) && !$this->shouldForceTests()) {
-            throw new \RuntimeException(
-                sprintf(
-                    'Invalid data path %s. No classes found there.',
-                    ($this->getDataPath() ?: 'null')
-                )
-            );
-        }
-
-        return $this->getNamespaceFromClass(($dataSeeds[0] ?: ''));
-    }
-
-    /**
      * @return array
      */
     private function getFixtures()
@@ -573,7 +535,8 @@ class ControllerManipulator extends AbstractServiceManipulator
     private function getRelevantFixtures()
     {
         $related = $this->getMetadata()->associationMappings;
-
+        ladybug_dump($related);
+        exit;
         //Load Entity Class.
         //Get related objects.
         //Find each fixture based on the class name and path. (Optionally ignore it if the ForcedTests is enabled)
