@@ -7,7 +7,7 @@
         ${{ entity|lowerfirst }} = $this->container->get('{{ dataloader_service_ns }}.{{ entity|lower }}')->createWithId();
         $this->createJsonRequest(
             'PUT',
-            $this->getUrl('put_{{ entity|lower|pluralize }}'),
+            $this->getUrl('put_{{ entity|lower|pluralize }}', ['id' => ${{ entity|lowerfirst }}['{{ entity_identifier }}']]),
             json_encode(${{ entity|lowerfirst }})
         );
 

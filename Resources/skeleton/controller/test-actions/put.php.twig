@@ -8,7 +8,7 @@
 
         $this->createJsonRequest(
             'PUT',
-            $this->getUrl('put_{{ entity|lower|pluralize }}'),
+            $this->getUrl('put_{{ entity|lower|pluralize }}', ['id' => ${{ entity|lowerfirst }}['{{ entity_identifier }}']]),
             json_encode(${{ entity|lowerfirst }})
         );
 

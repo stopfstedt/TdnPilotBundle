@@ -39,6 +39,7 @@ abstract class AbstractControllerTest extends WebTestCase
     public function setUp()
     {
         $this->client = static::createClient();
+        $this->client->followRedirects();
         $this->container = $this->client->getContainer();
         $this->loadFixtures($this->getFixtures());
     }

@@ -44,7 +44,7 @@
             $response->headers->set(
                 'Location',
                 $this->generateUrl(
-                    'get_{{ entity|lower }}',
+                    'get_{{ entity|lower|pluralize }}',
                     ['{{ entity_identifier }}' => ${{ entity|lower }}->get{{ entity_identifier|capitalize }}()],
                     true
                 )

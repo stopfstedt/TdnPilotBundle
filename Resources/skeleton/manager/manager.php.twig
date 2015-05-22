@@ -9,6 +9,7 @@ use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Id\AssignedGenerator;
 use {{ namespace }}\Entity\{{ entity }}Interface;
 {% endblock use_statements %}
 
@@ -82,12 +83,20 @@ class {{ entity }}Manager implements {{ entity }}ManagerInterface
     /**
      * @param {{ entity }}Interface ${{ entity|lowerfirst }}
      * @param bool $andFlush
+     * @param bool $forceId
      */
     public function update{{ entity }}(
         {{ entity }}Interface ${{ entity|lowerfirst }},
-        $andFlush = true
+        $andFlush = true,
+        $forceId  = false
     ) {
         $this->em->persist(${{ entity|lowerfirst }});
+
+        if ($forceId) {
+            $metadata = $this->em->getClassMetaData(get_class($user));
+            $metadata->setIdGenerator(new AssignedGenerator());
+        }
+
         if ($andFlush) {
             $this->em->flush();
         }

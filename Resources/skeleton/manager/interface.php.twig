@@ -49,12 +49,14 @@ interface {{ entity }}ManagerInterface
     /**
      * @param {{ entity }}Interface ${{ entity|lowerfirst }}
      * @param bool $andFlush
+     * @param bool $forceId
      *
      * @return void
      */
     public function update{{ entity }}(
         {{ entity }}Interface ${{ entity|lowerfirst }},
-        $andFlush = true
+        $andFlush = true,
+        $forceId  = false
     );
 
     /**
