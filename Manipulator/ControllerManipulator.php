@@ -12,11 +12,14 @@ use \SplFileInfo;
 use Tdn\PilotBundle\Model\ServiceDefinition;
 
 /**
+ * @todo: Separate Test gen from this class and create a ControllerManipulatorTestHelper to generate the tests.
  * Class ControllerManipulator
  * @package Tdn\PilotBundle\Manipulator
  */
 class ControllerManipulator extends AbstractServiceManipulator
 {
+    const NOT_FOUND_TOKEN = 'NOT_FOUND';
+
     /**
      * @var string
      */
@@ -260,29 +263,18 @@ class ControllerManipulator extends AbstractServiceManipulator
     protected function getServiceFileContents(File $file)
     {
         $serviceClass = $this->findClassInFqdnArray(
-            String::create($this->getEntity())->pluralize(), $this->getDataSeeds()
+            $this->getEntity(), $this->getDataSeeds()
         );
 
         $serviceId = sprintf(
             '%s.dataloader.%s',
             (string) String::create($this->getBundle()->getName())->toLowerCase()->replace('bundle', ''),
-            (string) String::create($this->getEntity())->pluralize()->toLowerCase()
+            (string) String::create($this->getEntity())->toLowerCase()
         );
 
         $paramKey = $serviceId . '.class';
 
         $definition = new Definition('%' . $paramKey . '%');
-        $definition
-            ->addArgument(new Reference('doctrine'))
-            ->addArgument(
-                sprintf(
-                    '%s\\Entity\\%s%s',
-                    $this->getBundle()->getNamespace(),
-                    $this->getEntityNamespace(),
-                    $this->getEntity()
-                )
-            )
-        ;
 
         return $this->getServiceFileUtils()
             ->addParameter($paramKey, $serviceClass)
@@ -303,11 +295,12 @@ class ControllerManipulator extends AbstractServiceManipulator
                 );
             }
 
-            if (!function_exists('sqlite_open')) {
-                throw new \RuntimeException(
-                    'PHP Detected no SQLite Support. Please ensure SQLite extension is installed.'
-                );
-            }
+            //Opinionated...
+//            if (!function_exists('sqlite_open')) {
+//                throw new \RuntimeException(
+//                    'PHP Detected no SQLite Support. Please ensure SQLite extension is installed.'
+//                );
+//            }
         }
 
         return parent::isValid();
@@ -412,10 +405,8 @@ class ControllerManipulator extends AbstractServiceManipulator
         return $this->getTemplateStrategy()->render(
             'controller/abstract-controller-test.php.twig',
             [
-                'entity'            => $this->getEntity(),
-                'namespace'         => $this->getBundle()->getNamespace(),
-                'dataloader_ns'     => $this->getDataLoaderNs(),
-                'fixtures'          => $this->getRelevantFixtures()
+                'entity'                => $this->getEntity(),
+                'namespace'             => $this->getBundle()->getNamespace(),
             ]
         );
     }
@@ -423,7 +414,7 @@ class ControllerManipulator extends AbstractServiceManipulator
     protected function getDataLoaderNs()
     {
         return sprintf(
-            '%s.dataloader.',
+            '%s.dataloader',
             (string) String::create($this->getBundle()->getName())->toLowerCase()->replace('bundle', '')
         );
     }
@@ -438,8 +429,11 @@ class ControllerManipulator extends AbstractServiceManipulator
         return $this->getTemplateStrategy()->render(
             'controller/controller-test.php.twig',
             [
-                'namespace' => $this->getBundle()->getNamespace(),
-                'entity' => $this->getEntity(),
+                'entity_identifier'      => $this->getEntityIdentifier(),
+                'entity'                 => $this->getEntity(),
+                'namespace'              => $this->getBundle()->getNamespace(),
+                'dataloader_service_ns'  => $this->getDataLoaderNs(),
+                'fixtures'               => $this->getRelevantFixtures()
             ]
         );
     }
@@ -534,25 +528,60 @@ class ControllerManipulator extends AbstractServiceManipulator
      */
     private function getRelevantFixtures()
     {
-        $related = $this->getMetadata()->associationMappings;
-        ladybug_dump($related);
-        exit;
-        //Load Entity Class.
-        //Get related objects.
-        //Find each fixture based on the class name and path. (Optionally ignore it if the ForcedTests is enabled)
-        //Construct FQDN for each one.
-        //Return array of constructed FQDNs.
+        $fixtureNs       = $this->getNamespaceFromFqdn($this->getFixtures()[0]);
+        $fixtures        = [];
+        $possibleClasses = array_merge(
+            [$this->getEntity()],
+            array_map(
+                function($v) {
+                    return $v['targetEntity'];
+                },
+                $this->getMetadata()->associationMappings)
+        );
+
+        foreach ($possibleClasses as $possibleClass) {
+            $possibleFixture = $fixtureNs . '\\Load' . $this->getClassFromFqdn($possibleClass) . 'Data';
+
+            if (!in_array($possibleFixture, $this->getFixtures()) && !$this->shouldForceTests()) {
+                throw new \RuntimeException(
+                    sprintf(
+                        'Fixture %s is missing. ' .
+                        'If you wish to generate tests with missing fixtures use the --force-tests flag.',
+                        $possibleFixture
+                    )
+                );
+            }
+
+            $fixtures[] = $possibleFixture;
+        }
+
+        return $fixtures;
     }
 
     /**
      * @param string $fqdn
      * @return string
      */
-    private function getNamespaceFromClass($fqdn)
+    private function getClassFromFqdn($fqdn)
     {
-        $lastSlash = String::create($fqdn)->strrpos('\\');
-        ladybug_dump((string) String::create($fqdn)->substr($lastSlash + 1));
-        return (string) String::create($fqdn)->substr($lastSlash);
+        $fqdn = String::create($fqdn);
+
+        if ($fqdn->strrpos('\\') !== false) {
+            return (string) $fqdn->substr($fqdn->strrpos('\\') + 1);
+        }
+
+        return $fqdn;
+    }
+
+    /**
+     * @param string $fqdn
+     * @return string
+     */
+    private function getNamespaceFromFqdn($fqdn)
+    {
+        $fqdn = String::create($fqdn);
+
+        return (string) $fqdn->substr(0, $fqdn->strrpos('\\'));
     }
 
     /**
@@ -564,11 +593,23 @@ class ControllerManipulator extends AbstractServiceManipulator
     private function findClassInFqdnArray($class, array $fqdnArray)
     {
         foreach ($fqdnArray as $fqdn) {
-            if (String::create($fqdn)->endsWith($class)) {
-                return $fqdn;
+            $fqdn = String::create($fqdn);
+            if ($fqdn->endsWith($class . 'Data')) {
+                return (string) $fqdn;
             }
         }
 
-        return null;
+        if (!$this->shouldForceTests()) {
+            throw new \LogicException(
+                sprintf(
+                    '%s was not found in the array.' . PHP_EOL .
+                    '%s',
+                    $class,
+                    print_r($fqdnArray, true)
+                )
+            );
+        }
+
+        return self::NOT_FOUND_TOKEN;
     }
 }

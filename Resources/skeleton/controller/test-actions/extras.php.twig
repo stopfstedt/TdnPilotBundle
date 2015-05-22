@@ -1,12 +1,17 @@
+
 {% block method_definition %}
+    /**
+     * @return array
+     */
     protected function getFixtures()
 {% endblock method_definition %}
-{
+    {
 {% block method_body %}
-    return [
-    {%- for fixture in fixtures %}
-        '{{ fixture }}'
-    {% endfor -%}
-    ]
+        return [
+{% for fixture in fixtures %}
+            '{{ fixture }}'{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        ];
 {% endblock method_body %}
-}
+    }

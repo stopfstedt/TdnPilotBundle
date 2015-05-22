@@ -1,3 +1,4 @@
+
 {% block method_definition %}
     public function testPost{{ entity }}()
 {% endblock method_definition %}
@@ -6,7 +7,7 @@
         $this->createJsonRequest(
             'POST',
             $this->getUrl('post_{{ entity|lower|pluralize }}'),
-            json_encode($this->container->get('{{ dataloader_ns }}.{{ entity|lower|pluralize }}')->post())
+            json_encode($this->container->get('{{ dataloader_service_ns }}.{{ entity|lower }}')->create())
         );
 
         $response = $this->client->getResponse();

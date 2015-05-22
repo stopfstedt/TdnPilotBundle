@@ -1,3 +1,4 @@
+
 {% block method_definition %}
     public function testGetAll{{ entity|pluralize }}()
 {% endblock method_definition %}
@@ -8,7 +9,7 @@
 
         $this->assertJsonResponse($response, Codes::HTTP_OK);
         $this->assertEquals(
-            $this->container->get('{{ dataloader_ns }}.{{ entity|lower|pluralize }}')->get(),
+            $this->container->get('{{ dataloader_service_ns }}.{{ entity|lower }}')->getAll(),
             json_decode($response->getContent(), true)
         );
 {% endblock method_body %}

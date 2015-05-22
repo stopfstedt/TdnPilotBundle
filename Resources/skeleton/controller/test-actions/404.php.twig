@@ -1,10 +1,11 @@
+
 {% block method_definition %}
     public function test{{ entity }}NotFound()
 {% endblock method_definition %}
-{
+    {
 {% block method_body %}
-    $this->createJsonRequest('GET', $this->getUrl('get_{{ entity|lower|pluralize }}', ['id' => '-9999']));
-    $response = $this->client->getResponse();
-    $this->assertJsonResponse($response, Codes::HTTP_NOT_FOUND);
+        $this->createJsonRequest('GET', $this->getUrl('get_{{ entity|lower|pluralize }}', ['id' => '-9999']));
+        $response = $this->client->getResponse();
+        $this->assertJsonResponse($response, Codes::HTTP_NOT_FOUND);
 {% endblock method_body %}
-}
+    }

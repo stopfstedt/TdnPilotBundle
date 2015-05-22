@@ -1,18 +1,18 @@
+
 {% block method_definition %}
     public function testGet{{ entity }}()
 {% endblock method_definition %}
-{
+    {
 {% block method_body %}
-    ${{ entity|lowerfirst|pluralize }} = $this->container->get('{{ dataloader_ns }}.{{ entity|lower|pluralize }}')->get();
-    ${{ entity|lowerfist }} = array_shift(${{ entity|lowerfirst|pluralize }});
-    $this->createJsonRequest('GET', $this->getUrl('get_{{ entity|lower|pluralize }}', ['id' => ${{ entity|lowerfist }}['{{ entity_identifier }}']]));
+        ${{ entity|lowerfirst }} = $this->container->get('{{ dataloader_service_ns }}.{{ entity|lower }}')->getOne();
+        $this->createJsonRequest('GET', $this->getUrl('get_{{ entity|lower|pluralize }}', ['id' => ${{ entity|lowerfirst }}['{{ entity_identifier }}']]));
 
-    $response = $this->client->getResponse();
+        $response = $this->client->getResponse();
 
-    $this->assertJsonResponse($response, Codes::HTTP_OK);
-    $this->assertEquals(
-        ${{ entity|lowerfirst }},
-        json_decode($response->getContent(), true)
-    );
+        $this->assertJsonResponse($response, Codes::HTTP_OK);
+        $this->assertEquals(
+            ${{ entity|lowerfirst }},
+            json_decode($response->getContent(), true)
+        );
 {% endblock method_body %}
-}
+    }

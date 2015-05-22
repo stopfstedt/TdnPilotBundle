@@ -14,20 +14,25 @@ interface SeedInterface
     /**
      * @return array
      */
-    public function cget();
+    public function getAll();
 
     /**
      * @return array
      */
-    public function post();
+    public function getOne();
 
     /**
      * @return array
      */
-    public function badPosts();
+    public function create();
 
     /**
      * @return array
      */
-    public function put();
+    public function createWithId();
+
+    /**
+     * @return array
+     */
+    public function invalid();
 }
