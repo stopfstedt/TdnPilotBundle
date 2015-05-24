@@ -390,9 +390,11 @@ class ControllerManipulator extends AbstractServiceManipulator
                 'format'                 => $this->getFormat(),
                 'form_type'              => $this->getBundle()->getNamespace() .
                     '\\Form\\Type\\' . $this->getEntity() . 'Type',
-                'entity_form_type'       => (string) String::create($this->getEntity() . 'Type')
+                'entity_form_type'       => ($this->isResource() ?
+                    (string) String::create($this->getEntity())->lowerCaseFirst() :
+                    (string) String::create($this->getEntity() . 'Type')
                     ->underscored()
-                    ->toLowerCase()
+                    ->toLowerCase())
             ]
         );
     }
@@ -432,6 +434,7 @@ class ControllerManipulator extends AbstractServiceManipulator
                 'entity_identifier'      => $this->getEntityIdentifier(),
                 'entity'                 => $this->getEntity(),
                 'namespace'              => $this->getBundle()->getNamespace(),
+                'resource'               => $this->isResource(),
                 'dataloader_service_ns'  => $this->getDataLoaderNs(),
                 'fixtures'               => $this->getRelevantFixtures()
             ]

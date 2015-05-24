@@ -12,6 +12,12 @@
 {% endblock method_definition %}
     {
 {% block method_body %}
-        return $request->request->get({{ "'" ~ entity_form_type ~ "'" }});
+        $data = $request->request->get({{ "'" ~ entity_form_type ~ "'" }});
+
+        if (empty($data)) {
+            $data = $request->request->all();
+        }
+
+        return $data;
 {% endblock method_body %}
     }

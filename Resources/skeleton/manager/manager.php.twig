@@ -93,7 +93,7 @@ class {{ entity }}Manager implements {{ entity }}ManagerInterface
         $this->em->persist(${{ entity|lowerfirst }});
 
         if ($forceId) {
-            $metadata = $this->em->getClassMetaData(get_class($user));
+            $metadata = $this->em->getClassMetaData(get_class(${{ entity|lowerfirst }}));
             $metadata->setIdGenerator(new AssignedGenerator());
         }
 

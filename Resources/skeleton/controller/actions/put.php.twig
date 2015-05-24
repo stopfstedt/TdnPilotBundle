@@ -41,17 +41,17 @@
             ${{ entity|lowerfirst }} = $this->get{{ entity }}Handler()
                 ->find{{ entity }}By(['{{ entity_identifier }}'=> $id]);
             if (${{ entity|lowerfirst }}) {
-                $answer{{ resource ? "['" ~ entity|lowerfirst ~  "']" }} =
-                    $this->get{{ entity }}Handler()->put(
-                        ${{ entity|lowerfirst }},
-                        $this->getPostData($request)
-                    );
                 $code = Codes::HTTP_OK;
             } else {
-                $answer{{ resource ? "['" ~ entity|lowerfirst ~  "']" }} =
-                    $this->get{{ entity }}Handler()->post($this->getPostData($request));
+                ${{ entity|lowerfirst }} = $this->get{{ entity }}Handler()->create{{ entity }}();
                 $code = Codes::HTTP_CREATED;
             }
+
+            $answer{{ resource ? "['" ~ entity|lowerfirst ~  "']" }} =
+                $this->get{{ entity }}Handler()->put(
+                    ${{ entity|lowerfirst }},
+                    $this->getPostData($request)
+                );
         } catch (InvalidFormException $exception) {
             return $exception->getForm();
         }
