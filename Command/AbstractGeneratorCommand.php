@@ -214,6 +214,14 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
                 'The service file format (yaml, xml, annotations). default: yaml',
                 self::DEFAULT_FORMAT
             )
+            ->addOption(
+                'exclude',
+                'x',
+                (InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY),
+                'File-names to exclude when generating files (with --entities-location). ' .
+                'No ext required. Case insensitive',
+                []
+            )
             ->setDescription(static::DESCRIPTION)
             ->setName(static::NAME)
         ;
@@ -239,13 +247,25 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
             return 1;
         }
 
-        $entities = $this->getEntityUtils()->getEntityDirAsCollection($input->getOption('entities-location'));
+        $entities = $this->getEntityUtils()->getEntityDirAsCollection(
+            $input->getOption('entities-location'),
+            $input->getOption('exclude')
+        );
         $doctrine = $this->getManagerRegistry();
         $templateStrategy = $this->getTemplateStrategy();
 
         if (null !== $entity = $input->getOption('entity')) {
             $entities->add($entity);
         }
+
+        $output->writeln(
+            sprintf(
+                'Generating files for %s entit%s... (You can skip interaction by passing in the %s flag)',
+                $entities->count(),
+                $entities->count() > 1 ? 'ies' : 'y',
+                '--no-interaction'
+            )
+        );
 
         foreach ($entities as $entity) {
             $entity = Validators::validateEntityName($entity);
@@ -390,7 +410,7 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
         if ($input->isInteractive()) {
             $question = new ConfirmationQuestion(
                 sprintf(
-                    'Entity: %s - File(s):' .
+                    'Entity %s - File(s) to be modified:' .
                     PHP_EOL . '<info>%s</info>' .
                     PHP_EOL . 'Do you confirm generation/manipulation of the files listed above (y/n)?',
                     $entity,

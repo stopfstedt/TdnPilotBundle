@@ -1,7 +1,7 @@
 <?php
 
 {% block namespace_block %}
-namespace {{ namespace }}\Entity\Manager{{ entity_namespace ? '\\' ~ entity_namespace : '' }};
+namespace {{ namespace }}\Entity\Manager;
 {% endblock %}
 
 {% block use_statements %}
@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Id\AssignedGenerator;
-use {{ namespace }}\Entity\{{ entity }}Interface;
+use {{ namespace }}\Entity{{ entity_namespace ? '\\' ~ entity_namespace : '' }}\{{ entity }}Interface;
 {% endblock use_statements %}
 
 /**

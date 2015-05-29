@@ -9,14 +9,19 @@ use Symfony\Component\Finder\Finder;
 use Sensio\Bundle\GeneratorBundle\Command\Validators;
 use Tdn\PhpTypes\Type\String;
 
+/**
+ * Class EntityUtils
+ * @package Tdn\PilotBundle\Services\Utils\Doctrine
+ */
 class EntityUtils
 {
     /**
      * @param string|null $directory
+     * @param array|string $exclude
      *
      * @return ArrayCollection
      */
-    public function getEntityDirAsCollection($directory = null)
+    public function getEntityDirAsCollection($directory = null, array $exclude = [])
     {
         $entities = new ArrayCollection();
 
@@ -28,7 +33,17 @@ class EntityUtils
                 ->name('*.php')
                 ->notName('/interface/i')
                 ->notName('/manager/i')
+                ->notName('/repository/i')
             ;
+
+            foreach ($exclude as $toExclude) {
+                $finder->notName(
+                    sprintf(
+                        '/%s/i',
+                        $toExclude
+                    )
+                );
+            }
 
             /** @var \SplFileInfo $file */
             foreach ($finder as $file) {
@@ -89,10 +104,19 @@ class EntityUtils
      */
     public function getMetadata(ManagerRegistry $doctrine, $entity)
     {
-        return $doctrine->getManagerForClass($entity)
-            ->getMetadataFactory()
-            ->getMetadataFor($entity)
-        ;
+        try {
+            return $doctrine->getManagerForClass($entity)
+                ->getMetadataFactory()
+                ->getMetadataFor($entity);
+        } catch (\Exception $e) {
+            throw new \RuntimeException(
+                sprintf(
+                    'Could not find metadata for class %s. Error: %s',
+                    $entity,
+                    $e->getMessage()
+                )
+            );
+        }
     }
 
     /**

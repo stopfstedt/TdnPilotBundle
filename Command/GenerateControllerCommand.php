@@ -89,7 +89,7 @@ class GenerateControllerCommand extends AbstractGeneratorCommand
             ->addOption(
                 'route-prefix',
                 '',
-                InputOption::VALUE_NONE,
+                InputOption::VALUE_OPTIONAL,
                 'If using annotations, you should also add a route prefix to the controller.'
             )
             ->addOption(
