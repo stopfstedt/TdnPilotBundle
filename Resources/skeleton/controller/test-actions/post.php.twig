@@ -7,7 +7,10 @@
         $this->createJsonRequest(
             'POST',
             $this->getUrl('post_{{ entity|lower|pluralize }}'),
-            json_encode($this->container->get('{{ dataloader_service_ns }}.{{ entity|lower }}')->create(){{ resource ? "['" ~ entity|lowerfirst ~  "']" }})
+            json_encode(
+                $this->container->get('{{ dataloader_service_ns }}.{{ entity|lower }}')
+                    ->create(){{ resource ? "['" ~ entity|lowerfirst ~  "']" }}
+            )
         );
 
         $response = $this->client->getResponse();

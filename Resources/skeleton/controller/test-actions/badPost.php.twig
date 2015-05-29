@@ -4,8 +4,16 @@
 {% endblock method_definition %}
     {
 {% block method_body %}
-        $invalid{{ entity }} = array_shift($this->container->get('{{ dataloader_service_ns }}.{{ entity|lower }}')->invalid());
-        $this->createJsonRequest('POST', $this->getUrl('post_{{ entity|lower|pluralize }}'), $invalid{{ entity }});
+        $invalid{{ entity }} = array_shift(
+            $this->container->get('{{ dataloader_service_ns }}.{{ entity|lower }}')->invalid()
+        );
+
+        $this->createJsonRequest(
+            'POST',
+            $this->getUrl('post_{{ entity|lower|pluralize }}'),
+            $invalid{{ entity }}
+        );
+
         $response = $this->client->getResponse();
         $this->assertEquals($response->getStatusCode(), Codes::HTTP_BAD_REQUEST);
 {% endblock method_body %}

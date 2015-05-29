@@ -4,8 +4,18 @@
 {% endblock method_definition %}
     {
 {% block method_body %}
-        ${{ entity|lowerfirst }} = $this->container->get('{{ dataloader_service_ns }}.{{ entity|lower }}')->getOne(){{ resource ? "['" ~ entity|lowerfirst ~  "']" }};
-        $this->createJsonRequest('GET', $this->getUrl('get_{{ entity|lower|pluralize }}', ['id' => ${{ entity|lowerfirst }}['{{ entity_identifier }}']]));
+        ${{ entity|lowerfirst }} = $this->container
+            ->get('{{ dataloader_service_ns }}.{{ entity|lower }}')
+            ->getOne(){{ resource ? "['" ~ entity|lowerfirst ~  "']" }}
+        ;
+
+        $this->createJsonRequest(
+            'GET',
+            $this->getUrl(
+                'get_{{ entity|lower|pluralize }}',
+                ['id' => ${{ entity|lowerfirst }}['{{ entity_identifier }}']]
+            )
+        );
 
         $response = $this->client->getResponse();
 
