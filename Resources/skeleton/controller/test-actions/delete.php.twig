@@ -4,13 +4,17 @@
 {% endblock method_definition %}
     {
 {% block method_body %}
-        ${{ entity|lowerfirst }} = $this->container->get('{{ dataloader_service_ns }}.{{ entity|lower }}')
+        ${{ entity|lowerfirst }} = $this->container
+            ->get('{{ dataloader_service_ns }}.{{ entity|lower }}')
             ->createWithId(){{ resource ? "['" ~ entity|lowerfirst ~  "']" }}
         ;
 
         $this->createJsonRequest(
             'PUT',
-            $this->getUrl('put_{{ entity|lower|pluralize }}', ['id' => ${{ entity|lowerfirst }}['{{ entity_identifier }}']]),
+            $this->getUrl(
+                'put_{{ entity|lower|pluralize }}',
+                ['id' => ${{ entity|lowerfirst }}['{{ entity_identifier }}']]
+            ),
             json_encode(${{ entity|lowerfirst }})
         );
 
