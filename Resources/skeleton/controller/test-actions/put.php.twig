@@ -21,7 +21,7 @@
         $response = $this->client->getResponse();
         $this->assertJsonResponse($response, Codes::HTTP_CREATED);
         $this->assertEquals(
-            $this->mockSerialize(${{ $entity|lowerfirst }}),
+            $this->mockSerialize(${{ entity|lowerfirst }}),
             json_decode($response->getContent(), true){{ resource ? "['" ~ entity|lowerfirst ~  "']" }}
         );
 {% endblock method_body %}
