@@ -9,8 +9,12 @@
 
         $this->assertJsonResponse($response, Codes::HTTP_OK);
         $this->assertEquals(
-            $this->container->get('{{ dataloader_service_ns }}.{{ entity|lower }}')->getAll(),
-            json_decode($response->getContent(), true)
+            $this->mockSerialize(
+                $this->container
+                    ->get('{{ dataloader_service_ns }}.{{ entity|lower }}')
+                    ->getAll()
+            ),
+            json_decode($response->getContent(), true){{ resource ? "['" ~ entity|lowerfirst|pluralize ~  "']" }}
         );
 {% endblock method_body %}
     }

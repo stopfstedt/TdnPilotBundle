@@ -35,16 +35,4 @@ interface SeedInterface
      * @return array
      */
     public function invalid();
-
-    /**
-     * @return array
-     */
-    public function getLastCreated();
-
-    /**
-     * Array of strings containing the property names that should remain private.
-     *
-     * @return array
-     */
-    public function getPrivateFields();
 }

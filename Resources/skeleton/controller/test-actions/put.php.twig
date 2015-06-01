@@ -6,7 +6,7 @@
 {% block method_body %}
         ${{ entity|lowerfirst }} = $this->container
             ->get('{{ dataloader_service_ns }}.{{ entity|lower }}')
-            ->createWithId(){{ resource ? "['" ~ entity|lowerfirst ~  "']" }}
+            ->createWithId()
         ;
 
         $this->createJsonRequest(
@@ -21,8 +21,7 @@
         $response = $this->client->getResponse();
         $this->assertJsonResponse($response, Codes::HTTP_CREATED);
         $this->assertEquals(
-            $this->container->get('{{ dataloader_service_ns }}.{{ entity|lower }}')
-                ->getLastCreated(){{ resource ? "['" ~ entity|lowerfirst ~  "']" }},
+            $this->mockSerialize(${{ $entity|lowerfirst }}),
             json_decode($response->getContent(), true){{ resource ? "['" ~ entity|lowerfirst ~  "']" }}
         );
 {% endblock method_body %}

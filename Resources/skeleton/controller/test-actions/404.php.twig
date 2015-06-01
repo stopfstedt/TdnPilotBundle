@@ -6,7 +6,7 @@
 {% block method_body %}
         $this->createJsonRequest(
             'GET',
-            $this->getUrl('get_{{ entity|lower|pluralize }}', ['id' => '-9999'])
+            $this->getUrl('get_{{ entity|lower|pluralize }}', ['id' => '0'])
         );
 
         $response = $this->client->getResponse();

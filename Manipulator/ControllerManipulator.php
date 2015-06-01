@@ -432,6 +432,7 @@ class ControllerManipulator extends AbstractServiceManipulator
             'controller/controller-test.php.twig',
             [
                 'entity_identifier'      => $this->getEntityIdentifier(),
+                'private_fields'         => $this->getPrivateFields(),
                 'entity'                 => $this->getEntity(),
                 'namespace'              => $this->getBundle()->getNamespace(),
                 'resource'               => $this->isResource(),
@@ -559,6 +560,36 @@ class ControllerManipulator extends AbstractServiceManipulator
         }
 
         return $fixtures;
+    }
+
+    /**
+     * @return array|string
+     */
+    private function getPrivateFields()
+    {
+        $cleanedProperties = [];
+        $classDoc   = $this->getMetadata()->getReflectionClass()->getDocComment();
+        /** @var \ReflectionProperty[] $properties */
+        $properties = $this->getMetadata()->getReflectionClass()->getProperties();
+
+        $exposeToken = (String::create($classDoc)->contains('ExclusionPolicy("all")', true)) ? 'Expose' : 'Exclude';
+
+        foreach ($properties as $property) {
+            $docComment = $property->getDocComment();
+            //Ties to JMS Serializer... Must remove with Alice.
+            if ($docComment !== null) {
+                $docComment = String::create($docComment);
+                if ($docComment->contains($exposeToken, true) && $exposeToken == 'Exclude') {
+                    $cleanedProperties[] = $property->getName();
+                }
+
+                if (!$docComment->contains($exposeToken, true) && $exposeToken == 'Expose') {
+                    $cleanedProperties[] = $property->getName();
+                }
+            }
+        }
+
+        return $cleanedProperties;
     }
 
     /**

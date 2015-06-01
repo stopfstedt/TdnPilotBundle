@@ -1,17 +1,28 @@
 
-{% block method_definition %}
+{% block extras %}
     /**
-     * @return array
+     * @return array|string
      */
     protected function getFixtures()
-{% endblock method_definition %}
     {
-{% block method_body %}
         return [
 {% for fixture in fixtures %}
             '{{ fixture }}'{% if not loop.last %},{% endif %}
 
 {% endfor %}
         ];
-{% endblock method_body %}
     }
+
+    /**
+     * @return array|string
+     */
+    protected function getPrivateFields()
+    {
+        return [
+{% for private_field in private_fields %}
+            '{{ private_field }}'{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        ];
+    }
+{% enbblock extras %}

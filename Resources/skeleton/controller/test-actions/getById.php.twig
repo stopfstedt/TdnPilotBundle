@@ -6,7 +6,7 @@
 {% block method_body %}
         ${{ entity|lowerfirst }} = $this->container
             ->get('{{ dataloader_service_ns }}.{{ entity|lower }}')
-            ->getOne(){{ resource ? "['" ~ entity|lowerfirst ~  "']" }}
+            ->getOne()
         ;
 
         $this->createJsonRequest(
@@ -21,7 +21,7 @@
 
         $this->assertJsonResponse($response, Codes::HTTP_OK);
         $this->assertEquals(
-            ${{ entity|lowerfirst }},
+            $this->mockSerialize(${{ entity|lowerfirst }}),
             json_decode($response->getContent(), true){{ resource ? "['" ~ entity|lowerfirst ~  "']" }}
         );
 {% endblock method_body %}
