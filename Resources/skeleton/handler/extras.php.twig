@@ -23,7 +23,11 @@
 
         if ($form->isValid()) {
             ${{ entity|lowerfirst }} = $form->getData();
-            $this->update{{ entity }}(${{ entity|lowerfirst }}, true, ('PUT' === $method || 'PATCH' === $method));
+            $this->update{{ entity }}(
+                ${{ entity|lowerfirst }},
+                true,
+                ('PUT' === $method || 'PATCH' === $method)
+            );
 
             return ${{ entity|lowerfirst }};
         }
