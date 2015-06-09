@@ -4,14 +4,15 @@
 {% endblock method_definition %}
     {
 {% block method_body %}
-        $invalid{{ entity }} = array_shift(
-            $this->container->get('{{ dataloader_service_ns }}.{{ entity|lower }}')->invalid()
-        );
+        $invalid{{ entity }} = $this->container
+            ->get('{{ dataloader_service_ns }}.{{ entity|lower }}')
+            ->createInvalid()
+        ;
 
         $this->createJsonRequest(
             'POST',
             $this->getUrl('post_{{ entity|lower|pluralize }}'),
-            $invalid{{ entity }}
+            json_encode(['{{ entity|lowerfirst }}' => $invalid{{ entity }})
         );
 
         $response = $this->client->getResponse();

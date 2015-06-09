@@ -6,7 +6,7 @@
 {% block method_body %}
         ${{ entity|lowerfirst }} = $this->container
             ->get('{{ dataloader_service_ns }}.{{ entity|lower }}')
-            ->createWithId()
+            ->getOne()
         ;
 
         $this->createJsonRequest(

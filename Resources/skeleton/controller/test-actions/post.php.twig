@@ -4,23 +4,27 @@
 {% endblock method_definition %}
     {
 {% block method_body %}
+        $data = $this->container->get('{{ dataloader_service_ns }}.{{ entity|lower }}')
+            ->create();
         $this->createJsonRequest(
             'POST',
             $this->getUrl('post_{{ entity|lower|pluralize }}'),
-            json_encode(
-                $this->container->get('{{ dataloader_service_ns }}.{{ entity|lower }}')
-                    ->create()
-            )
+            json_encode(['{{ entity|lowerfirst }}' => $data])
         );
 
         $response = $this->client->getResponse();
         $headers  = [];
 
         foreach ($response->headers->all() as $hK => $hV) {
-            $headers[(string) String::create($hK)->lower()] = $hV;
+            $headers[strtolower($hK)] = $hV;
         }
 
         $this->assertEquals($response->getStatusCode(), Codes::HTTP_CREATED);
-        $this->assertArrayHasKey('location', $headers, print_r($headers, true));
+        $this->assertTrue(
+            $response->headers->contains(
+                'Location'
+            ),
+            print_r($response->headers, true)
+        );
 {% endblock method_body %}
     }

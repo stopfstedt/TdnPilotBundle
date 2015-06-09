@@ -6,7 +6,7 @@
 {% block method_body %}
         ${{ entity|lowerfirst }} = $this->container
             ->get('{{ dataloader_service_ns }}.{{ entity|lower }}')
-            ->createWithId()
+            ->getOne()
         ;
 
         $this->createJsonRequest(
@@ -15,11 +15,11 @@
                 'put_{{ entity|lower|pluralize }}',
                 ['id' => ${{ entity|lowerfirst }}['{{ entity_identifier }}']]
             ),
-            json_encode(${{ entity|lowerfirst }})
+            json_encode(['{{ entity|lowerfirst }}' => ${{ entity|lowerfirst }}])
         );
 
         $response = $this->client->getResponse();
-        $this->assertJsonResponse($response, Codes::HTTP_CREATED);
+        $this->assertJsonResponse($response, Codes::HTTP_OK);
         $this->assertEquals(
             $this->mockSerialize(${{ entity|lowerfirst }}),
             json_decode($response->getContent(), true){{ resource ? "['" ~ entity|lowerfirst ~  "']" }}

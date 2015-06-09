@@ -38,7 +38,7 @@
 {% endblock method_definition %}
     {
 {% block method_body %}
-        $answer{{ resource ? "['" ~ entity|lowerfirst ~  "']" }} = $this->getOr404($id);
+        $answer{{ resource ? "['" ~ entity|lowerfirst|pluralize ~  "'][]" }} = $this->getOr404($id);
 
         return $answer;
 {% endblock method_body %}
