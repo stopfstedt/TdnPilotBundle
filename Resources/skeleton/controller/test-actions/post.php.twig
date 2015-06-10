@@ -15,11 +15,7 @@
         $response = $this->client->getResponse();
         $headers  = [];
 
-        foreach ($response->headers->all() as $hK => $hV) {
-            $headers[strtolower($hK)] = $hV;
-        }
-
-        $this->assertEquals($response->getStatusCode(), Codes::HTTP_CREATED);
+        $this->assertEquals(Codes::HTTP_CREATED, $response->getStatusCode());
         $this->assertTrue(
             $response->headers->contains(
                 'Location'

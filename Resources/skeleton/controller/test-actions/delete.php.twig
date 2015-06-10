@@ -9,17 +9,6 @@
             ->getOne()
         ;
 
-        $this->createJsonRequest(
-            'PUT',
-            $this->getUrl(
-                'put_{{ entity|lower|pluralize }}',
-                ['id' => ${{ entity|lowerfirst }}['{{ entity_identifier }}']]
-            ),
-            json_encode(${{ entity|lowerfirst }})
-        );
-
-        $response = $this->client->getResponse();
-        $this->assertJsonResponse($response, Codes::HTTP_CREATED);
         $this->client->request(
             'DELETE',
             $this->getUrl(
