@@ -12,7 +12,7 @@
         $this->createJsonRequest(
             'POST',
             $this->getUrl('post_{{ entity|lower|pluralize }}'),
-            json_encode(['{{ entity|lowerfirst }}' => $invalid{{ entity }})
+            json_encode(['{{ entity|lowerfirst }}' => $invalid{{ entity }}])
         );
 
         $response = $this->client->getResponse();
