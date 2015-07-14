@@ -4,8 +4,9 @@ namespace Tdn\PilotBundle\Tests\Command;
 
 use Tdn\PilotBundle\Command\GenerateControllerCommand;
 use Tdn\PilotBundle\Manipulator\ControllerManipulator;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
+use Tdn\PilotBundle\Model\File;
 use \Mockery;
+use Tdn\PilotBundle\Tests\Fixtures\ControllerData;
 
 /**
  * Class GenerateControllerCommandTest
@@ -36,7 +37,15 @@ class GenerateControllerCommandTest extends AbstractGeneratorCommandTest
     /**
      * @return array
      */
-    protected function getOptions()
+    public function getOptions()
+    {
+        return $this->optionsProvider();
+    }
+
+    /**
+     * @return array
+     */
+    protected function optionsProvider()
     {
         return [
             'command'            => $this->getCommand()->getName(),
@@ -49,12 +58,27 @@ class GenerateControllerCommandTest extends AbstractGeneratorCommandTest
     }
 
     /**
-     * @return Mockery\MockInterface|ControllerManipulator
+     * @return array
+     */
+    protected function altOptionsProvider()
+    {
+        return [
+            'command'            => $this->getCommand()->getName(),
+            '--overwrite'        => false,
+            '--target-directory' => $this->getOutDir(),
+            '--resource'         => true,
+            '--with-swagger'     => true,
+            '--entities-location'=> '/path/to/fake/entities'
+        ];
+    }
+
+    /**
+     * @return ControllerManipulator
      */
     protected function getManipulator()
     {
         $manipulator = Mockery::mock(
-            new ControllerManipulator($this->getTemplateStrategy(), $this->getBundle(), $this->getMetadata())
+            new ControllerManipulator()
         );
 
         $manipulator
@@ -63,7 +87,7 @@ class GenerateControllerCommandTest extends AbstractGeneratorCommandTest
                 [
                     'prepare'  => $manipulator,
                     'isValid'  => true,
-                    'generate' => $this->getGeneratedFiles()
+                    'generate' => $this->getGeneratedFiles(),
                 ]
             )
             ->zeroOrMoreTimes()
@@ -72,39 +96,32 @@ class GenerateControllerCommandTest extends AbstractGeneratorCommandTest
         return $manipulator;
     }
 
-
     /**
-     * @return GeneratedFileInterface[]
+     * @return File[]
      */
     protected function getGeneratedFiles()
     {
         $controllerFileMock = $this->getControllerFileMock();
 
         return [
-            $controllerFileMock->getFullPath() => $controllerFileMock
+            $controllerFileMock->getRealPath() => $controllerFileMock
         ];
     }
 
     /**
-     * @return GeneratedFileInterface
+     * @return File
      */
     protected function getControllerFileMock()
     {
-        $content = @file_get_contents(
-            dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
-            'data' . DIRECTORY_SEPARATOR .
-            'basic.controller.out'
-        );
-
-        $controllerFileMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
+        $controllerFileMock = Mockery::mock('\Tdn\PilotBundle\Model\File');
         $controllerFileMock
             ->shouldDeferMissing()
             ->shouldReceive(
                 [
+                    'getFilteredContents'  => ControllerData::BASIC_FOO_CONTROLLER,
                     'getFilename'  => 'FooController',
                     'getPath'      => $this->getOutDir() . DIRECTORY_SEPARATOR . 'Controller',
                     'getExtension' => 'php',
-                    'getContents'  => $content,
                     'getFullPath'  => $this->getOutDir() .
                         DIRECTORY_SEPARATOR . 'Controller' .
                         DIRECTORY_SEPARATOR . 'FooController.php'

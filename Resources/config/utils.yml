@@ -1,0 +1,12 @@
+parameters:
+    tdn_pilot.doctrine.entity.utils.class: Tdn\PilotBundle\Services\Utils\Doctrine\EntityUtils
+    tdn_pilot.symfony.service.utils.class: Tdn\PilotBundle\Services\Utils\Symfony\ServiceFileUtils
+    tdn_pilot.symfony.routing.utils.class: Tdn\PilotBundle\Services\Utils\Symfony\RoutingFileUtils
+
+services:
+    tdn_pilot.doctrine.entity.utils:
+        class: %tdn_pilot.doctrine.entity.utils.class%
+    tdn_pilot.symfony.service.utils:
+        class: %tdn_pilot.symfony.service.utils.class%
+    tdn_pilot.symfony.routing.utils:
+        class: %tdn_pilot.symfony.routing.utils.class%

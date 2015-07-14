@@ -2,8 +2,7 @@
 
 namespace Tdn\PilotBundle\Manipulator;
 
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
-use Tdn\PilotBundle\Services\Utils\DiXmlUtils;
+use Tdn\PilotBundle\Services\Utils\Symfony\ServiceFileUtils;
 
 /**
  * Interface ServiceManipulatorInterface
@@ -12,32 +11,12 @@ use Tdn\PilotBundle\Services\Utils\DiXmlUtils;
 interface ServiceManipulatorInterface extends ManipulatorInterface
 {
     /**
-     * @param DiXmlUtils $diManipulator
+     * @param ServiceFileUtils $serviceFileUtil
      */
-    public function setDiUtils(DiXmlUtils $diManipulator);
+    public function setServiceFileUtils(ServiceFileUtils $serviceFileUtil);
 
     /**
-     * @return DiXmlUtils
+     * @return ServiceFileUtils
      */
-    public function getDiUtils();
-
-    /**
-     * @param GeneratedFileInterface|null $file
-     */
-    public function setXmlServiceFile(GeneratedFileInterface $file = null);
-
-    /**
-     * @return \SimpleXMLElement
-     */
-    public function getXmlServiceFile();
-
-    /**
-     * @param bool $updatingDiFile
-     */
-    public function setUpdatingDiConfFile($updatingDiFile);
-
-    /**
-     * @return bool
-     */
-    public function isUpdatingDiConfFile();
+    public function getServiceFileUtils();
 }

@@ -23,14 +23,29 @@ class TdnPilotExtension extends Extension
         //tdn_pilot.template.strategy.twig_template_strategy
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('template-strategies.yml');
+        $loader->load('utils.yml');
 
+        $this->verifyDependencies();
+        $this->setDefaultTemplateStrategy($config, $container);
+    }
+
+    protected function setDefaultTemplateStrategy(array $config, ContainerBuilder $container)
+    {
         if (isset($config['template'])) {
             $container->setAlias(
                 'tdn_pilot.template.strategy.default',
                 'tdn_pilot.template.strategy.' . $config['template']['strategy']
             );
         }
+    }
 
+    protected function verifyDependencies()
+    {
+        if (!class_exists('Tuck\\ConverterBundle\\TuckConverterBundle')) {
+            throw new \RuntimeException(
+                'Please make sure that tuck/TuckConverterBundle is installed and configured'
+            );
+        }
     }
 
     public function getAlias()

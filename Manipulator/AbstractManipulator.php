@@ -3,12 +3,12 @@
 namespace Tdn\PilotBundle\Manipulator;
 
 use Doctrine\Common\Collections\Collection;
-use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Common\Collections\ArrayCollection;
 use Tdn\PhpTypes\Type\String;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
+use Tdn\PilotBundle\Model\File;
+use Tdn\PilotBundle\Model\Format;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
 
 /**
@@ -39,12 +39,12 @@ abstract class AbstractManipulator implements ManipulatorInterface
     private $metadata;
 
     /**
-     * @var ArrayCollection|GeneratedFileInterface[]
+     * @var ArrayCollection|File[]
      */
-    private $generatedFiles;
+    private $files;
 
     /**
-     * @var ArrayCollection|SplFileInfo[]
+     * @var ArrayCollection|File[]
      */
     private $fileDependencies;
 
@@ -54,6 +54,11 @@ abstract class AbstractManipulator implements ManipulatorInterface
     private $messages;
 
     /**
+     * @var string
+     */
+    private $targetDirectory;
+
+    /**
      * @var boolean
      */
     private $overwrite;
@@ -61,34 +66,41 @@ abstract class AbstractManipulator implements ManipulatorInterface
     /**
      * @var string
      */
-    private $targetDirectory;
+    private $format;
+
+    public function __construct()
+    {
+        $this->files            = new ArrayCollection();
+        $this->fileDependencies = new ArrayCollection();
+        $this->messages         = new ArrayCollection();
+        $this->setOverwrite(false);
+        $this->setFormat(Format::YAML);
+    }
+
+    /**
+     * @return static
+     */
+    public function reset()
+    {
+        return new static();
+    }
+
+    /**
+     * @return array
+     */
+    public static function getSupportedFormats()
+    {
+        return [
+            Format::YAML,
+            Format::YML,
+            Format::XML,
+            Format::ANNOTATION
+        ];
+    }
 
     /**
      * @param TemplateStrategyInterface $templateStrategy
-     * @param BundleInterface           $bundle
-     * @param ClassMetadata             $metadata
      */
-    public function __construct(
-        TemplateStrategyInterface $templateStrategy,
-        BundleInterface $bundle,
-        ClassMetadata $metadata
-    ) {
-        $this->generatedFiles   = new ArrayCollection();
-        $this->fileDependencies = new ArrayCollection();
-        $this->messages         = new ArrayCollection();
-        $this->setTemplateStrategy($templateStrategy);
-        $this->setBundle($bundle);
-        $this->setMetadata($metadata);
-        $this->setOverwrite(false);
-
-        if (count($this->getMetadata()->identifier) > 1) {
-            throw new \RuntimeException(sprintf(
-                'The %s does not support entity classes with multiple primary keys.',
-                __CLASS__
-            ));
-        }
-    }
-
     public function setTemplateStrategy(TemplateStrategyInterface $templateStrategy)
     {
         $this->templateStrategy = $templateStrategy;
@@ -119,6 +131,29 @@ abstract class AbstractManipulator implements ManipulatorInterface
     }
 
     /**
+     * @param ClassMetadata $metadata
+     */
+    public function setMetadata(ClassMetadata $metadata)
+    {
+        if (count($metadata->identifier) > 1) {
+            throw new \RuntimeException(sprintf(
+                'The %s does not support entity classes with multiple primary keys.',
+                __CLASS__
+            ));
+        }
+
+        $this->metadata = $metadata;
+    }
+
+    /**
+     * @return ClassMetadata
+     */
+    public function getMetadata()
+    {
+        return $this->metadata;
+    }
+
+    /**
      * @return string
      */
     public function getEntity()
@@ -135,47 +170,31 @@ abstract class AbstractManipulator implements ManipulatorInterface
     }
 
     /**
-     * @param ClassMetadata $metadata
+     * @param Collection $files
      */
-    public function setMetadata(ClassMetadata $metadata)
+    public function setFiles(Collection $files)
     {
-        $this->metadata = $metadata;
-    }
+        $this->files = new ArrayCollection();
 
-    /**
-     * @return ClassMetadata
-     */
-    public function getMetadata()
-    {
-        return $this->metadata;
-    }
-
-    /**
-     * @param Collection $generatedFiles
-     */
-    public function setGeneratedFiles(Collection $generatedFiles)
-    {
-        $this->generatedFiles = new ArrayCollection();
-
-        foreach ($generatedFiles as $generatedFile) {
-            $this->addGeneratedFile($generatedFile);
+        foreach ($files as $generatedFile) {
+            $this->addFile($generatedFile);
         }
     }
 
     /**
-     * @param GeneratedFileInterface $generatedFile
+     * @param File $file
      */
-    public function addGeneratedFile(GeneratedFileInterface $generatedFile)
+    public function addFile(File $file)
     {
-        $this->generatedFiles->set($generatedFile->getFullPath(), $generatedFile);
+        $this->files->set($file->getRealPath(), $file);
     }
 
     /**
-     * @return ArrayCollection|GeneratedFileInterface[]
+     * @return ArrayCollection|File[]
      */
-    public function getGeneratedFiles()
+    public function getFiles()
     {
-        return $this->generatedFiles;
+        return $this->files;
     }
 
     /**
@@ -191,15 +210,15 @@ abstract class AbstractManipulator implements ManipulatorInterface
     }
 
     /**
-     * @param SplFileInfo $fileDependency
+     * @param File $fileDependency
      */
-    public function addFileDependency(SplFileInfo $fileDependency)
+    public function addFileDependency(File $fileDependency)
     {
         $this->fileDependencies->add($fileDependency);
     }
 
     /**
-     * @return ArrayCollection|SplFileInfo[]
+     * @return ArrayCollection|File[]
      */
     public function getFileDependencies()
     {
@@ -223,7 +242,7 @@ abstract class AbstractManipulator implements ManipulatorInterface
      */
     public function addMessage($message)
     {
-        $this->messages->add($message);
+        $this->messages->add((string) $message);
     }
 
     /**
@@ -247,7 +266,7 @@ abstract class AbstractManipulator implements ManipulatorInterface
      */
     public function getTargetDirectory()
     {
-        return $this->targetDirectory;
+        return (is_dir($this->targetDirectory)) ? realpath($this->targetDirectory) : null;
     }
 
     /**
@@ -259,11 +278,33 @@ abstract class AbstractManipulator implements ManipulatorInterface
     }
 
     /**
+     * True if the generated files should be overwritten.
+     *
      * @return bool
      */
     public function shouldOverwrite()
     {
         return $this->overwrite;
+    }
+
+    /**
+     * @param string $format
+     */
+    public function setFormat($format)
+    {
+        if (!in_array($format, self::getSupportedFormats())) {
+            throw new \InvalidArgumentException('Invalid format ' . $format);
+        }
+
+        $this->format = $format;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormat()
+    {
+        return $this->format;
     }
 
     /**
@@ -284,8 +325,8 @@ abstract class AbstractManipulator implements ManipulatorInterface
             }
         }
 
-        foreach ($this->getGeneratedFiles() as $generatedFile) {
-            if ($this->isGeneratedFileValid($generatedFile)) {
+        foreach ($this->getFiles() as $generatedFile) {
+            if ($this->isFileValid($generatedFile)) {
                 continue;
             }
         }
@@ -297,22 +338,22 @@ abstract class AbstractManipulator implements ManipulatorInterface
      * Generates all the files declared by the manipulator if the
      * system is in a valid state.
      *
-     * @return ArrayCollection|GeneratedFileInterface[]
+     * @return ArrayCollection|File[]
      */
     public function generate()
     {
         if ($this->isValid()) {
-            foreach ($this->getGeneratedFiles() as $generatedFile) {
-                if ((!$generatedFile->isAuxFile() || !$generatedFile->isServiceFile()) && $this->shouldOverwrite()
-                    && file_exists($generatedFile->getFullPath())
+            foreach ($this->getFiles() as $file) {
+                if ((!$file->isAuxFile() || !$file->isServiceFile()) &&
+                    ($this->shouldOverwrite() && $file->isReadable())
                 ) {
-                    unlink($generatedFile->getFullPath());
+                    unlink($file->getRealPath());
                 }
 
-                $this->getTemplateStrategy()->renderFile($generatedFile);
+                $this->getTemplateStrategy()->renderFile($file);
             }
 
-            return $this->getGeneratedFiles();
+            return $this->getFiles();
         }
 
         return new ArrayCollection();
@@ -324,15 +365,15 @@ abstract class AbstractManipulator implements ManipulatorInterface
      * Certain objects we're generating declare their dependencies
      * on other objects. This ensures those dependencies exist.
      *
-     * @param SplFileInfo $fileDependency
+     * @param File $file
      * @return bool
      */
-    protected function isDependencyValid(SplFileInfo $fileDependency)
+    protected function isDependencyValid(File $file)
     {
-        if (!$fileDependency->isFile() || !$fileDependency->isReadable()) {
+        if (!$file->isReadable()) {
             throw new \RuntimeException(sprintf(
                 'Please ensure the file %s exists and is readable.',
-                $fileDependency->getRealPath()
+                $file->getRealPath()
             ));
         }
 
@@ -345,18 +386,17 @@ abstract class AbstractManipulator implements ManipulatorInterface
      * Of if a conflict is present, that the class has been configured
      * to properly handle that conflict.
      *
-     * @param GeneratedFileInterface $generatedFile
+     * @param File $file
      * @return bool
      */
-    protected function isGeneratedFileValid(GeneratedFileInterface $generatedFile)
+    protected function isFileValid(File $file)
     {
-        if (file_exists($generatedFile->getFullPath()) &&
-            (!$this->shouldOverwrite() && !$generatedFile->isAuxFile() && !$generatedFile->isServiceFile())
+        if (file_exists($file->getRealPath()) &&
+            (!$this->shouldOverwrite() && !$file->isAuxFile() && !$file->isServiceFile())
         ) {
             throw new \RuntimeException(sprintf(
-                'Unable to generate the %s form class as it already exists under the file: %s',
-                $generatedFile->getFilename(),
-                $generatedFile->getFullPath()
+                'Unable to generate the %s file as it already exists',
+                $file->getRealPath()
             ));
         }
 
@@ -384,22 +424,6 @@ abstract class AbstractManipulator implements ManipulatorInterface
             }
         }
 
-        $multiTypes = array(
-            ClassMetadata::ONE_TO_MANY,
-            ClassMetadata::MANY_TO_MANY,
-        );
-
-        foreach ($metadata->associationMappings as $fieldName => $relation) {
-            if (in_array($relation['type'], $multiTypes)) {
-                $fields[$fieldName]['relatedType'] = 'many';
-            } else {
-                $fields[$fieldName]['relatedType'] = 'single';
-            }
-
-            $fields[$fieldName]['relatedEntityShortcut'] =
-                $this->getEntityBundleShortcut($fields[$fieldName]['targetEntity']);
-        }
-
         return $fields;
     }
 
@@ -407,7 +431,7 @@ abstract class AbstractManipulator implements ManipulatorInterface
      * Gets the short version of a Entity's FQDN
      *
      * Take an entity name and return the shortcut name
-     * eg Acme\DemoBundle\Entity\Notes -> AcemDemoBundle:Notes
+     * eg Acme\DemoBundle\Entity\Notes -> AcmeDemoBundle:Notes
      *
      * @param string $entity Fully qualified class name of the entity
      *
@@ -415,16 +439,37 @@ abstract class AbstractManipulator implements ManipulatorInterface
      */
     protected function getEntityBundleShortcut($entity)
     {
-        // wrap in EntityManager's Class Metadata function avoid problems with cached proxy classes
         $path = explode('\Entity\\', $entity);
         return str_replace('\\', '', $path[0]) . ':' . $path[1];
+    }
+
+    /**
+     * Find entity identifier.
+     *
+     * Figures out what an entity's identifier is from it's metadata
+     * And returns the name of the identifier.
+     *
+     * @throws \RuntimeException
+     *
+     * @return mixed
+     */
+    protected function getEntityIdentifier()
+    {
+        if (count($this->getMetadata()->identifier) !== 1) {
+            throw new \RuntimeException(
+                'TdnPilotBundle is incompatible with entities that contain more than one identifier or no identifier.'
+            );
+        }
+
+        return $this->getMetadata()->getIdentifierFieldNames()[0];
     }
 
     /**
      * Cleans properties with namespaces appended to them.
      *
      * This method always assumes that the directory for entities
-     * will be `Entity` (the doctrine standard).
+     * will be `Entity` (symfony-standard). Will pop the last part of a string on
+     * directory separators and assume it's the proper value.
      *
      * @param string $property
      *

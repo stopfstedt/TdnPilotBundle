@@ -1,0 +1,28 @@
+
+{% block method_definition %}
+    public function testGet{{ entity }}()
+{% endblock method_definition %}
+    {
+{% block method_body %}
+        ${{ entity|lowerfirst }} = $this->container
+            ->get('{{ dataloader_service_ns }}.{{ entity|lower }}')
+            ->getOne()
+        ;
+
+        $this->createJsonRequest(
+            'GET',
+            $this->getUrl(
+                'get_{{ entity|lower|pluralize }}',
+                ['id' => ${{ entity|lowerfirst }}['{{ entity_identifier }}']]
+            )
+        );
+
+        $response = $this->client->getResponse();
+
+        $this->assertJsonResponse($response, Codes::HTTP_OK);
+        $this->assertEquals(
+            $this->mockSerialize(${{ entity|lowerfirst }}),
+            json_decode($response->getContent(), true){{ resource ? "['" ~ entity|lowerfirst|pluralize ~  "'][0]" }}
+        );
+{% endblock method_body %}
+    }

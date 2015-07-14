@@ -4,8 +4,9 @@ namespace Tdn\PilotBundle\Tests\Command;
 
 use Tdn\PilotBundle\Command\GenerateRoutingCommand;
 use Tdn\PilotBundle\Manipulator\RoutingManipulator;
-use Tdn\PilotBundle\Model\GeneratedFile;
+use Tdn\PilotBundle\Model\File;
 use \Mockery;
+use Tdn\PilotBundle\Tests\Fixtures\RoutingData;
 
 /**
  * Class GenerateRoutingCommandTest
@@ -24,7 +25,7 @@ class GenerateRoutingCommandTest extends AbstractGeneratorCommandTest
     /**
      * @return array
      */
-    protected function getOptions()
+    public function getOptions()
     {
         return [
             'command'            => $this->getCommand()->getName(),
@@ -32,8 +33,7 @@ class GenerateRoutingCommandTest extends AbstractGeneratorCommandTest
             '--target-directory' => $this->getOutDir(),
             '--route-prefix'     => 'v1',
             '--remove'           => false,
-            '--entity'           => 'FooBarBundle:Foo',
-            'routing-file'       => 'routing.yml'
+            '--entity'           => 'FooBarBundle:Foo'
         ];
     }
 
@@ -43,7 +43,7 @@ class GenerateRoutingCommandTest extends AbstractGeneratorCommandTest
     protected function getManipulator()
     {
         $manipulator = Mockery::mock(
-            new RoutingManipulator($this->getTemplateStrategy(), $this->getBundle(), $this->getMetadata())
+            new RoutingManipulator()
         );
 
         $manipulator
@@ -62,28 +62,22 @@ class GenerateRoutingCommandTest extends AbstractGeneratorCommandTest
     }
 
     /**
-     * @return Mockery\MockInterface|GeneratedFile[]
+     * @return File[]
      */
     protected function getGeneratedFiles()
     {
-        $content = @file_get_contents(
-            dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
-            'data' . DIRECTORY_SEPARATOR .
-            'routing.out'
-        );
-
-        $routingFileMock = Mockery::mock('\Tdn\PilotBundle\Model\GeneratedFile');
+        $routingFileMock = Mockery::mock('\Tdn\PilotBundle\Model\File');
         $routingFileMock
             ->shouldDeferMissing()
             ->shouldReceive(
                 [
-                    'getFilename'  => 'routing',
+                    'getFilteredContents'  => RoutingData::ROUTING_FILE,
+                    'getFileName'  => 'routing',
+                    'getExtension' => 'yml',
                     'getPath'      => $this->getOutDir() .
                         DIRECTORY_SEPARATOR . 'Resources' .
                         DIRECTORY_SEPARATOR . 'config',
-                    'getExtension' => 'yml',
-                    'getContents'  => $content,
-                    'getFullPath'  => $this->getOutDir() .
+                    'getRealPath'  => $this->getOutDir() .
                         DIRECTORY_SEPARATOR . 'Resources' .
                         DIRECTORY_SEPARATOR . 'config' .
                         DIRECTORY_SEPARATOR . 'routing.yml'
@@ -93,7 +87,7 @@ class GenerateRoutingCommandTest extends AbstractGeneratorCommandTest
         ;
 
         return [
-            $routingFileMock->getFullPath() => $routingFileMock
+            $routingFileMock->getRealPath() => $routingFileMock
         ];
     }
 }

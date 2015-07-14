@@ -3,12 +3,9 @@
 namespace Tdn\PilotBundle\Manipulator;
 
 use Symfony\Component\Filesystem\Exception\IOException;
-use Symfony\Component\Finder\SplFileInfo;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use Doctrine\ORM\Mapping\ClassMetadata;
-use Tdn\PilotBundle\Model\GeneratedFile;
-use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
+use Tdn\PilotBundle\Model\File;
 use Tdn\PhpTypes\Type\String;
+use Tdn\PilotBundle\Model\Format;
 
 /**
  * Class RoutingGenerator
@@ -37,19 +34,13 @@ class RoutingManipulator extends AbstractManipulator
     private $isInFile;
 
     /**
-     * @param TemplateStrategyInterface $templateStrategy
-     * @param BundleInterface $bundle
-     * @param ClassMetadata $metadata
      */
-    public function __construct(
-        TemplateStrategyInterface $templateStrategy,
-        BundleInterface $bundle,
-        ClassMetadata $metadata
-    ) {
+    public function __construct()
+    {
         $this->setRemove(false);
         $this->isInFile = false;
 
-        return parent::__construct($templateStrategy, $bundle, $metadata);
+        parent::__construct();
     }
 
     /**
@@ -106,33 +97,45 @@ class RoutingManipulator extends AbstractManipulator
      */
     public function prepare()
     {
-        list($file, $extension) = explode('.', $this->getRoutingFile());
-        $routing = new GeneratedFile();
-        $routing
-            ->setFilename($file)
-            ->setExtension($extension)
-            ->setPath(sprintf(
+        if ($this->getFormat() == Format::ANNOTATION) {
+            $this->addMessage(
+                Format::ANNOTATION . ' was selected. No files generated. ' .
+                'Use the appropriate controller for the entity with the' .
+                ' --format=annotation and --route-prefix=<prefix> flag.'
+            );
+
+            return $this;
+        }
+
+        $routingFile = new File(
+            sprintf(
                 '%s' . DIRECTORY_SEPARATOR . 'Resources' .
-                DIRECTORY_SEPARATOR . 'config',
-                ($this->getTargetDirectory()) ?: $this->getBundle()->getPath()
-            ))
-            ->setContents($this->getRoutingContents($routing))
-            ->setAuxFile(true) //Needed because this might exist but we still want to add routes to it.
+                DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . '%s',
+                ($this->getTargetDirectory()) ?: $this->getBundle()->getPath(),
+                $this->getRoutingFile()//,
+                //$this->getFormat()
+            )
+        );
+
+        $routingFile
+            ->setFilteredContents($this->getRoutingContents($routingFile))
+            //Needed because this might exist but we still want to add routes to it
+            ->setAuxFile(true)
         ;
 
-        $this->addGeneratedFile($routing);
+        $this->addFile($routingFile);
         $this->addControllerDependency();
 
         return $this;
     }
 
     /**
-     * @param  GeneratedFile $routingFile
+     * @param  File $routingFile
      * @return string
      */
-    protected function getRoutingContents(GeneratedFile $routingFile)
+    protected function getRoutingContents(File $routingFile)
     {
-        $content = $routingFile->getContents() ?: '';
+        $content = $routingFile->getFilteredContents() ?: '';
         $configurationText = $this->getConfigurationText();
         $this->isInFile    = $this->hasConfigurationText($content, $configurationText);
 
@@ -171,6 +174,11 @@ class RoutingManipulator extends AbstractManipulator
      */
     protected function getConfigurationText()
     {
+//        $routeCollection = new RouteCollection();
+//        $routeCollection->addPrefix((string) String::create($this->getRoutePrefix())->replace('/', ''));
+
+//        $route = new Route($this->getRouteFromEntity());
+
         $output = sprintf("%s:\n", $this->getRouteFromEntity());
         $output .=
             sprintf(
@@ -180,11 +188,11 @@ class RoutingManipulator extends AbstractManipulator
             );
         $output .=
             sprintf(
-                "    prefix:   /%s\n",
-                (string) String::create($this->getRoutePrefix())->replace('/', '')
+                "    prefix:   /%s\n" .
+                "    defaults: {_format:%s}\n",
+                (string) String::create($this->getRoutePrefix())->replace('/', ''),
+                'json'
             );
-        $output .=
-            sprintf("    defaults: {_format:%s}\n", 'json');
 
         return $output;
     }
@@ -245,7 +253,7 @@ class RoutingManipulator extends AbstractManipulator
             $this->getEntity()
         );
 
-        $this->addFileDependency(new SplFileInfo($controllerFile, null, null));
+        $this->addFileDependency(new File($controllerFile));
     }
 
     /**

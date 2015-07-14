@@ -8,16 +8,20 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Sensio\Bundle\GeneratorBundle\Command\Helper\QuestionHelper;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Sensio\Bundle\GeneratorBundle\Command\Validators;
 use Tdn\PilotBundle\Manipulator\ManipulatorInterface;
-use Tdn\PilotBundle\Model\GeneratedFileInterface;
-use Tdn\PilotBundle\Services\Utils\EntityUtils;
-use Tdn\PilotBundle\Services\Utils\TemplateStrategyUtils;
+use Tdn\PilotBundle\Manipulator\ServiceManipulatorInterface;
+use Tdn\PilotBundle\Model\File;
+use Tdn\PilotBundle\Model\Format;
+use Tdn\PilotBundle\Services\Utils\Doctrine\EntityUtils;
+use Tdn\PilotBundle\Template\Strategy\TemplateStrategyUtils;
 use Tdn\PilotBundle\Template\Strategy\TemplateStrategyInterface;
+use Tdn\PilotBundle\Services\Utils\Symfony\ServiceFileUtils;
 
 /**
  * Class AbstractGeneratorCommand
@@ -43,6 +47,11 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
     /**
      * @var string
      */
+    const DEFAULT_FORMAT = Format::YAML;
+
+    /**
+     * @var string
+     */
     private $entity;
 
     /**
@@ -56,27 +65,14 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
     private $manipulator;
 
     /**
-     * @var InputInterface
-     */
-    private $input;
-
-    /**
      * @return string[]
      */
     abstract protected function getFiles();
 
     /**
-     * @param TemplateStrategyInterface $templateStrategy
-     * @param BundleInterface           $bundle
-     * @param ClassMetadata             $metadata
-     *
      * @return ManipulatorInterface
      */
-    abstract protected function createManipulator(
-        TemplateStrategyInterface $templateStrategy,
-        BundleInterface $bundle,
-        ClassMetadata $metadata
-    );
+    abstract protected function createManipulator();
 
     /**
      * @param ManipulatorInterface $manipulator
@@ -89,31 +85,51 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
     /**
      * Returns current manipulator if set, otherwise returns a new instance.
      *
-     * Originally this function internally assigned the variable to cache it, but ran into
-     * issues with support entities.
+     * Returns the expected manipulator (based on createManipulator) for the current entity.
+     * Does not assign $this->manipulator so that a new instance is created every time.
      *
      * @param TemplateStrategyInterface $templateStrategy
      * @param BundleInterface           $bundle
      * @param ClassMetadata             $metadata
+     * @param string                    $format
+     * @param bool                      $overWrite
+     * @param string                    $targetDirectory
      *
      * @return ManipulatorInterface
      */
     public function getManipulator(
         TemplateStrategyInterface $templateStrategy,
         BundleInterface $bundle,
-        ClassMetadata $metadata
+        ClassMetadata $metadata,
+        $format = Format::YML,
+        $overWrite = false,
+        $targetDirectory = null
     ) {
         if ($this->manipulator) {
             return $this->manipulator;
         } else {
-            $manipulator = $this->createManipulator(
-                $templateStrategy,
-                $bundle,
-                $metadata
-            );
+            $manipulator = $this->createManipulator();
 
-            $manipulator->setOverwrite(($this->getInput()->getOption('overwrite') ? true : false));
-            $manipulator->setTargetDirectory($this->getInput()->getOption('target-directory'));
+            $manipulator->setMetadata($metadata);
+            $manipulator->setTemplateStrategy($templateStrategy);
+            $manipulator->setBundle($bundle);
+
+            if ($overWrite) {
+                $manipulator->setOverwrite($overWrite);
+            }
+
+            if ($targetDirectory) {
+                $manipulator->setTargetDirectory($targetDirectory);
+            }
+
+            if ($format) {
+                $manipulator->setFormat($format);
+            }
+
+            if ($manipulator instanceof ServiceManipulatorInterface) {
+                $manipulator->setServiceFileUtils($this->getServiceFileUtils());
+                //Maybe add an abstract service generator command that adds this option
+            }
 
             return $manipulator;
         }
@@ -161,56 +177,54 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
     protected function configure()
     {
         if (static::NAME == '' || static::DESCRIPTION == '') {
-            throw new \RuntimeException(
+            throw new \LogicException(
                 'Please set the name and description of the command. Error in: ' . get_called_class()
             );
         }
 
         $this
-            ->setDefinition(array_merge(
-                [
-                    new InputOption(
-                        'entity',
-                        't',
-                        InputOption::VALUE_OPTIONAL,
-                        'The entity class name to initialize (shortcut notation: FooBarBundle:Entity)',
-                        null
-                    ),
-                    new InputOption(
-                        'entities-location',
-                        'l',
-                        InputOption::VALUE_OPTIONAL,
-                        'The directory containing the entities classes to target',
-                        null
-                    ),
-                    new InputOption(
-                        'overwrite',
-                        'o',
-                        InputOption::VALUE_NONE,
-                        'Overwrite existing ' . implode(', ', $this->getFiles())
-                    ),
-                    new InputOption(
-                        'target-directory',
-                        'd',
-                        InputOption::VALUE_OPTIONAL,
-                        'Specify target directory. Defaults to symfony standard.',
-                        null
-                    )
-                ],
-                $this->getInputArgs()
-            ))
+            ->addOption(
+                'entity',
+                't',
+                InputOption::VALUE_OPTIONAL,
+                'The entity class name to initialize (shortcut notation: FooBarBundle:Entity)'
+            )
+            ->addOption(
+                'entities-location',
+                'l',
+                InputOption::VALUE_OPTIONAL,
+                'The directory containing the entity classes to target'
+            )
+            ->addOption(
+                'overwrite',
+                'o',
+                InputOption::VALUE_NONE,
+                'Overwrite existing ' . implode(',', $this->getFiles())
+            )
+            ->addOption(
+                'target-directory',
+                'd',
+                InputOption::VALUE_OPTIONAL,
+                'Specify a different target directory (namespaces will have to be changed manually)'
+            )
+            ->addOption(
+                'format',
+                'f',
+                InputOption::VALUE_OPTIONAL,
+                'The service file format (yaml, xml, annotations). default: yaml',
+                self::DEFAULT_FORMAT
+            )
+            ->addOption(
+                'exclude',
+                'x',
+                (InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY),
+                'File-names to exclude when generating files (with --entities-location). ' .
+                'No ext required. Case insensitive',
+                []
+            )
             ->setDescription(static::DESCRIPTION)
-            ->setName(static::NAME);
-    }
-
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     */
-    protected function interact(InputInterface $input, OutputInterface $output)
-    {
-        parent::interact($input, $output);
-        $this->input = $input;
+            ->setName(static::NAME)
+        ;
     }
 
     /**
@@ -225,31 +239,57 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->ensureValidInput($input, $output);
+        if (($input->getOption('entity') === null && $input->getOption('entities-location') === null) ||
+            ($input->getOption('entity') !== null && $input->getOption('entities-location') !== null)
+        ) {
+            $output->writeln('<error>Please use either entity OR entities-location. One is required.</error>');
 
-        $entities = $this->getEntityUtils()->getEntityDirAsCollection($input->getOption('entities-location'));
+            return 1;
+        }
+
+        $entities = $this->getEntityUtils()->getEntityDirAsCollection(
+            $input->getOption('entities-location'),
+            $input->getOption('exclude')
+        );
+        $doctrine = $this->getManagerRegistry();
+        $templateStrategy = $this->getTemplateStrategy();
+
         if (null !== $entity = $input->getOption('entity')) {
             $entities->add($entity);
         }
 
-        $doctrine = $this->getManagerRegistry();
+        $output->writeln(
+            sprintf(
+                'Generating files for %s entit%s... (You can skip interaction by passing in the %s flag)',
+                $entities->count(),
+                $entities->count() > 1 ? 'ies' : 'y',
+                '--no-interaction'
+            )
+        );
 
         foreach ($entities as $entity) {
             $entity = Validators::validateEntityName($entity);
             list($bundle, $entity) = $this->getEntityUtils()->parseShortcutNotation($entity);
             $this->setEntity($doctrine->getAliasNamespace($bundle) . '\\' . $entity);
-            $bundle = $this->getContainer()->get('kernel')->getBundle($bundle);
-            $templateStrategy = $this->getTemplateStrategy();
-            $templateStrategy->setSkeletonDirs($this->getTemplateStrategyUtils()->getDefaultSkeletonDirs($bundle));
+            //This could be made better if we could guarantee that all entities share the same bundle
+            //(although they should)
+            $bundle = $this->getKernel()->getBundle($bundle);
+            $templateStrategy->setSkeletonDirs(
+                $this->getTemplateStrategyUtils()->getDefaultSkeletonDirs($bundle)
+            );
 
             try {
+                //Same as above, and just calling setMetadata() instead...hmm.
                 $manipulator = $this->getManipulator(
                     $templateStrategy,
                     $bundle,
-                    $this->getEntityUtils()->getMetadata($doctrine, $this->getEntity())
+                    $this->getEntityUtils()->getMetadata($doctrine, $this->getEntity()),
+                    $input->getOption('format'),
+                    ($input->getOption('overwrite') ? true : false),
+                    ($input->hasOption('target-directory') ? $input->getOption('target-directory') : null)
                 )->prepare();
 
-                if ($this->shouldContinue($input, $output, $manipulator->getGeneratedFiles(), $entity)) {
+                if ($this->shouldContinue($input, $output, $manipulator->getFiles(), $entity)) {
                     $output->write(PHP_EOL);
                     foreach ($manipulator->generate() as $file) {
                         $this->printFileGeneratedMessage($output, $file);
@@ -279,6 +319,14 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
     }
 
     /**
+     * @return KernelInterface
+     */
+    protected function getKernel()
+    {
+        return $this->getContainer()->get('kernel');
+    }
+
+    /**
      * @return ManagerRegistry
      */
     protected function getManagerRegistry()
@@ -292,6 +340,14 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
     protected function getTemplateStrategy()
     {
         return $this->getContainer()->get('tdn_pilot.template.strategy.default');
+    }
+
+    /**
+     * @return ServiceFileUtils
+     */
+    protected function getServiceFileUtils()
+    {
+        return $this->getContainer()->get('tdn_pilot.symfony.service.utils');
     }
 
     /**
@@ -313,20 +369,20 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
 
     /**
      * @param OutputInterface $output
-     * @param GeneratedFileInterface $file
+     * @param File $file
      */
-    protected function printFileGeneratedMessage(OutputInterface $output, GeneratedFileInterface $file)
+    protected function printFileGeneratedMessage(OutputInterface $output, File $file)
     {
         $output->writeln(sprintf(
             'The new <info>%s</info> file has been created under <info>%s</info>.',
-            $file->getFilename() . '.' . $file->getExtension(),
-            $file->getFullPath()
+            $file->getFilename(),
+            $file->getRealPath()
         ));
 
         if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
             $output->writeln(sprintf(
                 'Contents:' . PHP_EOL . '%s',
-                $file->getContents()
+                $file->getFilteredContents()
             ));
         }
     }
@@ -354,12 +410,12 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
         if ($input->isInteractive()) {
             $question = new ConfirmationQuestion(
                 sprintf(
-                    'Entity: %s - File(s):' .
+                    'Entity %s - File(s) to be modified:' .
                     PHP_EOL . '<info>%s</info>' .
                     PHP_EOL . 'Do you confirm generation/manipulation of the files listed above (y/n)?',
                     $entity,
-                    implode(PHP_EOL, $generatedFiles->map(function (GeneratedFileInterface $generatedFile) {
-                        return '- ' . $generatedFile->getFullPath();
+                    implode(PHP_EOL, $generatedFiles->map(function (File $generatedFile) {
+                        return '- ' . $generatedFile->getRealPath();
                     })->toArray())
                 ),
                 false
@@ -369,31 +425,6 @@ abstract class AbstractGeneratorCommand extends ContainerAwareCommand
         }
 
         return true;
-    }
-
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     *
-     * @throws \RuntimeException when both entity and entities-location are set or both are not set.
-     */
-    protected function ensureValidInput(InputInterface $input, OutputInterface $output)
-    {
-        if (($input->getOption('entity') === null && $input->getOption('entities-location') === null) ||
-            ($input->getOption('entity') !== null && $input->getOption('entities-location') !== null)
-        ) {
-            $output->writeln('<error>Please use either entity OR entities-location. One is required.</error>');
-
-            throw new \RuntimeException();
-        }
-    }
-
-    /**
-     * @return InputInterface
-     */
-    protected function getInput()
-    {
-        return $this->input;
     }
 
     /**
