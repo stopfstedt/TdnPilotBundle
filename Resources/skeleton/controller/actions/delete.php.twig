@@ -45,7 +45,8 @@
         ${{ entity|lowerfirst }} = $this->getOr404($id);
 
         try {
-            $this->get{{ entity }}Handler()->delete{{ entity }}(${{ entity|lowerfirst }});
+            $this->get{{ entity }}Handler()
+                ->delete{{ entity }}(${{ entity|lowerfirst }});
 
             return new Response('', Codes::HTTP_NO_CONTENT);
         } catch (\Exception $exception) {

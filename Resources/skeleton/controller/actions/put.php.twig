@@ -43,7 +43,8 @@
             if (${{ entity|lowerfirst }}) {
                 $code = Codes::HTTP_OK;
             } else {
-                ${{ entity|lowerfirst }} = $this->get{{ entity }}Handler()->create{{ entity }}();
+                ${{ entity|lowerfirst }} = $this->get{{ entity }}Handler()
+                    ->create{{ entity }}();
                 $code = Codes::HTTP_CREATED;
             }
 

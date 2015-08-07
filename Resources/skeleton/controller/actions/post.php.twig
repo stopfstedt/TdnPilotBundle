@@ -36,21 +36,13 @@
     {
 {% block method_body %}
         try {
-            ${{ entity|lower }} = $this->get{{ entity }}Handler()
+            $new = $this->get{{ entity }}Handler()
                 ->post($this->getPostData($request));
+            $answer['{{ entity|lowerfirst|pluralize }}'] = [$new];
 
-            $response = new Response();
-            $response->setStatusCode(Codes::HTTP_CREATED);
-            $response->headers->set(
-                'Location',
-                $this->generateUrl(
-                    'get_{{ entity|lower|pluralize }}',
-                    ['{{ entity_identifier }}' => ${{ entity|lower }}->get{{ entity_identifier|capitalize }}()],
-                    true
-                )
-            );
+            $view = $this->view($answer, Codes::HTTP_CREATED);
 
-            return $response;
+            return $this->handleView($view);
         } catch (InvalidFormException $exception) {
             return $exception->getForm();
         }
