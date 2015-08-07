@@ -21,17 +21,10 @@
 
         $form->submit($parameters, 'PATCH' !== $method);
 
-        if ($form->isValid()) {
-            ${{ entity|lowerfirst }} = $form->getData();
-            $this->update{{ entity }}(
-                ${{ entity|lowerfirst }},
-                true,
-                ('PUT' === $method || 'PATCH' === $method)
-            );
-
-            return ${{ entity|lowerfirst }};
+        if (! $form->isValid()) {
+            throw new InvalidFormException('Invalid submitted data', $form);
         }
 
-        throw new InvalidFormException('Invalid submitted data', $form);
+        return $form->getData();
     }
 {% endblock extras_methods %}
