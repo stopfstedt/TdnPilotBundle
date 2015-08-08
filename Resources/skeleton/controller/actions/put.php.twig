@@ -48,11 +48,22 @@
                 $code = Codes::HTTP_CREATED;
             }
 
-            $answer{{ resource ? "['" ~ entity|lowerfirst ~  "']" }} =
-                $this->get{{ entity }}Handler()->put(
-                    ${{ entity|lowerfirst }},
-                    $this->getPostData($request)
-                );
+            $handler = $this->get{{ entity }}Handler();
+
+            $aamcMethod = $handler->put(
+                ${{ entity|lowerfirst }},
+                $this->getPostData($request)
+            );
+
+            $authChecker = $this->get('security.authorization_checker');
+            if (! $authChecker->isGranted('edit', ${{ entity|lowerfirst }})) {
+                throw $this->createAccessDeniedException('Unauthorized access!');
+            }
+
+            $this->get{{ entity }}Handler()->update{{ entity }}(${{ entity|lowerfirst }}, true, true);
+
+            $answer{{ resource ? "['" ~ entity|lowerfirst ~  "']" }} = ${{ entity|lowerfirst }};
+
         } catch (InvalidFormException $exception) {
             return $exception->getForm();
         }

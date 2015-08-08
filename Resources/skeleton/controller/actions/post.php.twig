@@ -36,9 +36,18 @@
     {
 {% block method_body %}
         try {
-            $new = $this->get{{ entity }}Handler()
-                ->post($this->getPostData($request));
-            $answer['{{ entity|lowerfirst|pluralize }}'] = [$new];
+            $handler = $this->get{{ entity }}Handler();
+
+            ${{ entity|lowerfirst }} = $handler->post($this->getPostData($request));
+
+            $authChecker = $this->get('security.authorization_checker');
+            if (! $authChecker->isGranted('create', ${{ entity|lowerfirst }})) {
+                throw $this->createAccessDeniedException('Unauthorized access!');
+            }
+
+            $this->get{{ entity }}Handler()->update{{ entity }}(${{ entity|lowerfirst }}, true, false);
+
+            $answer['{{ entity|lowerfirst|pluralize }}'] = [${{ entity|lowerfirst }}];
 
             $view = $this->view($answer, Codes::HTTP_CREATED);
 

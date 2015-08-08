@@ -38,7 +38,14 @@
 {% endblock method_definition %}
     {
 {% block method_body %}
-        $answer{{ resource ? "['" ~ entity|lowerfirst|pluralize ~  "'][]" }} = $this->getOr404($id);
+        ${{ entity|lowerfirst }} = $this->getOr404($id);
+
+        $authChecker = $this->get('security.authorization_checker');
+        if (! $authChecker->isGranted('view', ${{ entity|lowerfirst }})) {
+            throw $this->createAccessDeniedException('Unauthorized access!');
+        }
+
+        $answer{{ resource ? "['" ~ entity|lowerfirst|pluralize ~  "'][]" }} = ${{ entity|lowerfirst }};
 
         return $answer;
 {% endblock method_body %}
